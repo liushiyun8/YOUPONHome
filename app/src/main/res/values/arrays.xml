@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="device_sort">
+        <item>风暖</item>
+        <item>光暖</item>
+        <item>照明</item>
+        <item>换气</item>
+    </string-array>
+
+    <string-array name="roombean">
+        <item>客厅</item>
+        <item>厨房</item>
+        <item>卫生间</item>
+        <item>卧室</item>
+        <item>走廊</item>
+    </string-array>
+    <string-array name="sensor_sort">
+        <item>红外传感器</item>
+        <item>光线传感器</item>
+        <item>温度传感器</item>
+        <item>湿度传感器</item>
+        <item>CO2传感器</item>
+        <item>TVOC传感器</item>
+        <item>可燃气传感器</item>
+        <item>烟感传感器</item>
+    </string-array>
+    <string-array name="all_sort">
+        <item>网关</item>
+        <item>照明</item>
+        <item>光暖</item>
+        <item>风暖</item>
+        <item>换气</item>
+        <item>红外感应</item>
+        <item>光线感应</item>
+        <item>空气质量</item>
+        <item>温湿度</item>
+        <item>烟雾检测</item>
+        <item>CO2检测</item>
+        <item>可燃气检测</item>
+    </string-array>
+    <string-array name="rate_stringarray">
+        <item>只响一次</item>
+        <item>周一到周五</item>
+        <item>每天</item>
+        <item>周末</item>
+    </string-array>
+</resources>

@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">友邦智能</string>
+    <string name="forgetpwd">忘记密码</string>
+    <string name="register">注册账号</string>
+    <string name="loginsuccess">登录成功</string>
+    <string name="account">手机号或邮箱号</string>
+    <string name="yanzhi">请输入验证码</string>
+    <string name="sendcode">发送验证码</string>
+    <string name="czpwd">请输入密码</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="device_select">设备类型选择</string>
+    <string name="wangguan">添加网关</string>
+    <string name="addshebei">添加设备</string>
+    <string name="shousuo">正在搜索网关......</string>
+    <string name="tishi">提示：请给设备通电，并开启WiFi搜网功能</string>
+    <string name="stopserch">停止搜索</string>
+    <string name="shousuodevice">正在搜索设备.....</string>
+    <string name="tishishebei">提示：请给设备通电。</string>
+    <string name="editshebei">设备设置</string>
+    <string name="editgateway">网关设置</string>
+    <string name="about">\t\t浙江友邦集成吊顶股份有限公司是中国集成吊顶行业的缔造者和领导者，专注于创新设计和和卓越性能缔造一流的室内吊顶整体解决方案。
+        \n\t\t ICPD研发系统能够最有效的实现跨行业集成各业界冠军，整合全球顶尖资源进行产品调整，为其他产业提供平台支持并协同发展。
+    </string>
+    <string name="website">http://www.chinayoubang.com</string>
+</resources>

@@ -1,0 +1,72 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+android {
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
+
+    defaultConfig {
+        applicationId "com.youpon.home"
+        minSdkVersion 17
+        targetSdkVersion 22
+        versionCode 1
+        versionName "V1.0.4"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // 自定义输出配置
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        // 输出apk名称为wooyun_v1.0_wandoujia.apk
+                        def fileName = "youpon_v${defaultConfig.versionName}_${variant.productFlavors[0].name}.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
+        }
+    }
+    productFlavors {
+        kuan {}
+        xiaomi {}
+        qh360 {}
+        baidu {}
+        wandoujia {}
+        qq{}
+        huawei{}
+    }
+
+    productFlavors.all {
+        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+    }
+    useLibrary 'org.apache.http.legacy'
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    //添加这行
+    apt 'com.jakewharton:butterknife-compiler:8.2.1'
+    compile files('libs/tools.jar')
+    compile project(':zxinglib')
+    compile project(':draglibrary')
+    compile files('libs/xlink-wifi-official-sdk-v3-21541.jar')
+    compile files('libs/android-async-http-1.4.6.jar')
+    compile project(':library1')
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'io.fogcloud.sdk:fog2_sdk:0.0.4'
+    compile 'com.jakewharton:butterknife:8.2.1'
+    compile 'com.orhanobut:logger:1.15'
+    compile 'com.android.support:percent:23.4.0'
+    compile 'org.xutils:xutils:3.3.38'
+    compile 'com.android.support:design:23.4.0'
+    compile 'com.squareup.picasso:picasso:2.3.2'
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.weigan:loopView:0.1.2'
+    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+
+}

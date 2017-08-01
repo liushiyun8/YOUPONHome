@@ -1,0 +1,3 @@
+include ':app', ':library1'
+include ':zxinglib'
+include ':draglibrary'

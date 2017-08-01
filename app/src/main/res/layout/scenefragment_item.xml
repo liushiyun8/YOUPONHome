@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingLeft="@dimen/x16"
+        android:paddingRight="@dimen/x12"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/delet"
+            android:layout_width="@dimen/x36"
+            android:layout_height="@dimen/x36"
+            android:src="@mipmap/equ_ic_scene"/>
+        <LinearLayout
+            android:id="@+id/click"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/x16"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="#333"
+                android:text="场景1"/>
+            <TextView
+                android:id="@+id/detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/y4"
+                android:textSize="11sp"
+                android:textColor="#999"
+                android:text="照明01 开     风暖02 关
+光暖03 开     换气04 关…"
+                />
+
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/on_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/scene_select"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>

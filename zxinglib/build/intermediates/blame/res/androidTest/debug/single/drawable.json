@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "E:\\demo\\Home\\zxinglib\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\launcher_icon.png",
+        "source": "E:\\demo\\Home\\zxinglib\\build\\intermediates\\bundles\\debug\\res\\drawable\\launcher_icon.png"
+    },
+    {
+        "merged": "E:\\demo\\Home\\zxinglib\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\navbar_btn_back_nor.png",
+        "source": "E:\\demo\\Home\\zxinglib\\build\\intermediates\\bundles\\debug\\res\\drawable\\navbar_btn_back_nor.png"
+    },
+    {
+        "merged": "E:\\demo\\Home\\zxinglib\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\share_img_code1.png",
+        "source": "E:\\demo\\Home\\zxinglib\\build\\intermediates\\bundles\\debug\\res\\drawable\\share_img_code1.png"
+    },
+    {
+        "merged": "E:\\demo\\Home\\zxinglib\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\share_img_code2.png",
+        "source": "E:\\demo\\Home\\zxinglib\\build\\intermediates\\bundles\\debug\\res\\drawable\\share_img_code2.png"
+    }
+]

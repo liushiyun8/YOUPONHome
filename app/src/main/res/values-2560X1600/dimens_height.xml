@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources><dimen name="margintop">51px</dimen>
+<dimen name="feng_margin">44px</dimen>
+<dimen name="edit_height">148px</dimen>
+<dimen name="radio_height">177px</dimen>
+<dimen name="spinner_height">44px</dimen>
+</resources>

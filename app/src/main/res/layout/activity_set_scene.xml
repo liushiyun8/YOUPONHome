@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:background="@color/white"
+tools:context="com.youpon.home1.ui.scene.SetSceneActivity">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:background="#192548"
+    android:layout_height="?actionBarSize"
+    >
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/x16"
+        android:src="@mipmap/navbar_btn_back_nor"/>
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:layout_centerVertical="true"
+        android:text="场景详情"/>
+    <ImageView
+        android:id="@+id/edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/x11"
+        android:src="@mipmap/navbar_btn_edit_nor"/>
+</RelativeLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginRight="@dimen/x16"
+    android:layout_marginLeft="@dimen/x16">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y60"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="#333"
+            android:textSize="16sp"
+            android:text="场景名称"/>
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:background="@null"
+            android:textColor="#333"
+            android:layout_marginLeft="@dimen/x17"
+            android:layout_height="wrap_content"
+            android:text="午休模式"/>
+        <ImageView
+            android:id="@+id/rename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/list_btn_more"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/y13"
+        android:gravity="center_vertical"
+        android:background="@color/bgcolor"
+        android:paddingTop="@dimen/y13"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="#666"
+            android:textSize="14sp"
+            android:text="场景内容"/>
+        <TextView
+            android:id="@+id/shebei_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x6"
+            android:textColor="#666"
+            android:textSize="14sp"
+            android:text="12个设备"/>
+    </LinearLayout>
+</LinearLayout>
+    <ListView
+    android:id="@+id/lv"
+    android:divider="@color/transparent"
+    android:dividerHeight="0dp"
+    android:scrollbars="none"
+    android:layout_width="match_parent"
+    android:layout_weight="1"
+    android:layout_height="0dp"/>
+    <!--<TextView-->
+        <!--android:id="@+id/default_scene"-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_weight="1"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:textColor="#333"-->
+        <!--android:paddingTop="10dp"-->
+        <!--android:paddingLeft="@dimen/x16"-->
+        <!--android:textSize="16sp"-->
+        <!--android:text="保存"/>-->
+    <TextView
+        android:id="@+id/save"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:background="@drawable/nextcolor"
+        android:textSize="16sp"
+        android:text="保存"/>
+</LinearLayout>
+

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:drawable="@mipmap/power_on" android:state_checked="true"/>
+    <item android:state_enabled="false" android:drawable="@mipmap/power_unable"/>
+    <item android:drawable="@mipmap/power_off" android:state_checked="false"/>
+</selector>

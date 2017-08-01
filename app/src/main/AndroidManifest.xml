@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.youpon.home1">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- wifi状态 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- wifi状态改变 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <application
+        android:name=".comm.App"
+        android:allowBackup="true"
+        android:icon="@mipmap/default_icon"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.Notitle">
+        <activity
+            android:name=".ui.index.IndexActivity"
+            android:theme="@style/AppTheme.Notitle.FullSreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.user.MainActivity"
+            android:theme="@style/AppTheme.Notitle"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name=".ui.user.FindpwdActivity"
+            android:theme="@style/AppTheme.Notitle"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name=".ui.user.RegisterActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name=".ui.home.activities.DeviceMainActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".ui.device.AddWGActivity" />
+        <activity android:name=".ui.device.DeviceDetailActivity" />
+        <activity android:name=".ui.device.AddDeviceActivity" />
+        <activity android:name=".ui.device.WangActivity" />
+        <activity android:name=".ui.device.DevEditActivity" />
+        <activity
+            android:name=".ui.scene.SceneAddActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+        <activity android:name=".ui.space.activities.RoomsetActivity" />
+        <activity android:name=".ui.space.activities.AddRoomActivity" />
+        <activity android:name=".ui.home.activities.MainSetActivity" />
+        <activity android:name=".ui.home.activities.MainAddActivity" />
+        <activity android:name=".ui.space.activities.SpaceAddActivity" />
+        <activity android:name=".ui.device.GatewaySetActivity" />
+        <activity android:name=".ui.home.activities.AppSetActivity" />
+        <activity android:name=".ui.device.SensorDetailActivity" />
+        <activity
+            android:name=".ui.device.LianDongSetActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity android:name=".ui.device.TimeTaskActivity" />
+        <activity android:name=".ui.device.TimeTaskAddActivity" />
+        <activity android:name=".ui.home.activities.ShareActivity" />
+        <activity android:name=".ui.device.UserListActivity" />
+        <activity android:name=".ui.home.activities.NotifyEventInfoActivity" />
+
+        <service
+            android:name=".ui.home.service.MyService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".ui.home.service.MyTokenService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <receiver
+            android:name=".ui.reciever.MyReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter android:priority="999999">
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+        <!-- XLINK 内网服务android:process="com.rabbit.man" -->
+        <service
+            android:name="io.xlink.wifi.sdk.XlinkUdpService"
+            android:enabled="true"
+            android:exported="true" />
+        <!-- XLINK 公网服务 -->
+        <service
+            android:name="io.xlink.wifi.sdk.XlinkTcpService"
+            android:enabled="true"
+            android:exported="true" />
+        <!--
+ ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}" />
+
+        <activity android:name=".ui.scene.AddSceanDvActivity" />
+        <activity android:name=".ui.home.activities.AboutActivity" />
+        <activity android:name=".ui.home.activities.VersionActivity" />
+        <activity android:name=".ui.home.activities.PushSetActivity" />
+        <activity android:name=".ui.user.ResetpwdActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+        <activity android:name=".ui.device.PanelDetailActivity" />
+        <activity
+            android:name=".ui.index.Index2Activity"
+            android:theme="@style/AppTheme.Notitle.FullSreen" />
+        <activity
+            android:name=".ui.device.WifiSetActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity android:name=".ui.device.DeviceSortActivity" />
+        <activity android:name=".ui.space.activities.SpaceDetailActivity" />
+        <activity android:name=".ui.device.SoftVersionActivity" />
+        <activity android:name=".ui.device.SubDevicelistActivity" />
+        <activity android:name=".ui.scene.SetSceneActivity" />
+        <activity android:name=".ui.device.LianDongActivity" />
+        <activity android:name=".ui.device.LianDongDevActivity" />
+        <activity android:name=".ui.home.activities.ShareDeviceActivity" />
+        <activity android:name=".ui.home.activities.ShareQCodeActivity" />
+        <activity
+            android:name=".ui.home.activities.ShareUserInfoActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity android:name=".ui.device.SensorEditActivity" />
+        <activity android:name=".ui.home.activities.WebViewActivity"></activity>
+    </application>
+
+</manifest>

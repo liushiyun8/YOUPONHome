@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y60"
+        android:layout_weight="1"
+        android:paddingLeft="@dimen/x16"
+        android:paddingRight="@dimen/x16"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="@dimen/x37"
+            android:layout_height="@dimen/x37"
+            android:src="@mipmap/equ_ic_gateway" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="80dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/x11">
+
+            <TextView
+                android:id="@+id/mdnsname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="#333"
+                android:text="EMW3081" />
+
+            <TextView
+                android:id="@+id/mdnsmac"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginTop="@dimen/y7"
+                android:textColor="#999"
+                android:layout_marginBottom="@dimen/y7"
+                android:text="MAC:c8:34:e3:4f:ae:5f" />
+
+            <TextView
+                android:id="@+id/mdnsip"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="#999"
+                android:text="IP:192.168.1.25" />
+        </LinearLayout>
+        <!--<ImageView-->
+            <!--android:id="@+id/force_delet"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@mipmap/delete"/>-->
+        <!--<ImageView-->
+            <!--android:id="@+id/force_ok"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@mipmap/ok"/>-->
+        <TextView
+            android:id="@+id/bind"
+            android:layout_width="@dimen/x50"
+            android:layout_height="@dimen/y24"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:background="@drawable/device_item_bg"
+            android:textColor="@color/item_bg_select"
+            android:text="添加"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="@dimen/x16"
+        android:background="#eee"/>
+</LinearLayout>

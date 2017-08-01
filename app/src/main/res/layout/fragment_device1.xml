@@ -1,0 +1,37 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.youpon.home1.ui.home.fragement.Device1Fragment">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="#192548"
+        android:layout_height="?actionBarSize"
+        >
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:layout_centerVertical="true"
+            android:text="设备"/>
+        <ImageView
+            android:id="@+id/add"
+            android:layout_width="@dimen/x29"
+            android:layout_height="@dimen/y28"
+            android:src="@mipmap/navbar_btn_add_nor"
+            android:layout_marginRight="@dimen/x11"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+    <com.handmark.pulltorefresh.library.PullToRefreshGridView
+     android:id="@+id/gv"
+     android:background="@color/bgcolor"
+     android:numColumns="3"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"/>
+
+</LinearLayout>

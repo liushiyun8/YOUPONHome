@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="zi_color">#d000</color>
+    <color name="bgcolor">#fafafa</color>
+    <color name="green">#0f0</color>
+    <color name="darkgreen">#50f0</color>
+    <color name="white">#fff</color>
+    <color name="home_rgroup">#a00f</color>
+    <color name="gray">#cccccc</color>
+    <color name="titlelay_color">#000</color>
+    <color name="black">#000</color>
+    <color name="red">#f00</color>
+    <color name="blue">#900f</color>
+    <color name="yellow">#f6ab00</color>
+    <color name="foreground">#192548</color>
+    <color name="drawcolor">#fcfeff</color>
+    <color name="divider">#eeeeee</color>
+    <color name="bla">#333</color>
+    <color name="title_bar">#192548</color>
+    <drawable name="enable_no">#cccccc</drawable>
+    <drawable name="error">#f00</drawable>
+    <drawable name="enable_yes">#f6ab00</drawable>
+    <drawable name="yellow">#f6ab00</drawable>
+    <drawable name="onoffcolor">#6e7aa0</drawable>
+    <drawable name="foreground">#192548</drawable>
+</resources>

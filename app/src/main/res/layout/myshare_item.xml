@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:gravity="center_vertical"
+    android:paddingTop="@dimen/y10"
+    android:paddingBottom="@dimen/y10"
+    android:layout_height="match_parent">
+<com.youpon.home1.comm.view.CustomShapeImageView
+    android:id="@+id/touxiang"
+    app:shape="circle"
+    app:onlyDrawBorder="false"
+    android:layout_width="@dimen/x40"
+    android:layout_height="@dimen/x40"
+    android:layout_marginLeft="@dimen/x16"
+    android:layout_marginRight="@dimen/x12"
+    android:src="@mipmap/ic_launcher"/>
+    <TextView
+        android:id="@+id/name"
+        android:textSize="16sp"
+        android:textColor="#333"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="昵称"/>
+    <TextView
+        android:id="@+id/count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <ImageView
+        android:id="@+id/more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/x12"
+        android:src="@mipmap/list_btn_more"/>
+</LinearLayout>

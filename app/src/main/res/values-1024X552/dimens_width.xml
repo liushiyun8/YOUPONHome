@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources><dimen name="zi_size">31px</dimen>
+<dimen name="shebei_margin">10px</dimen>
+<dimen name="listzi_size">31px</dimen>
+<dimen name="tishizi_size">18px</dimen>
+<dimen name="textsize">21px</dimen>
+<dimen name="fab_margin">15px</dimen>
+<dimen name="fengsize">26px</dimen>
+<dimen name="shezimargin">26px</dimen>
+<dimen name="mingmargin">5px</dimen>
+<dimen name="seekwidth">266px</dimen>
+<dimen name="edit_width">293px</dimen>
+<dimen name="edit_paddingleft">10px</dimen>
+<dimen name="edit_marginleft">186px</dimen>
+<dimen name="main_icon_width">42px</dimen>
+<dimen name="pull_width">63px</dimen>
+<dimen name="radio_width">133px</dimen>
+<dimen name="week_marginrught">15px</dimen>
+<dimen name="week_width">53px</dimen>
+<dimen name="spinner_width">25px</dimen>
+<dimen name="title_size">42px</dimen>
+</resources>

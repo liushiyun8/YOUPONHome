@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RadioGroup
+        android:id="@+id/feng_dang"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        android:layout_height="wrap_content">
+        <RadioButton
+            android:id="@+id/liang"
+            android:layout_width="wrap_content"
+            android:button="@null"
+            android:text="凉风"
+            android:padding="10dp"
+            android:textSize="@dimen/zi_size"
+            android:layout_height="wrap_content"
+            android:background="@drawable/radio_bg"/>
+        <RadioButton
+            android:id="@+id/nuan"
+            android:layout_width="wrap_content"
+            android:button="@null"
+            android:text="暖风"
+            android:padding="10dp"
+            android:layout_marginLeft="@dimen/feng_margin"
+            android:layout_marginRight="@dimen/feng_margin"
+            android:textSize="@dimen/zi_size"
+            android:layout_height="wrap_content"
+            android:background="@drawable/radio_bg"/>
+        <RadioButton
+            android:id="@+id/re"
+            android:layout_width="wrap_content"
+            android:button="@null"
+            android:text="热风"
+            android:padding="10dp"
+            android:textSize="@dimen/zi_size"
+            android:layout_height="wrap_content"
+            android:background="@drawable/radio_bg"/>
+
+    </RadioGroup>
+    <SeekBar
+        android:id="@+id/seek"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
+    <Button
+        android:id="@+id/sure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="确定"
+        android:layout_gravity="center"/>
+
+</LinearLayout>
