@@ -126,7 +126,7 @@ public class SubDevice extends Devall implements Serializable {
     public  void setMyType(int type) {
         this.type =type;
         String index=dst+"";
-        if(name==""||name==null){
+        if("".equals(name)||name==null){
             String first="";
             if(clas==5){
                first="一键";
@@ -142,10 +142,9 @@ public class SubDevice extends Devall implements Serializable {
             }
             if(type==0){
                 Panel panel = PanelManage.getInstance().getPanel(mac);
-                Device device= DeviceManage.getInstance().getDevice(gateway_id);
                 String my="";
-                if(device!=null&&panel!=null)
-                    my=device.getName()+panel.getName();
+                if(panel!=null)
+                    my=panel.getMyName();
                 this.name=my+dst;
             }else if(type==1){
                 this.name=first+"风暖";

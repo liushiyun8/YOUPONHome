@@ -310,21 +310,20 @@ public class Scenebean extends Devall{
 
     public void setSceneId(String sceneId) {
         this.sceneId = sceneId;
-        Device device = DeviceManage.getInstance().getDevice(gateway_id);
         Panel panel= PanelManage.getInstance().getPanel(panel_mac);
-        if(name==null||"".equals(name)&&device!=null){
+        if(name==null||"".equals(name)){
             switch (sceneId){
                 case "00":
-                    name=device.getName()+panel.getName()+"场景1";
+                    name=panel.getMyName()+"场景1";
                     break;
                 case "01":
-                    name=device.getName()+panel.getName()+"场景2";
+                    name=panel.getMyName()+"场景2";
                     break;
                 case "03":
-                    name=device.getName()+panel.getName()+"场景3";
+                    name=panel.getMyName()+"场景3";
                     break;
                 default:
-                    name=device.getName()+panel.getName()+"场景3";
+                    name=panel.getMyName()+"场景3";
                     break;
             }
         }

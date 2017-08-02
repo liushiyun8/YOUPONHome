@@ -115,7 +115,7 @@ public class AddSceanDvActivity extends BaseActivity implements View.OnClickList
                 name.setText(item.getName());
                 helper.setText(R.id.count,item.getRoom());
                 Panel panel = PanelManage.getInstance().getPanel(item.getMac());
-                helper.setText(R.id.panel_name,panel==null?"":panel.getName());
+                helper.setText(R.id.panel_name,panel==null?"":panel.getMyName());
                 }
         };
         lv.setAdapter(commonAdapter);

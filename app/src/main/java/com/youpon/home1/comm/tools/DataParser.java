@@ -41,7 +41,7 @@ import io.xlink.wifi.sdk.XDevice;
  */
 public class DataParser {
     private static DataParser instance;
-    private DataParser(){};
+    private DataParser(){}
     public static DataParser getInstance(){
         if(instance==null){
             instance=new DataParser();
@@ -82,7 +82,7 @@ public class DataParser {
         }
         String id = s485.substring(8, 12);
         int dst =Integer.parseInt(s485.substring(12, 14),16) ;
-        int src = Integer.parseInt(s485.substring(14, 16),16) ;;
+        int src = Integer.parseInt(s485.substring(14, 16),16);
         String cluster=s485.substring(16,20);
 //        Log.e("verything", "cluster:" + cluster + ",id:" + id + ",dst:" + dst + ",src:" + src + ",uuu:" + s485.substring(22, 26));
         switch (cluster) {
@@ -90,8 +90,7 @@ public class DataParser {
                 Log.e("verything", "cluster:" + cluster + ",id:" + id + ",dst:" + dst + ",src:" + src + ",uuu:" + s485.substring(22, 26));
                 if ("0005".equals(s485.substring(22, 26))) {
                     int type = Integer.parseInt(s485.substring(33, 34));
-                    SubDevice devisortdb = null;
-                    devisortdb = App.db.selector(SubDevice.class).where("id", "=", id).and("gateway_id", "=", deviceid).findFirst();
+                    SubDevice devisortdb = App.db.selector(SubDevice.class).where("id", "=", id).and("gateway_id", "=", deviceid).findFirst();
                     if (devisortdb == null) {
                        return;
                     } else {
@@ -111,7 +110,7 @@ public class DataParser {
                         } catch (DbException e) {
                             e.printStackTrace();
                         }
-                    };
+                    }
                 }
                 break;
             case "0005":
@@ -322,7 +321,7 @@ public class DataParser {
                 break;
             case "0006":
                 String cons = s485.substring(20, 22);
-                int tap = 0;
+                int tap;
                 if ("04".equals(cons)) {
                     if(s485.substring(22,24).equals("86")){
                         Message massge = Message.obtain();
@@ -396,7 +395,7 @@ public class DataParser {
 //                    Log.e("换气设备切换","subdevice:"+App.db.selector(SubDevice.class).where("id", "=", id).and("gateway_id", "=", deviceid).and("dst","=",sst).findFirst());
                     EventBus.getDefault().postSticky(new EventData(EventData.CODE_REFRESH_DEVICE, "刷新子设备"));
                     break;
-                };
+                }
                 try {
                     SubDevice dbdevi;
                     if(sst==2){
@@ -1064,6 +1063,8 @@ public class DataParser {
                         int v=Integer.parseInt(pay.substring(12,16),16);
                         int ty = Integer.parseInt(pay.substring(7,8));
                         int type=ty+5;
+                        if(v>10000)
+                            break;
                         Log.e("sensor:","type:"+type+"  value:"+v);
                         try {
                             App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("type","=",type).and("device_id","=",deviceid),new KeyValue[]{new KeyValue("online",true),new KeyValue("value1",v)});

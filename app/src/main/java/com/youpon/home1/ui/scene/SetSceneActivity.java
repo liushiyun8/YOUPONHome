@@ -173,7 +173,7 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                 guangnuan.setVisibility(View.GONE);
                 final SubDevice subDevice = item;
                 Panel panel = PanelManage.getInstance().getPanel(subDevice.getMac());
-                helper.setText(R.id.panel_name, panel == null ? "" : panel.getName());
+                helper.setText(R.id.panel_name, panel == null ? "" : panel.getMyName());
                 icon.setImageResource(Comconst.IMAGETYPE[subDevice.getTp()]);
                 name.setText(subDevice.getName());
                 onOff.setTag(position);
@@ -304,6 +304,9 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                         if (subDevice.getValue1() != 0) {
                             huanqu.setVisibility(View.VISIBLE);
                         }
+                        if(subDevice.getValue2()==1){
+                            gaodang.setVisibility(View.GONE);
+                        }else gaodang.setVisibility(View.VISIBLE);
                         huanqu.setTag(position);
                         huanqu.setOnCheckedChangeListener(null);
                         switch (subDevice.getValue1()) {
@@ -348,7 +351,7 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.save:
-                String s = "";
+                String s;
                 if (deviList.size() > 0) {
                     sceneBean.setGateway_id(deviList.get(0).getGateway_id());
                     s = sceneBean.sub2action(deviList);
