@@ -214,7 +214,7 @@ public class SpaceAdapter extends BaseAdapter {
                         viewHolder.onOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                if (buttonView.getTag() != position) {
+                                if ((int)buttonView.getTag() != position) {
                                     return;
                                 }
                                 if (subDevice.getTp() == 1) {
@@ -258,7 +258,7 @@ public class SpaceAdapter extends BaseAdapter {
                                 viewHolder.fengDong.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                                     @Override
                                     public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                        if (group.getTag() != position) {
+                                        if ((int)group.getTag() != position) {
                                             return;
                                         }
                                         switch (checkedId) {
@@ -274,7 +274,7 @@ public class SpaceAdapter extends BaseAdapter {
                                 viewHolder.fengdang.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                                     @Override
                                     public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                        if (group.getTag() != position) {
+                                        if ((int)group.getTag() != position) {
                                             return;
                                         }
                                         switch (checkedId) {
@@ -351,7 +351,7 @@ public class SpaceAdapter extends BaseAdapter {
                                 viewHolder.huanqu.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                                     @Override
                                     public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                        if (group.getTag() != position) return;
+                                        if ((int)group.getTag() != position) return;
                                         switch (checkedId) {
                                             case R.id.didang:
                                                 sendComand(subDevice,0, 1);

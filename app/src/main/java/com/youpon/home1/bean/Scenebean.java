@@ -91,6 +91,11 @@ public class Scenebean extends Devall{
         return type;
     }
 
+    @Override
+    public void setRoom(String room) {
+
+    }
+
     public String getId() {
         return id;
     }

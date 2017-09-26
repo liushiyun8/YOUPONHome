@@ -130,12 +130,13 @@
                     android:layout_height="wrap_content"
                     android:text="智能网关MCSDFSDF"/>
             </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#eee"/>
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="#eee"/>-->
             <LinearLayout
                 android:id="@+id/soft_edit"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/y60"
                 android:gravity="center_vertical"

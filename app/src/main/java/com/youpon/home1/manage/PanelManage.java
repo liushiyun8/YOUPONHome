@@ -81,7 +81,7 @@ public class PanelManage {
                         scenebean.setId(subDevice.getId());
                         scenebean.setGateway_id(subDevice.getGateway_id());
                         scenebean.setGateway_type(0);
-                        scenebean.setName(subDevice.getName());
+                        scenebean.setName("四位场景"+subDevice.getDst());
                         scenebean.setType(1);
                         scenebean.setPanel_mac(subDevice.getMac());
                         scenebean.setGroupId("0001");

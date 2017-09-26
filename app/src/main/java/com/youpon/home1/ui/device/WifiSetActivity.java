@@ -97,14 +97,14 @@ public class WifiSetActivity extends BaseActivity implements View.OnClickListene
             public void afterTextChanged(Editable s) {
                 if (!"".equals(s)) {
                     dele1.setVisibility(View.VISIBLE);
-                    if (s.length() >= 8)
-                        set.setEnabled(true);
-                    else {
-                        set.setEnabled(false);
-                    }
+//                    if (s.length() >= 8)
+//                        set.setEnabled(true);
+//                    else {
+//                        set.setEnabled(false);
+//                    }
                 } else {
                     dele1.setVisibility(View.GONE);
-                    set.setEnabled(false);
+//                    set.setEnabled(false);
                 }
             }
         });

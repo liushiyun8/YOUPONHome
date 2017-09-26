@@ -12,6 +12,7 @@ public abstract class Devall implements Serializable{
     public abstract String getSID();
     public abstract int getSort();
     public abstract int getType();
+    public abstract void setRoom(String room);
     public abstract String getRoom();
     public abstract boolean isOnline();
 }

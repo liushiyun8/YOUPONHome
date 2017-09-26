@@ -26,6 +26,8 @@ import com.youpon.home1.manage.DeviceManage;
 import com.youpon.home1.ui.scene.SceneAddActivity;
 import com.youpon.home1.ui.scene.SetSceneActivity;
 
+import org.xutils.common.util.KeyValue;
+import org.xutils.db.sqlite.WhereBuilder;
 import org.xutils.ex.DbException;
 
 import java.util.ArrayList;
@@ -114,6 +116,11 @@ public class  MysceneListAdapter extends BaseAdapter {
                             }else {
                                 if("0001".equals(scenebean.getGroupId())){
                                     Command.sendData(device.getXDevice(), Command.getCallSceneStr(scenebean.getGroupId(),scenebean.getSceneId(),"FFFF",0).getBytes(), "MysceneListAdapter");
+                                    try {
+                                        App.db.update(Scenebean.class, WhereBuilder.b("panel_mac","=",scenebean.getPanel_mac()).and("sceneId","!=",scenebean.getSceneId()),new KeyValue("status","0"));
+                                    } catch (DbException e) {
+
+                                    }
                                 }else
                                 Command.sendData(device.getXDevice(), Command.getCallSceneStr(scenebean.getGroupId(),scenebean.getSceneId(),scenebean.getId(),scenebean.getGateway_type()).getBytes(), "MysceneListAdapter");
                             }

@@ -147,7 +147,7 @@ public class LianDongSetActivity extends BaseActivity implements View.OnClickLis
                 onOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (buttonView.getTag() != position) {
+                        if ((int)buttonView.getTag() != position) {
                             return;
                         }
                         if (subDevice.getTp() == 1) {
@@ -185,7 +185,7 @@ public class LianDongSetActivity extends BaseActivity implements View.OnClickLis
                         fengDong.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                if (group.getTag() != position) {
+                                if ((int)group.getTag() != position) {
                                     return;
                                 }
                                 switch (checkedId) {
@@ -201,7 +201,7 @@ public class LianDongSetActivity extends BaseActivity implements View.OnClickLis
                         fengdang.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                if (group.getTag() != position) {
+                                if ((int)group.getTag() != position) {
                                     return;
                                 }
                                 switch (checkedId) {
@@ -265,6 +265,7 @@ public class LianDongSetActivity extends BaseActivity implements View.OnClickLis
                         if (subDevice.getValue1() != 0) {
                             huanqu.setVisibility(View.VISIBLE);
                         }
+                        gaodang.setVisibility(View.GONE);
                         huanqu.setTag(position);
                         huanqu.setOnCheckedChangeListener(null);
                         switch (subDevice.getValue1()) {
@@ -277,7 +278,7 @@ public class LianDongSetActivity extends BaseActivity implements View.OnClickLis
                         huanqu.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                if (group.getTag() != position) return;
+                                if ((int)group.getTag() != position) return;
                                 switch (checkedId) {
                                     case R.id.didang:
                                         item.setValue1(1);

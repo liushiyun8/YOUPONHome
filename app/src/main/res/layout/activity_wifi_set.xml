@@ -154,7 +154,6 @@
             android:id="@+id/set"
             android:layout_width="@dimen/x296"
             android:layout_height="@dimen/y44"
-            android:enabled="false"
             android:textSize="18sp"
             android:textColor="@color/white"
             android:background="@drawable/kefu_bg"

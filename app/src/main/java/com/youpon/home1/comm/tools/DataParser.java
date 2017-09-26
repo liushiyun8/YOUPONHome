@@ -472,6 +472,7 @@ public class DataParser {
                                             break;
                                         }
                                         if(dbdevi.getTp()==1&&"0006".equals(clu)){
+
                                             dbdevi.setValue2(ttap);
                                         }else
                                             dbdevi.setValue1(ttap);
@@ -507,7 +508,7 @@ public class DataParser {
                                 Log.e("S485","clu:"+clu);
                                 Log.e("S485","ttap:"+tap2);
                                 try {
-                                    Log.e("UUUUJJJ","id:"+id+" device_id:"+deviceid+" type:"+tp);
+//                                    Log.e("UUUUJJJ","id:"+id+" device_id:"+deviceid+" type:"+tp);
 //                                    Sensor first = App.db.selector(Sensor.class).where("devisort_id", "=", id).and("device_id", "=", deviceid).and("type", "=", ty).findFirst();
 //                                    if (first==null){
 //                                        Log.e("UUUU","sensor为空");
@@ -696,7 +697,10 @@ public class DataParser {
                     }
                     App.db.replace(subDe);
                     if(subDe.getType()==4){
-                        Command.sendData1(deviceid,Command.getOtherStr("55AA55000F0100"+gsonAllDevice.getNwkid()+"000006010008000016FF",0).getBytes(),"detaparser");
+                        if(gsonAllDevice.getRiu()==0){
+                            Command.sendData1(deviceid,Command.getOtherStr("55AA55000F0100"+gsonAllDevice.getNwkid()+"000006010008000016FF",0).getBytes(),"detaparser");
+                        }else
+                        Command.sendData1(deviceid,Command.getOtherStr("zcl global read 0x0008 0x0016\\r\\n send 0x"+gsonAllDevice.getNwkid()+" 1 6",1).getBytes(),"detaparser");
                     }
                 } catch (DbException e) {
                     e.printStackTrace();
@@ -948,7 +952,11 @@ public class DataParser {
                     case "0006":
                     case "0008":
                     case "0000":
-                        if(pay.contains("0A050042")){
+                        if(pay.contains("011600")||pay.contains("0A1600")){
+                            int v=Integer.parseInt(pay.substring(pay.length()-2));
+                            App.db.update(SubDevice.class,WhereBuilder.b("id", "=", id).and("gateway_id","=",deviceid).and("dst","=",dst),new KeyValue[]{new KeyValue("value2",v),new KeyValue("online",true)});
+                            EventBus.getDefault().post(new EventData(EventData.CODE_REFRESH_DEVICE,"刷新子设备"));
+                        }else if(pay.contains("0A050042")){
 //                            synchronized (this) {
 //                                SubDevice SubDevice = null;
 //                                try {
@@ -1059,6 +1067,13 @@ public class DataParser {
 //                            }
 //                        }
                         break;
+                    case "FC00":
+                        if("03".equals(pay.substring(8,10))){
+                            App.db.update(SubDevice.class,WhereBuilder.b("gateway_id","=",deviceid).and("id","=",id).and("type","!=",2),new KeyValue[]{new KeyValue("value1",0),new KeyValue("value2",0)});
+//                            App.db.update(SubDevice.class,WhereBuilder.b("gateway_id","=",deviceid).and("id","=",id).and("type","=",2),new KeyValue("value2",0));
+                        }
+                        EventBus.getDefault().postSticky(new EventData(EventData.CODE_REFRESH_DEVICE,"刷新子设备"));
+                        break;
                     case "FC01":
                         int v=Integer.parseInt(pay.substring(12,16),16);
                         int ty = Integer.parseInt(pay.substring(7,8));
@@ -1098,21 +1113,8 @@ public class DataParser {
                         }else if("0406".equals(cluster)){
                             type1=1;
                         }
-//                        if(cluster.equals("0402")||cluster.equals("0403")){
-//                            value=(value&0x8000)>0?(value-0x10000):value;
-//                        }
-//                        Sensor dbsensor1 = null;
-
-//                            if("0402".equals(cluster))
                             if(!"0405".equals(cluster))
                             App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("type","=",type1).and("device_id","=",deviceid),new KeyValue[]{new KeyValue("online",true),new KeyValue("value1",value)});
-//                            dbsensor1 = App.db.selector(Sensor.class).where("id", "=", id +type).findFirst();
-//                            if(dbsensor1==null){
-//                                dbsensor1 = new Sensor(deviceid, id,type,value,0);
-//                            }else
-//                                dbsensor1.setValue1(value);
-//                            dbsensor1.setOnline(true);
-//                            App.db.replace(dbsensor1);
                         } catch (DbException e) {
                             e.printStackTrace();
                         }
@@ -1139,7 +1141,32 @@ public class DataParser {
 //                        break;
                     case "0005":
                         String commandId = pay.substring(8, 10);
-                        if("09".equals(commandId)){
+                        if ("05".equals(pay.substring(4,6))) {
+                            if(pay.substring(6,10).equals("0100")){
+                                App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=", pay.substring(6,10)),new KeyValue("status",0));
+                                App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=", pay.substring(6,10)).and("sceneId","=",pay.substring(10,12)),new KeyValue("status",1));
+                            }else {
+                                Panel panel = PanelManage.getInstance().getPanelById(id,deviceid);
+                                if (panel == null) break;
+                                String mac1 = panel.getMac();
+                                App.db.update(Scenebean.class,WhereBuilder.b("panel_mac","=",mac1).and("groupId", "=", pay.substring(6,10)),new KeyValue("status",0));
+                                App.db.update(Scenebean.class,WhereBuilder.b("panel_mac","=",mac1).and("groupId", "=", pay.substring(6,10)).and("sceneId", "=",pay.substring(10, 12)),new KeyValue("status",1));
+                            }
+                            EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
+                            break;
+                        }else if("07".equals(commandId)){
+                            String groupid = pay.substring(10, 14);
+                            if(groupid.equals("0100")){
+                                App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=",groupid).and("sceneId","=",pay.substring(14,16)),new KeyValue("status",0));
+                            }else {
+                                Panel panel = PanelManage.getInstance().getPanelById(id,deviceid);
+                                if (panel == null) break;
+                                String mac1 = panel.getMac();
+                                App.db.update(Scenebean.class,WhereBuilder.b("panel_mac","=",mac1).and("groupId", "=",groupid).and("sceneId","=",pay.substring(14,16)),new KeyValue("status",0));
+                            }
+                            EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
+//                            EventBus.getDefault().post(new EventData(EventData.CODE_REFRESH_DEVICE, ""));
+                        }else if("09".equals(commandId)){
                             String status = pay.substring(10, 12);
                             Message ms = Message.obtain();
                             ms.what = 2;
@@ -1353,6 +1380,14 @@ public class DataParser {
             case 16:
                 deleData(deviceid);
                 EventBus.getDefault().post(new EventData(EventData.TAG_REFRESH,""));
+                break;
+            case 17:
+                if ("05".equals(pay.substring(4,6))) {
+                    App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=", pay.substring(6,10)),new KeyValue("status",0));
+                    App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=", pay.substring(6,10)).and("sceneId", "=",pay.substring(10, 12)),new KeyValue("status",1));
+                    EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
+                    break;
+                }
                 break;
         }
     }

@@ -2,6 +2,7 @@ package com.youpon.home1.ui.space.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -10,12 +11,17 @@ import android.widget.TextView;
 
 import com.mobeta.android.dslv.DragSortListView;
 import com.youpon.home1.R;
+import com.youpon.home1.bean.Devall;
+import com.youpon.home1.bean.Device;
 import com.youpon.home1.bean.Roombean;
+import com.youpon.home1.bean.Sensor;
 import com.youpon.home1.bean.SpaceBean;
+import com.youpon.home1.bean.SubDevice;
 import com.youpon.home1.comm.App;
 import com.youpon.home1.comm.Comconst;
 import com.youpon.home1.comm.base.BaseActivity;
 import com.youpon.home1.comm.base.EventData;
+import com.youpon.home1.manage.DeviceManage;
 import com.youpon.home1.ui.adpter.CommonAdapter;
 import com.youpon.home1.ui.adpter.RoomlvAdapter;
 import com.youpon.home1.ui.adpter.ViewHolder;
@@ -71,36 +77,82 @@ public class RoomsetActivity extends BaseActivity implements View.OnClickListene
                     helper.getView(R.id.diver).setVisibility(View.GONE);
                     final String name = item.getName();
                     helper.setText(R.id.name, name);
-                    try {
-                        List<SpaceBean> all = App.db.selector(SpaceBean.class).where("room", "=", item.getName()).findAll();
-                        helper.setText(R.id.count,(all==null?0:all.size())+"个");
-                    } catch (DbException e) {
-                        e.printStackTrace();
-                    }
+                    helper.setText(R.id.count,(getMyData(name).size())+"个");
                 }
             };
         lv.setAdapter(roomlvAdapter);
-        lv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.e("tag","点击到我了");
                 Intent intent = new Intent(RoomsetActivity.this, SpaceDetailActivity.class);
                 intent.putExtra("room",all.get(position).getName());
                 startActivity(intent);
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
         });
+//        lv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
         back.setOnClickListener(this);
         add.setOnClickListener(this);
+    }
+
+    public List<Devall> getMyData(String s){
+        List<Devall> list=new ArrayList<>();
+        try {
+            List<Device> gates = DeviceManage.getInstance().getCurrentdev();
+            if(gates!=null){
+                if("所有空间".equals(s)){
+                    list.addAll(gates);
+                }else
+                    for (int i = 0; i < gates.size(); i++) {
+                        Device gateway = gates.get(i);
+                        if(gateway.getRoom().equals(s)){
+                            list.add(gateway);
+                        }
+                    }
+                for (int i = 0; i < gates.size(); i++) {
+                    Device gateway = gates.get(i);
+                    List<SubDevice> ds=null;
+                    if("所有空间".equals(s)){
+                        ds= App.db.selector(SubDevice.class).where("gateway_id", "=",gateway.getXDevice().getDeviceId()).and("type","!=",0).findAll();
+                    }else
+                        ds= App.db.selector(SubDevice.class).where("gateway_id", "=",gateway.getXDevice().getDeviceId()).and("type","!=",0).and("room","=",s).findAll();
+                    if(ds!=null){
+                        list.addAll(ds);
+                    }
+                }
+                for (int i = 0; i < gates.size(); i++) {
+                    Device gateway = gates.get(i);
+                    List<Sensor> ds=null;
+                    if("所有空间".equals(s)) {
+                        ds= App.db.selector(Sensor.class).where("device_id", "=", gateway.getXDevice().getDeviceId()).findAll();
+                    }else
+                        ds=App.db.selector(Sensor.class).where("device_id", "=", gateway.getXDevice().getDeviceId()).and("room", "=", s).findAll();
+                    if(ds!=null){
+                        list.addAll(ds);
+                    }
+                }
+            }
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     private void initData() {
         all.clear();
         try {
            List<Roombean> all1 = App.db.selector(Roombean.class).findAll();
+            Log.e("all",App.db.getDaoConfig()+all1.toString());
             if(all1!=null){
                 all.addAll(all1);
             }

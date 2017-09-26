@@ -126,7 +126,7 @@ public class GatewaySetActivity extends BaseActivity implements View.OnClickList
                     JSONObject jsonObject = new JSONObject(result);
                     if(jsonObject!=null){
                         int newest = jsonObject.optInt("newest");
-                        if(newest>gateway.getXDevice().getMcuHardVersion()){
+                        if(newest>gateway.getXDevice().getMcuSoftVersion()){
                             hardware.setEnabled(true);
                             hardware.setText("可升级");
                         }

@@ -163,6 +163,10 @@ public class TimeTaskAddActivity extends BaseActivity implements View.OnClickLis
         if (tap == 0) {
             tap = 1;
         }
+        if(subDevice.getClas()==9){
+            nuan.setVisibility(View.GONE);
+            re.setVisibility(View.GONE);
+        }
         switch (subDevice.getTp()) {
             case 0:
                 nuanqu.setVisibility(View.VISIBLE);
@@ -218,6 +222,9 @@ public class TimeTaskAddActivity extends BaseActivity implements View.OnClickLis
                 break;
             case 3:
                 huanqu.setVisibility(View.VISIBLE);
+                if(tap2==1){
+                    gaodang.setVisibility(View.GONE);
+                }else gaodang.setVisibility(View.VISIBLE);
                 if (tap == 1) {
                     didang.setChecked(true);
                 } else gaodang.setChecked(true);

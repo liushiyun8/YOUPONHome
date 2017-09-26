@@ -55,7 +55,7 @@
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 android:layout_marginLeft="10dp"
-                android:text="V3"/>
+                />
         </LinearLayout>
         <View
             android:layout_width="match_parent"
@@ -76,7 +76,7 @@
             android:textSize="14sp"
             android:textColor="#999999"
             android:layout_marginTop="@dimen/y18"
-            android:text="BUG修复"/>
+            />
 
         <View
             android:layout_width="match_parent"
@@ -90,6 +90,7 @@
             android:layout_height="@dimen/y44"
             android:textColor="@color/white"
             android:textSize="18sp"
+            android:enabled="false"
             android:layout_marginBottom="@dimen/y60"
             android:text="升级"/>
     </LinearLayout>

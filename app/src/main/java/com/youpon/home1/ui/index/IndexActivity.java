@@ -50,7 +50,7 @@ public class IndexActivity extends BaseActivity {
         isRun=true;
         sp = App.getSp();
         timer = new Timer();
-        if (sp.get(Comconst.ISAUTO, false) == true) {
+        if ((boolean)sp.get(Comconst.ISAUTO, false) == true) {
             if (NetWorkTools.getAPNType(this) == -1) {
                 Toast.makeText(this, "无网络连接！", Toast.LENGTH_LONG).show();
                 startActivity(new Intent(IndexActivity.this, Index2Activity.class));
@@ -125,7 +125,8 @@ public class IndexActivity extends BaseActivity {
                 App.getApp().setRefreshToken(refreshToken);
                 App.getApp().setAppid(appid);
                 App.getApp().setAuth(authKey);
-                App.db = x.getDb(new DbManager.DaoConfig().setDbDir(new File("liuyun/" + appid)).setDbName("youpon").setDbVersion(1).setDbUpgradeListener(new DbManager.DbUpgradeListener() {
+                App.db=null;
+                App.db = x.getDb(new DbManager.DaoConfig().setDbDir(new File("liuyun/" + appid)).setDbName("youpon"+appid).setDbVersion(1).setDbUpgradeListener(new DbManager.DbUpgradeListener() {
                     @Override
                     public void onUpgrade(DbManager db, int oldVersion, int newVersion) {
                         try {

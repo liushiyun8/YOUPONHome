@@ -37,4 +37,12 @@ public class Roombean {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "Roombean{" +
+                "objectId='" + objectId + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

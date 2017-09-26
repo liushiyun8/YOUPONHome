@@ -264,7 +264,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 App.getApp().setRefreshToken(refreshToken);
                 App.getApp().setAppid(appid);
                 App.getApp().setAuth(authKey);
-                App.db = x.getDb(new DbManager.DaoConfig().setDbDir(new File("liuyun/" + appid)).setDbName("youpon").setDbVersion(1).setDbUpgradeListener(new DbManager.DbUpgradeListener() {
+                App.db=null;
+                App.db = x.getDb(new DbManager.DaoConfig().setDbDir(new File("liuyun/" + appid)).setDbName("youpon"+appid).setDbVersion(1).setDbUpgradeListener(new DbManager.DbUpgradeListener() {
                     @Override
                     public void onUpgrade(DbManager db, int oldVersion, int newVersion) {
                         try {

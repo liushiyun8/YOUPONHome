@@ -185,7 +185,7 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                 onOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (buttonView.getTag() != position) {
+                        if ((int)buttonView.getTag() != position) {
                             return;
                         }
                         if (subDevice.getTp() == 1) {
@@ -200,6 +200,13 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                         Log.e(TAG, subDevice.getValue1() + "");
                         if (subDevice.getValue1() != 0) {
                             nuanqu.setVisibility(View.VISIBLE);
+                        }
+                        if(subDevice.getClas()==9){
+                            nuan.setVisibility(View.GONE);
+                            re.setVisibility(View.GONE);
+                        }else {
+                            nuan.setVisibility(View.VISIBLE);
+                            re.setVisibility(View.VISIBLE);
                         }
                         fengdang.setOnCheckedChangeListener(null);
                         fengDong.setOnCheckedChangeListener(null);
@@ -224,7 +231,7 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                         fengDong.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                if (group.getTag() != position) {
+                                if ((int)group.getTag() != position) {
                                     return;
                                 }
                                 switch (checkedId) {
@@ -240,7 +247,7 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                         fengdang.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                if (group.getTag() != position) {
+                                if ((int)group.getTag() != position) {
                                     return;
                                 }
                                 switch (checkedId) {
@@ -319,7 +326,7 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                         huanqu.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                if (group.getTag() != position) return;
+                                if ((int)group.getTag() != position) return;
                                 switch (checkedId) {
                                     case R.id.didang:
                                         item.setValue1(1);

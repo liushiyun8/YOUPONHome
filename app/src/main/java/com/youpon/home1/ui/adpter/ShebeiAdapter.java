@@ -112,36 +112,40 @@ public class ShebeiAdapter extends BaseAdapter {
                                 context.startActivity(intent);
                             }
                         });
-                        if (device.isOnline()) {
-                            viewHolder.onOff.setChecked(true);
-                        } else {
-                            viewHolder.onOff.setVisibility(View.GONE);
+                        if (!device.isOnline()){
                             viewHolder.status.setVisibility(View.VISIBLE);
-                        }
-//                        List<SubDevice> subDevices = null;
-//                        try {
-//                            subDevices = App.db.selector(SubDevice.class).where("gateway_id", "=", device.getXDevice().getDeviceId()).findAll();
-//                        } catch (DbException e) {
-//                            e.printStackTrace();
-//                        }
-//                        final List<SubDevice> finalSubDevices = subDevices;
-                        viewHolder.onOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                                if (finalSubDevices != null) {
-//                                    for (int i = 0; i < finalSubDevices.size(); i++) {
-//                                        SubDevice subDevice = finalSubDevices.get(i);
-//                                        if (subDevice.getValue1() != 0) {
-//                                            if(subDevice.getTp()==1){
-//                                                sendComand(subDevice, 1, 0);
-//                                            }else
-//                                            sendComand(subDevice, 0, 0);
-//                                        }
-//                                    }
-//                                }
-                                Command.sendData1(deviceid, Command.closeAll().getBytes(), "SpaceAdapter");
+                            viewHolder.onOff.setVisibility(View.GONE);
+                        }else {
+                            viewHolder.status.setVisibility(View.GONE);
+                            viewHolder.onOff.setVisibility(View.VISIBLE);
+                            List<SubDevice> subDevices = null;
+                            try {
+                                subDevices = App.db.selector(SubDevice.class).where("gateway_id", "=", device.getXDevice().getDeviceId()).and("clas","=",299).findAll();
+                            } catch (DbException e) {
+                                e.printStackTrace();
                             }
-                        });
+                            if(subDevices!=null){
+                                boolean flag=false;
+                                for (SubDevice sub : subDevices) {
+                                    if(!((sub.getValue1()==0&&sub.getType()!=2)||(sub.getValue2()==0&&sub.getType()==2))){
+                                        flag=true;
+                                        break;
+                                    }
+                                }
+                                if(flag){
+                                    viewHolder.onOff.setChecked(true);
+                                }else viewHolder.onOff.setChecked(false);
+                            }else {
+                                viewHolder.onOff.setChecked(false);
+                            }
+                            viewHolder.onOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                    if(!isChecked)
+                                        Command.sendData1(deviceid, Command.closeAll().getBytes(), "SpaceAdapter");
+                                }
+                            });
+                        }
                     }
                     break;
                 case 3:
@@ -200,7 +204,7 @@ public class ShebeiAdapter extends BaseAdapter {
                         viewHolder.onOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                if (buttonView.getTag() != position) {
+                                if ((int)buttonView.getTag() != position) {
                                     return;
                                 }
                                 if (subDevice.getTp() == 1) {
@@ -244,7 +248,7 @@ public class ShebeiAdapter extends BaseAdapter {
                                 viewHolder.fengDong.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                                     @Override
                                     public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                        if (group.getTag() != position) {
+                                        if ((int)group.getTag() != position) {
                                             return;
                                         }
                                         switch (checkedId) {
@@ -260,7 +264,7 @@ public class ShebeiAdapter extends BaseAdapter {
                                 viewHolder.fengdang.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                                     @Override
                                     public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                        if (group.getTag() != position) {
+                                        if ((int)group.getTag() != position) {
                                             return;
                                         }
                                         switch (checkedId) {
@@ -340,7 +344,7 @@ public class ShebeiAdapter extends BaseAdapter {
                                 viewHolder.huanqu.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                                     @Override
                                     public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                        if (group.getTag() != position) return;
+                                        if ((int)group.getTag() != position) return;
                                         switch (checkedId) {
                                             case R.id.didang:
                                                 sendComand(subDevice, 0, 1);

@@ -98,9 +98,9 @@ public class Command {
                     ls="0"+ls;
                 }
                 if(devisort.getTp()==2||(t==1&&devisort.getTp()==1)||devisort.getTp()==4){
-                    s=Star+getRedam()+middle1+"55AA5500111100"+id+"00000"+dst+"010006"+"02000010"+ls+"FF"+endStr1;
+                    s=Star+getRedam()+middle1+"55AA5500113100"+id+"00000"+dst+"010006"+"02000010"+ls+"FF"+endStr1;
                 }else {
-                    s=Star+getRedam()+middle1+"55AA5500111100"+id+"00000"+dst+"010008"+"02000020"+ls+"FF"+endStr1;
+                    s=Star+getRedam()+middle1+"55AA5500113100"+id+"00000"+dst+"010008"+"02000020"+ls+"FF"+endStr1;
                 }
             }else {
                 if((devisort.getTp()==2||(t==1&&devisort.getTp()==1)||devisort.getTp()==4)){
@@ -178,9 +178,9 @@ public class Command {
                     ls = "0" + ls;
                 }
                 if ("0008".equals(actionsBean.getNclu())) {
-                    command.append("{\"RIU\":0,\"D\":\"" + "55AA5500111100" + first.getId() + "00000" +  dstid  + "010008"+"02000020" + ls + "FF" + "\"},");
+                    command.append("{\"RIU\":0,\"D\":\"" + "55AA5500113100" + first.getId() + "00000" +  dstid  + "010008"+"02000020" + ls + "FF" + "\"},");
                 } else if ("0006".equals(actionsBean.getNclu())) {
-                    command.append("{\"RIU\":0,\"D\":\"" + "55AA5500111100" + first.getId() + "00000" +  dstid + "010006" +"02000010" + ls + "FF" + "\"},");
+                    command.append("{\"RIU\":0,\"D\":\"" + "55AA5500113100" + first.getId() + "00000" +  dstid + "010006" +"02000010" + ls + "FF" + "\"},");
                 }
             }
         }

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.se7en.utils.DeviceUtils;
 import com.youpon.home1.R;
+import com.youpon.home1.bean.Devall;
 import com.youpon.home1.bean.Device;
 import com.youpon.home1.bean.Panel;
 import com.youpon.home1.bean.Roombean;
@@ -83,11 +84,11 @@ public class SpaceDetailActivity extends BaseActivity implements View.OnClickLis
     @BindView(R.id.checkLayout)
     LinearLayout checkLayout;
     private String room;
-    private List<SpaceBean> room1 = new ArrayList<>();
-    private CommonAdapter<SpaceBean> commonAdapter;
+    private List<Devall> room1 = new ArrayList<>();
+    private CommonAdapter<Devall> commonAdapter;
     private boolean AllCheckMode;
     private boolean moveMode;
-    private List<SpaceBean> selectList=new ArrayList<>();
+    private List<Devall> selectList=new ArrayList<>();
     private RoomDialog dialog;
     private String s;
 
@@ -132,9 +133,9 @@ public class SpaceDetailActivity extends BaseActivity implements View.OnClickLis
             delet.setVisibility(View.GONE);
         } else tishi.setVisibility(View.GONE);
         getData();
-        commonAdapter = new CommonAdapter<SpaceBean>(this, room1, R.layout.myroom_item) {
+        commonAdapter = new CommonAdapter<Devall>(this, room1, R.layout.myroom_item) {
             @Override
-            public void convert(ViewHolder helper, int position, final SpaceBean item) {
+            public void convert(ViewHolder helper, int position, final Devall item) {
                 helper.getView(R.id.more).setVisibility(View.GONE);
                 helper.getView(R.id.count).setVisibility(View.GONE);
                 CheckBox box = helper.getView(R.id.check);
@@ -147,11 +148,11 @@ public class SpaceDetailActivity extends BaseActivity implements View.OnClickLis
                         if(isChecked){
                             if(!selectList.contains(item))
                             selectList.add(item);
-                            Log.e("adpter_add",item.getSid());
+                            Log.e("adpter_add",item.getSID());
                         }else {
                             if (selectList.contains(item))
                                 selectList.remove(item);
-                            Log.e("adpter_remove", item.getSid());
+                            Log.e("adpter_remove", item.getSID());
                         }
                         count.setText(selectList.size()+"");
                     }
@@ -164,14 +165,14 @@ public class SpaceDetailActivity extends BaseActivity implements View.OnClickLis
                 TextView name = helper.getView(R.id.name);
                 switch (item.getSort()) {
                     case 1:
-                        Device device = DeviceManage.getInstance().getDevice(item.getSid());
+                        Device device = DeviceManage.getInstance().getDevice(item.getSID());
                         icon.setImageResource(R.mipmap.equ_ic_gateway);
                         helper.getView(R.id.panel_name).setVisibility(View.GONE);
                         name.setText(device.getName());
                         break;
                     case 3:
                         try {
-                            SubDevice sub = App.db.selector(SubDevice.class).where("unique", "=", item.getSid()).findFirst();
+                            SubDevice sub = App.db.selector(SubDevice.class).where("unique", "=", item.getSID()).findFirst();
                             if (sub != null) {
                                 icon.setImageResource(Comconst.IMAGETYPE[sub.getTp()]);
                                 name.setText(sub.getName());
@@ -210,7 +211,7 @@ public class SpaceDetailActivity extends BaseActivity implements View.OnClickLis
                         break;
                     case 4:
                         try {
-                            Sensor sensor = App.db.selector(Sensor.class).where("id", "=", item.getSid()).findFirst();
+                            Sensor sensor = App.db.selector(Sensor.class).where("id", "=",item.getSID()).findFirst();
                             helper.getView(R.id.panel_name).setOnClickListener(null);
                             if (sensor != null) {
                                 icon.setImageResource(Comconst.SENSORTYPE[sensor.getType() - 1]);
@@ -230,16 +231,52 @@ public class SpaceDetailActivity extends BaseActivity implements View.OnClickLis
         lv.setAdapter(commonAdapter);
     }
 
-    private void getData() {
-        room1.clear();
+    public List<Devall> getMyData(String s){
+        List<Devall> list=new ArrayList<>();
         try {
-            List<SpaceBean> roomli = App.db.selector(SpaceBean.class).where("room", "=", room).findAll();
-            if (roomli != null) {
-                room1.addAll(roomli);
+            List<Device> gates = DeviceManage.getInstance().getCurrentdev();
+            if(gates!=null){
+                if("所有空间".equals(s)){
+                    list.addAll(gates);
+                }else
+                    for (int i = 0; i < gates.size(); i++) {
+                        Device gateway = gates.get(i);
+                        if(gateway.getRoom().equals(s)){
+                            list.add(gateway);
+                        }
+                    }
+                for (int i = 0; i < gates.size(); i++) {
+                    Device gateway = gates.get(i);
+                    List<SubDevice> ds=null;
+                    if("所有空间".equals(s)){
+                        ds= App.db.selector(SubDevice.class).where("gateway_id", "=",gateway.getXDevice().getDeviceId()).and("type","!=",0).findAll();
+                    }else
+                        ds= App.db.selector(SubDevice.class).where("gateway_id", "=",gateway.getXDevice().getDeviceId()).and("type","!=",0).and("room","=",s).findAll();
+                    if(ds!=null){
+                        list.addAll(ds);
+                    }
+                }
+                for (int i = 0; i < gates.size(); i++) {
+                    Device gateway = gates.get(i);
+                    List<Sensor> ds=null;
+                    if("所有空间".equals(s)) {
+                        ds= App.db.selector(Sensor.class).where("device_id", "=", gateway.getXDevice().getDeviceId()).findAll();
+                    }else
+                        ds=App.db.selector(Sensor.class).where("device_id", "=", gateway.getXDevice().getDeviceId()).and("room", "=", s).findAll();
+                    if(ds!=null){
+                        list.addAll(ds);
+                    }
+                }
             }
         } catch (DbException e) {
             e.printStackTrace();
         }
+        return list;
+    }
+
+    private void getData() {
+        room1.clear();
+        room1.addAll(getMyData(room));
     }
 
     @Override
@@ -286,19 +323,19 @@ public class SpaceDetailActivity extends BaseActivity implements View.OnClickLis
                                 });
                             }
                             for (int i = 0; i < room1.size(); i++) {
-                                SpaceBean spaceBean = room1.get(i);
+                                Devall spaceBean = room1.get(i);
                                 spaceBean.setRoom("客厅");
                                 switch (spaceBean.getSort()){
                                     case 1:
-                                        Device device = DeviceManage.getInstance().getDevice(spaceBean.getSid());
+                                        Device device = DeviceManage.getInstance().getDevice(spaceBean.getSID());
                                         device.setRoom(s);
                                         DeviceManage.getInstance().updateDevice(device);
                                         break;
                                     case 3:
-                                        App.db.update(SubDevice.class, WhereBuilder.b("unique","=",spaceBean.getSid()),new KeyValue("room","客厅"));
+                                        App.db.update(SubDevice.class, WhereBuilder.b("unique","=",spaceBean.getSID()),new KeyValue("room","客厅"));
                                         break;
                                     case 4:
-                                        App.db.update(Sensor.class, WhereBuilder.b("id","=",spaceBean.getSid()),new KeyValue("room","客厅"));
+                                        App.db.update(Sensor.class, WhereBuilder.b("id","=",spaceBean.getSID()),new KeyValue("room","客厅"));
                                         break;
                                 }
                             }
@@ -327,17 +364,17 @@ public class SpaceDetailActivity extends BaseActivity implements View.OnClickLis
                         }
                         try {
                             for (int i = 0; i < selectList.size(); i++) {
-                                SpaceBean spaceBean = selectList.get(i);
+                                Devall spaceBean = selectList.get(i);
                                 spaceBean.setRoom(s);
                                 switch (spaceBean.getSort()){
                                     case 1:
-                                        Device device = DeviceManage.getInstance().getDevice(spaceBean.getSid());
+                                        Device device = DeviceManage.getInstance().getDevice(spaceBean.getSID());
                                         device.setRoom(s);
                                         DeviceManage.getInstance().updateDevice(device);
                                         break;
                                     case 3:
-                                        App.db.update(SubDevice.class, WhereBuilder.b("unique","=",spaceBean.getSid()),new KeyValue("room",s));
-                                        final SubDevice sub = App.db.selector(SubDevice.class).where("unique", "=", spaceBean.getSid()).findFirst();
+                                        App.db.update(SubDevice.class, WhereBuilder.b("unique","=",spaceBean.getSID()),new KeyValue("room",s));
+                                        final SubDevice sub = App.db.selector(SubDevice.class).where("unique", "=", spaceBean.getSID()).findFirst();
                                         if(sub!=null){
                                             sub.setRoom(s);
                                             HttpManage.getInstance().upDateSub(HttpManage.SUBTABLE, sub.getObjectId(), new Gson().toJson(sub), new MyCallback() {
@@ -359,8 +396,8 @@ public class SpaceDetailActivity extends BaseActivity implements View.OnClickLis
 
                                         break;
                                     case 4:
-                                        App.db.update(Sensor.class, WhereBuilder.b("id","=",spaceBean.getSid()),new KeyValue("room",s));
-                                        final Sensor sen= App.db.selector(Sensor.class).where("id","=",spaceBean.getSid()).findFirst();
+                                        App.db.update(Sensor.class, WhereBuilder.b("id","=",spaceBean.getSID()),new KeyValue("room",s));
+                                        final Sensor sen= App.db.selector(Sensor.class).where("id","=",spaceBean.getSID()).findFirst();
                                         if(sen!=null){
                                             sen.setRoom(s);
                                             HttpManage.getInstance().upDateSub(HttpManage.SUBTABLE, sen.getObjectId(), new Gson().toJson(sen), new MyCallback() {
@@ -381,9 +418,8 @@ public class SpaceDetailActivity extends BaseActivity implements View.OnClickLis
                                         };
                                 }
                             }
-                            App.db.replace(selectList);
                             getData();
-                            commonAdapter.notifyDataSetInvalidated();
+                            commonAdapter.notifyDataSetChanged();
                             if(selectList.size()>0){
                                 MyToast.show(SpaceDetailActivity.this,MyToast.TYPE_OK,"设备移动成功",1);
                             }

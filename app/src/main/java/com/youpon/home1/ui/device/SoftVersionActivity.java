@@ -55,6 +55,17 @@ public class SoftVersionActivity extends BaseActivity implements View.OnClickLis
         type = getIntent().getIntExtra("type", 0);
         device_id = getIntent().getIntExtra("device_id", 0);
         device = DeviceManage.getInstance().getDevice(device_id);
+        HttpManage.getInstance().getDeviceUpdateTask(device_id, new MyCallback() {
+            @Override
+            public void onSuc(String result) {
+                Log.e("UpdateTask",result);
+            }
+
+            @Override
+            public void onFail(int code, String msg) {
+
+            }
+        });
         if(type==1){
             title.setText("固件版本");
             HttpManage.getInstance().getDeviceUpdate(device_id, new MyCallback() {
@@ -68,7 +79,7 @@ public class SoftVersionActivity extends BaseActivity implements View.OnClickLis
                             String description = jsonObject.optString("description");
                             describe.setText(description);
                             currentV.setText("V"+newest);
-                            if(newest>device.getXDevice().getMcuHardVersion()){
+                            if(newest>device.getXDevice().getMcuSoftVersion()){
                                 update.setEnabled(true);
                             }else update.setEnabled(false);
                         }
@@ -101,7 +112,7 @@ public class SoftVersionActivity extends BaseActivity implements View.OnClickLis
                 HttpManage.getInstance().getFirmware(device_id, new MyCallback() {
                     @Override
                     public void onSuc(String result) {
-                        Log.e("TAG", result);
+                        Log.e("TAG", result+"设备升级");
                         Toast.makeText(SoftVersionActivity.this, "设备开始升级..." + result, Toast.LENGTH_SHORT).show();
                     }
 

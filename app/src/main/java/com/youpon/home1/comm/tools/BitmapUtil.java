@@ -270,7 +270,7 @@ public class BitmapUtil {
 		options.inJustDecodeBounds = true;
 		// 获取资源图片
 		InputStream is = con.getResources().openRawResource(
-				R.mipmap.ic_launcher);
+				R.raw.ic_launcher);
 		BitmapFactory.decodeStream(is, null, options);
 		int outWidth = options.outWidth;
 		int outHeight = options.outHeight;

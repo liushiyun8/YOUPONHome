@@ -228,7 +228,7 @@ public class DeviceImageView extends ImageView {
                 }
                 paint.setStrokeWidth(1);
                 paint.setColor(Color.GREEN);
-                Log.e("TAGPaint","width:"+width+" height:"+height+" radio:"+radios);
+//                Log.e("TAGPaint","width:"+width+" height:"+height+" radio:"+radios);
 //                canvas.drawCircle(centerX,centerY,radios,paint);
                 canvas.drawBitmap(temp1,centerX-temp1.getWidth()/2,centerY-temp1.getHeight()/2,paint);
                 int flag = canvas.saveLayer(0, 0, width, height, paint);

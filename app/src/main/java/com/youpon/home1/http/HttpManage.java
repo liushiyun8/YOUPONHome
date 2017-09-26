@@ -105,6 +105,8 @@ public class HttpManage {
 
     private final String updateDeviceURL=host+"/v2/product/{product_id}/device/{device_id}";
 
+    private String addDeviceURL=host+"/v2/product/{product_id}/device";
+
     private String newUpdateURL=host+"/v2/upgrade/device/newest_version";
 
     public static final int TYPE_SINGLE=0;
@@ -568,6 +570,41 @@ public class HttpManage {
         x.http().post(entity,myCallback);
     }
 
+    public void getDeviceUpdateTask(int device_id, MyCallback myCallback) {
+        RequestParams entity=new RequestParams(host+"/v2/upgrade/firmware/check/"+device_id);
+        entity.setHeader("Access-Token", App.getApp().getAccessToken());
+        entity.setMethod(HttpMethod.POST);
+        entity.setAsJsonContent(true);
+        entity.addBodyParameter("product_id",Constant.PRODUCTID);
+//        "product_id":"产品ID",
+//                "type":"升级任务类型",
+//                "current_version":"设备当前版本",
+//                "identify":"用来定位多MCU或多子设备的情况"
+        entity.addBodyParameter("type","1");
+        entity.addBodyParameter("current_version","15");
+        entity.addBodyParameter("identify","0");
+        x.http().post(entity,myCallback);
+    }
+
+    public void addDevice(String token,String mac,String name,Callback.CommonCallback<String> callback) {
+        RequestParams entity=new RequestParams(addDeviceURL.replace("{product_id}",Constant.PRODUCTID));
+        entity.setHeader("Access-Token",token);
+        entity.setMethod(HttpMethod.POST);
+        entity.setAsJsonContent(true);
+        entity.addBodyParameter("mac",mac);
+        entity.addBodyParameter("name",name);
+        x.http().post(entity,callback);
+    }
+
+    public void getAuthkey(Callback.CommonCallback<String> callback) {
+        RequestParams entity=new RequestParams(host+"/v2/accesskey_auth");
+        entity.setMethod(HttpMethod.POST);
+        entity.setAsJsonContent(true);
+        entity.addBodyParameter("id","320fa6b33f30e600");
+        entity.addBodyParameter("secret","6811eb286493895e94e7615fd2927446");
+        x.http().post(entity,callback);
+    }
+
     public void getFirmware(int device_id,Callback.CommonCallback<String> callback) {
         RequestParams entity=new RequestParams(firmwareURL);
         entity.setHeader("Access-Token", App.getApp().getAccessToken());
@@ -641,6 +678,7 @@ public class HttpManage {
         }
         return headersdata;
     }
+
 
 
     public static abstract class ResultCallback<T> extends TextHttpResponseHandler {

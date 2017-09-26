@@ -19,14 +19,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.youpon.home1.R;
 import com.youpon.home1.bean.Device;
-import com.youpon.home1.bean.NoticeInfo;
-import com.youpon.home1.bean.SubDevice;
-import com.youpon.home1.bean.Gateway;
-import com.youpon.home1.bean.Roombean;
-import com.youpon.home1.bean.Sensor;
 import com.youpon.home1.comm.App;
 import com.youpon.home1.comm.Comconst;
 import com.youpon.home1.comm.Constant;
@@ -37,18 +31,14 @@ import com.youpon.home1.comm.tools.DataParser;
 import com.youpon.home1.comm.tools.SpUtils;
 import com.youpon.home1.comm.tools.XlinkUtils;
 import com.youpon.home1.http.HttpManage;
-import com.youpon.home1.http.Net2db;
 import com.youpon.home1.manage.DeviceManage;
 import com.youpon.home1.ui.home.fragement.Device1Fragment;
-import com.youpon.home1.ui.home.fragement.DeviceFragment;
 import com.youpon.home1.ui.home.fragement.SceneFragment;
 import com.youpon.home1.ui.home.fragement.SpaceFragement;
 import com.youpon.home1.ui.home.fragement.ZhuyueFragment;
 import com.youpon.home1.ui.home.service.MyService;
 import com.youpon.home1.ui.home.service.MyTokenService;
 import com.youpon.home1.ui.reciever.ScreenObserver;
-
-import org.apache.http.Header;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -56,9 +46,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
-import org.xutils.common.util.KeyValue;
-import org.xutils.db.sqlite.WhereBuilder;
-import org.xutils.ex.DbException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -66,9 +53,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.fog.callbacks.ControlDeviceCallBack;
-import io.fog.fog2sdk.MiCODevice;
-import io.fog.helper.Configuration;
 import io.xlink.wifi.sdk.XDevice;
 import io.xlink.wifi.sdk.XlinkAgent;
 import io.xlink.wifi.sdk.XlinkCode;
@@ -76,7 +60,6 @@ import io.xlink.wifi.sdk.bean.DataPoint;
 import io.xlink.wifi.sdk.bean.EventNotify;
 import io.xlink.wifi.sdk.listener.ConnectDeviceListener;
 import io.xlink.wifi.sdk.listener.GetSubscribeKeyListener;
-import io.xlink.wifi.sdk.listener.SendPipeListener;
 import io.xlink.wifi.sdk.listener.SubscribeDeviceListener;
 import io.xlink.wifi.sdk.util.MyLog;
 
@@ -381,7 +364,6 @@ public class DeviceMainActivity extends BaseActivity {
             byte[] bs1=Command.getAll(Command.ALLSENSOR).getBytes();
             byte[] bs2=Command.getRead485("FFFF").getBytes();
             byte[] bs3=Command.getOtherStr(Command.CUSDEVICE).getBytes();
-            byte[] bs4=Command.getAll(Command.ALLTIMER).getBytes();
             String tips;
             switch (result) {
                 // 连接设备成功 设备处于内网
@@ -395,7 +377,6 @@ public class DeviceMainActivity extends BaseActivity {
                     Command.sendData(xDevice,bs1,TAG);
                     Command.sendData(xDevice,bs2,TAG);
                     Command.sendData(xDevice,bs3,TAG);
-//                    Command.sendData(xDevice,bs4,TAG);
                     XlinkAgent.getInstance().sendProbe(xDevice);
                     break;
                 // 连接设备成功 设备处于云端
@@ -407,7 +388,7 @@ public class DeviceMainActivity extends BaseActivity {
                     Command.sendData(xDevice,bs2,TAG);
                     Command.sendData(xDevice,bs3,TAG);
 //                    Command.sendData(xDevice,bs4,TAG);
-                    XlinkUtils.shortTips(tips);
+//                    XlinkUtils.shortTips(tips);
 //                    DeviceManage.getInstance().addDevice(xDevice);
                     Log(tips);
                     break;
@@ -490,7 +471,6 @@ public class DeviceMainActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
                 DeviceManage.getInstance().clearCurrentdev();
-                Log.e("JSONGETList", result);
                 try {
                     JSONArray datas = new JSONArray(result);
                     for (int i = 0; i < datas.length(); i++) {
@@ -503,7 +483,7 @@ public class DeviceMainActivity extends BaseActivity {
                 }
                 EventBus.getDefault().post(new EventData(EventData.CODE_GETDEVICE, ""));
                 for (int j = 0; j < DeviceManage.getInstance().getCurrentdev().size(); j++) {
-                    Log.e("JSONCurrent", DeviceManage.getInstance().getCurrentdev().toString());
+//                    Log.e("JSONCurrent", DeviceManage.getInstance().getCurrentdev().toString());
                     connectDevice(DeviceManage.getInstance().getCurrentdev().get(j));
                 }
             }
@@ -538,25 +518,25 @@ public class DeviceMainActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
-                case _REFRESHTEXTVIEW:
-                    String s = msg.obj.toString().trim();
-                    Log.e("Handle", s);
-                    break;
+//                case _REFRESHTEXTVIEW:
+//                    String s = msg.obj.toString().trim();
+//                    Log.e("Handle", s);
+//                    break;
                 case 2:
                     Toast.makeText(DeviceMainActivity.this,msg.obj.toString(),Toast.LENGTH_SHORT).show();
                     break;
             }
         }
     }
-    private void startAnim(View view) {
-        ScaleAnimation scaleAnimation = new ScaleAnimation(1, 1.5f, 1, 1.5f, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
-        scaleAnimation.setFillAfter(true);
-        view.startAnimation(scaleAnimation);
-    }
-    private void stoptAnim(View view) {
-        ScaleAnimation scaleAnimation = new ScaleAnimation(1.5f, 1, 1.5f, 1,Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
-        view.startAnimation(scaleAnimation);
-    }
+//    private void startAnim(View view) {
+//        ScaleAnimation scaleAnimation = new ScaleAnimation(1, 1.5f, 1, 1.5f, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+//        scaleAnimation.setFillAfter(true);
+//        view.startAnimation(scaleAnimation);
+//    }
+//    private void stoptAnim(View view) {
+//        ScaleAnimation scaleAnimation = new ScaleAnimation(1.5f, 1, 1.5f, 1,Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+//        view.startAnimation(scaleAnimation);
+//    }
 
     @Override
     protected void onResume() {
