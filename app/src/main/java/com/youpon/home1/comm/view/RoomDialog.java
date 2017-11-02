@@ -3,9 +3,13 @@ package com.youpon.home1.comm.view;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.se7en.utils.DeviceUtils;
@@ -46,17 +50,18 @@ public class RoomDialog implements View.OnClickListener {
                     textView.setTextColor(Color.parseColor("#6e7aa0"));
                     textView.setLayoutParams(lp);
                     textView.setBackgroundResource(R.drawable.text_bg);
-                    textView.setOnClickListener(new View.OnClickListener() {
+                    textView.setOnTouchListener(new View.OnTouchListener() {
                         @Override
-                        public void onClick(View v) {
+                        public boolean onTouch(View v, MotionEvent motionEvent) {
+                            Log.e("onclick","我被点击了");
                             TextView tv= (TextView) v;
                             for (int j = 0; j < flow.getChildCount(); j++) {
                                 flow.getChildAt(j).setSelected(false);
                             }
                             v.setSelected(true);
                             s =tv.getText().toString();
+                            return true;
                         }
-
                     });
                     flow.addView(textView);
                 }

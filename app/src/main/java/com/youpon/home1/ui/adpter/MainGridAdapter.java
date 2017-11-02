@@ -99,8 +99,10 @@ public class MainGridAdapter extends BaseAdapter {
                             List<Scenebean.ActionsBean> action = scenebean.getAction();
                             if(scenebean.getStatus()!=1) {
                                 scenebean.setStatus(1);
-                                Command.sendData1(scenebean.getGateway_id(),Command.getCommands(action).getBytes(),"MainGridAdapter");
-
+                                List<String> commands = Command.getCommands(action);
+                                for (String command : commands) {
+                                    Command.sendData1(scenebean.getGateway_id(), command.getBytes(),"MainGridAdapter");
+                                }
                             }else {
                                 scenebean.setStatus(0);
                                 List<Scenebean.ActionsBean> action1 = new ArrayList<Scenebean.ActionsBean>();
@@ -114,7 +116,10 @@ public class MainGridAdapter extends BaseAdapter {
                                     action1.add(actionsBean);
                                 }
                                 if (action1 != null && action.size() > 0) {
-                                    Command.sendData(DeviceManage.getInstance().getDevice(scenebean.getGateway_id()).getXDevice(), Command.getCommands(action1).getBytes(), "MysceneListAdapter");
+                                    List<String> commands = Command.getCommands(action);
+                                    for (String command : commands) {
+                                        Command.sendData1(scenebean.getGateway_id(), command.getBytes(),"MainGridAdapter");
+                                    }
                                 }
                             }
                             try {

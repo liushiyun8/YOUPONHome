@@ -73,7 +73,7 @@ public class SceneFragment extends Fragment {
             Scenebean scenebean = fourthScene.get(i);
             Scenebean first=null;
             try {
-                first = App.db.selector(Scenebean.class).where("panel_mac", "=", scenebean.getPanel_mac()).and("groupId", "=", scenebean.getGroupId()).and("sceneId", "=", scenebean.getSceneId()).findFirst();
+                first = App.db.selector(Scenebean.class).where("panel_mac", "=", scenebean.getPanel_mac()).and("gateway_id","=",scenebean.getGateway_id()).and("groupId", "=", scenebean.getGroupId()).and("sceneId", "=", scenebean.getSceneId()).findFirst();
             } catch (DbException e) {
                 e.printStackTrace();
             }
@@ -96,6 +96,7 @@ public class SceneFragment extends Fragment {
 
         }
         lists.addAll(DbUtil.findMyScene());
+        Log.e("lists111:",lists.toString());
         if (lists.size() == 0) {
             noscene.setVisibility(View.VISIBLE);
         } else {
@@ -130,7 +131,7 @@ public class SceneFragment extends Fragment {
         for (int j = 0; j < fourthScene.size(); j++) {
             Scenebean scenebean = fourthScene.get(j);
             try {
-                Scenebean first = App.db.selector(Scenebean.class).where("panel_mac", "=", scenebean.getPanel_mac()).and("groupId", "=", scenebean.getGroupId()).and("sceneId", "=", scenebean.getSceneId()).findFirst();
+                Scenebean first = App.db.selector(Scenebean.class).where("panel_mac", "=", scenebean.getPanel_mac()).and("gateway_id","=",scenebean.getGateway_id()).and("groupId", "=", scenebean.getGroupId()).and("sceneId", "=", scenebean.getSceneId()).findFirst();
                 if(first==null){
                     HttpManage.getInstance().addSub(HttpManage.TYPE_SINGLE,HttpManage.SCENETABLE,new Gson().toJson(scenebean), new MyCallback() {
                         @Override
@@ -153,38 +154,6 @@ public class SceneFragment extends Fragment {
                 e.printStackTrace();
             }
         }
-        List<Panel> panels = PanelManage.getInstance().get485Scenepanel();
-        for (int i = 0; i < panels.size(); i++) {
-            Panel panel = panels.get(i);
-            Device device = DeviceManage.getInstance().getDevice(panel.getGateway_id());
-            if(device!=null){
-                if(device.isOnline())
-                Command.sendData(device.getXDevice(), Command.getReadSceneStr("FFFF","00",panel.getId(),0).getBytes(), TAG);
-            }
-        }
-        final List<Device> devices = DeviceManage.getInstance().getCurrentdev();
-        task = new TimerTask() {
-            @Override
-            public void run() {
-                if (i >= devices.size()) {
-                    Log.e("jkghgjgj","hjjj");
-                    if(task!=null)
-                    task.cancel();
-                    return;
-                }
-                final Device device = devices.get(i);
-                if (device.isOnline()) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Command.sendData(device.getXDevice(), Command.getReadSceneStr("FFFF", "00", "FFFF", 1).getBytes(), TAG);
-                        }
-                    });
-                }
-                i++;
-            }
-        };
-        new Timer().schedule(task,0,3000);
         updateDate();
         mysceneListAdapter = new MysceneListAdapter(getActivity(), lists);
         lv.setAdapter(mysceneListAdapter);
@@ -194,6 +163,35 @@ public class SceneFragment extends Fragment {
                 startActivity(new Intent(getActivity(), SceneAddActivity.class));
             }
         });
+        //获取四位场景里面的设备状态
+        byte[] bs2=Command.getAll(99).getBytes();
+        List<Device> devices = DeviceManage.getInstance().getCurrentdev();
+        for (Device de:devices) {
+            Command.sendData(de.getXDevice(),bs2,TAG);
+        }
+
+        //获取网关上三个场景的内容
+        List<Panel> panels = PanelManage.getInstance().get485Scenepanel();
+        for (int i = 0; i < panels.size(); i++) {
+            Panel panel = panels.get(i);
+            Device device = DeviceManage.getInstance().getDevice(panel.getGateway_id());
+            if(device!=null){
+                if(device.isOnline())
+                Command.sendData(device.getXDevice(), Command.getReadSceneStr("FFFF","00",panel.getId(),0).getBytes(), TAG);
+            }
+        }
+
+        //获取九位面板上两个场景的内容
+        List<Panel> panels1 = PanelManage.getInstance().getNineScenepanel();
+        for (int i = 0; i < panels1.size(); i++) {
+            Panel panel = panels1.get(i);
+            Device device = DeviceManage.getInstance().getDevice(panel.getGateway_id());
+            if(device!=null){
+                if(device.isOnline())
+                    Command.sendData(device.getXDevice(), Command.getReadSceneStr("FFFF","00",panel.getId(),1).getBytes(), TAG);
+            }
+        }
+
 
     }
 

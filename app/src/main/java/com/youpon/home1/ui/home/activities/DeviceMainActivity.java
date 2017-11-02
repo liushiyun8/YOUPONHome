@@ -96,8 +96,10 @@ public class DeviceMainActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDataEvnet(EventData eventData){
-        if(eventData.getTag()==EventData.TAG_REFRESH){
+        if(EventData.TAG_REFRESH.equals(eventData.getTag())){
             loadData();
+        }else if(eventData.getCode()==EventData.CODE_RECONNECT){
+            connectDevice(DeviceManage.getInstance().getDevice((XDevice) eventData.getData()));
         }
     }
 
@@ -362,7 +364,7 @@ public class DeviceMainActivity extends BaseActivity {
             // TODO: handle exception
             byte[] bs=Command.getAll(Command.ALLDEVICE).getBytes();
             byte[] bs1=Command.getAll(Command.ALLSENSOR).getBytes();
-            byte[] bs2=Command.getRead485("FFFF").getBytes();
+//            byte[] bs2=Command.getRead485("FFFF").getBytes();
             byte[] bs3=Command.getOtherStr(Command.CUSDEVICE).getBytes();
             String tips;
             switch (result) {
@@ -375,8 +377,8 @@ public class DeviceMainActivity extends BaseActivity {
 //                    Log(tips);
                     Command.sendData(xDevice,bs,TAG);
                     Command.sendData(xDevice,bs1,TAG);
-                    Command.sendData(xDevice,bs2,TAG);
-                    Command.sendData(xDevice,bs3,TAG);
+//                    Command.sendData(xDevice,bs2,TAG);
+//                    Command.sendData(xDevice,bs3,TAG);
                     XlinkAgent.getInstance().sendProbe(xDevice);
                     break;
                 // 连接设备成功 设备处于云端
@@ -385,8 +387,8 @@ public class DeviceMainActivity extends BaseActivity {
                     tips = "正在通过云端控制设备(" + xDevice.getDeviceName() + ")";
                     Command.sendData(xDevice,bs,TAG);
                     Command.sendData(xDevice,bs1,TAG);
-                    Command.sendData(xDevice,bs2,TAG);
-                    Command.sendData(xDevice,bs3,TAG);
+
+//                    Command.sendData(xDevice,bs3,TAG);
 //                    Command.sendData(xDevice,bs4,TAG);
 //                    XlinkUtils.shortTips(tips);
 //                    DeviceManage.getInstance().addDevice(xDevice);
@@ -523,7 +525,7 @@ public class DeviceMainActivity extends BaseActivity {
 //                    Log.e("Handle", s);
 //                    break;
                 case 2:
-                    Toast.makeText(DeviceMainActivity.this,msg.obj.toString(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DeviceMainActivity.this,msg.obj!=null?msg.obj.toString():"",Toast.LENGTH_SHORT).show();
                     break;
             }
         }

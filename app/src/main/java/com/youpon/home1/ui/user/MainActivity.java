@@ -242,8 +242,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             public void onError(Header[] headers, HttpManage.Error error) {
                 //用户验证失败， 错误码提示见 </a>《错误码说明》 </a>文档
                 Toast.makeText(MainActivity.this,"登录失败", Toast.LENGTH_SHORT).show();
-                XlinkUtils.shortTips(error.getMsg());
-                Log.e("HHHHE", error.getMsg());
+                XlinkUtils.shortTips(error.getMsg()+"");
+                Log.e("HHHHE", error.getMsg()+"");
             }
 
             @Override

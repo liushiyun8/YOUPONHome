@@ -292,24 +292,25 @@ public class ShebeiAdapter extends BaseAdapter {
                                 viewHolder.jian.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        if (viewHolder.seek.getProgress() >= 10)
-                                            viewHolder.seek.setProgress(viewHolder.seek.getProgress() - 10);
+                                        int progress = viewHolder.seek.getProgress();
+                                        progress=progress<20?10:(progress - 10);
+                                        viewHolder.seek.setProgress(progress);
+                                        sendComand(subDevice, 0, progress);
                                     }
                                 });
                                 viewHolder.add.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        if (viewHolder.seek.getProgress() <= 90)
-                                            viewHolder.seek.setProgress(viewHolder.seek.getProgress() + 10);
+                                        int progress = viewHolder.seek.getProgress();
+                                        progress=progress>90?100:(progress + 10);
+                                        viewHolder.seek.setProgress(progress);
+                                        sendComand(subDevice, 0, progress);
                                     }
                                 });
                                 viewHolder.seek.setTag(position);
                                 viewHolder.seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                                     @Override
                                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                                        if (!fromUser) {
-                                            sendComand(subDevice, 0, progress);
-                                        }
                                     }
 
                                     @Override
@@ -319,7 +320,12 @@ public class ShebeiAdapter extends BaseAdapter {
 
                                     @Override
                                     public void onStopTrackingTouch(SeekBar seekBar) {
-                                        sendComand(subDevice, 0, seekBar.getProgress());
+                                        int progress = seekBar.getProgress();
+                                        if (progress < 10) {
+                                            progress = 10;
+                                            seekBar.setProgress(progress);
+                                        }
+                                        sendComand(subDevice, 0,progress);
                                     }
                                 });
                                 break;

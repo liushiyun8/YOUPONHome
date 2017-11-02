@@ -1,11 +1,11 @@
 package com.youpon.home1.ui.device;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
@@ -28,7 +28,9 @@ import com.youpon.home1.comm.base.BaseActivity;
 import com.youpon.home1.comm.base.EventData;
 import com.youpon.home1.comm.tools.Command;
 import com.youpon.home1.comm.tools.SpUtils;
+import com.youpon.home1.comm.tools.XlinkUtils;
 import com.youpon.home1.comm.view.DeviceImageView;
+import com.youpon.home1.comm.view.MyRelativeLayout;
 import com.youpon.home1.manage.DeviceManage;
 
 import org.greenrobot.eventbus.EventBus;
@@ -90,15 +92,17 @@ public class DeviceDetailActivity extends BaseActivity implements View.OnClickLi
     TextView taskTv;
     @BindView(R.id.baiye)
     ImageView baiye;
+    @BindView(R.id.control_layout)
+    MyRelativeLayout controlLayout;
     private int type;
     private String id;
-    private int tap;
-    private int tap2;
+    private int tap=-1;
+    private int tap2=-1;
     private SpUtils sp;
     private int deviceid;
     private MyHandle myhandle = new MyHandle();
     private SubDevice subDevice;
-//    private ProgressDialog progressDialog;
+    //    private ProgressDialog progressDialog;
     private String unique;
     private int dst;
     private XDevice xDevice;
@@ -255,7 +259,7 @@ public class DeviceDetailActivity extends BaseActivity implements View.OnClickLi
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
                     int progress = seekBar.getProgress();
-                    if (progress <= 10) {
+                    if (progress < 10) {
                         progress = 10;
                         seekBar.setProgress(progress);
                     }
@@ -265,30 +269,26 @@ public class DeviceDetailActivity extends BaseActivity implements View.OnClickLi
             add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int progress = seekb.getProgress();
-                    if (progress >= 100)
-                        return;
-                    seekb.setProgress(++progress);
+                    int progress =seekb.getProgress();
+                    progress=progress>90?100:(progress + 10);
+                    seekb.setProgress(progress);
                     sendCommand(0, progress);
                 }
             });
             jian.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int progress = seekb.getProgress();
-                    if (progress <= 0) {
-                        return;
-                    }
-                    seekb.setProgress(--progress);
-                    if (progress < 10) progress = 10;
+                    int progress =seekb.getProgress();
+                    progress=progress<20?10:(progress - 10);
+                    seekb.setProgress(progress);
                     sendCommand(0, progress);
                 }
             });
         } else if (type == 3) {
             huanqi.setVisibility(View.VISIBLE);
-            if (tap2 ==1) {
+            if (tap2 == 1) {
                 gaodang.setVisibility(View.GONE);
-            }else gaodang.setVisibility(View.VISIBLE);
+            } else gaodang.setVisibility(View.VISIBLE);
             if (tap == 0) {
                 shebeiIcon.setDeviceStatus(0);
                 huanqi.setOnCheckedChangeListener(null);
@@ -368,12 +368,8 @@ public class DeviceDetailActivity extends BaseActivity implements View.OnClickLi
         type = subDevice.getTp();
         clas = subDevice.getClas();
         shebeiIcon.setType(type);
-        String name = subDevice.getName();
         deviceid = subDevice.getGateway_id();
-        title.setText(name);
-        tap = subDevice.getValue1();
-        tap2 = subDevice.getValue2();
-        initUI();
+        updateData();
     }
 
     private void updateData() {
@@ -381,6 +377,20 @@ public class DeviceDetailActivity extends BaseActivity implements View.OnClickLi
             subDevice = App.db.selector(SubDevice.class).where("unique", "=", unique).findFirst();
         } catch (DbException e) {
             e.printStackTrace();
+        }
+        if(subDevice.isOnline()){
+            controlLayout.setIntercept(false);
+            controlLayout.setOnClickListener(null);
+            onOff.setEnabled(true);
+        }else {
+            controlLayout.setIntercept(true);
+            controlLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    XlinkUtils.shortTips("设备离线，不可控制");
+                }
+            });
+            onOff.setEnabled(false);
         }
         title.setText(subDevice.getName());
         if (tap != subDevice.getValue1() || tap2 != subDevice.getValue2()) {
@@ -434,7 +444,7 @@ public class DeviceDetailActivity extends BaseActivity implements View.OnClickLi
             super.handleMessage(msg);
             switch (msg.what) {
                 case _REFRESHTEXTVIEW:
-                    Log.e("Handle", msg.obj.toString().trim());
+                    Log.e("Handler", msg.obj.toString().trim());
                     break;
             }
         }

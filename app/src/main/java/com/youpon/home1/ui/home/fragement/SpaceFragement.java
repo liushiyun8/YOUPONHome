@@ -352,7 +352,7 @@ public class SpaceFragement extends Fragment implements View.OnClickListener {
                 }else
                     for (int i = 0; i < gates.size(); i++) {
                         Device gateway = gates.get(i);
-                        if(gateway.getRoom().equals(s)){
+                        if(s.equals(gateway.getRoom())){
                             list.add(gateway);
                         }
                     }

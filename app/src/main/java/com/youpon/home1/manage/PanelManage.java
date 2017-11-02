@@ -168,4 +168,14 @@ public class PanelManage {
         }
         return list;
     }
+
+    public List<Panel> getNineScenepanel() {
+        List<Panel> list=new ArrayList<>();
+        for (Panel panel : panelMap.values()) {
+            if(panel.getClas()==9){
+                list.add(panel);
+            }
+        }
+        return list;
+    }
 }

@@ -264,15 +264,17 @@ public class SceneAddActivity extends BaseActivity implements View.OnClickListen
                         jian.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (seek.getProgress() >= 10)
-                                    seek.setProgress(seek.getProgress() - 10);
+                                int progress =seek.getProgress();
+                                progress=progress<20?10:(progress - 10);
+                                seek.setProgress(progress);
                             }
                         });
                         add.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (seek.getProgress() <= 90)
-                                    seek.setProgress(seek.getProgress() + 10);
+                                int progress =seek.getProgress();
+                                progress=progress>90?100:(progress + 10);
+                                seek.setProgress(progress);
                             }
                         });
                         seek.setTag(position);
@@ -291,7 +293,12 @@ public class SceneAddActivity extends BaseActivity implements View.OnClickListen
 
                             @Override
                             public void onStopTrackingTouch(SeekBar seekBar) {
-                                item.setValue1(seekBar.getProgress());
+                                int progress = seekBar.getProgress();
+                                if (progress < 10) {
+                                    progress = 10;
+                                    seekBar.setProgress(progress);
+                                }
+                                item.setValue1(progress);
                             }
                         });
                         break;

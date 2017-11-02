@@ -133,8 +133,8 @@ public class DeviceManage {
         device.setSubscribe(true);
         device.setOnline(jsonObject.optBoolean("is_online"));
         try {
-            App.db.update(SubDevice.class, WhereBuilder.b("gateway_id","=",xdevice.getDeviceId()),new KeyValue("online",false));
-            App.db.update(Sensor.class, WhereBuilder.b("device_id","=",xdevice.getDeviceId()),new KeyValue("online",false));
+            App.db.update(SubDevice.class, WhereBuilder.b("gateway_id","=",xdevice.getDeviceId()),new KeyValue("online",jsonObject.optBoolean("is_online")));
+            App.db.update(Sensor.class, WhereBuilder.b("device_id","=",xdevice.getDeviceId()),new KeyValue("online",jsonObject.optBoolean("is_online")));
         } catch (DbException e) {
             e.printStackTrace();
         }
@@ -228,7 +228,7 @@ public class DeviceManage {
             }
         }
         try {
-        if(device.getName()!=null){
+            if(device.getName()!=null){
                 jo.put(NAME, device.getName());
             }
             if(device.getRole()!=0){

@@ -30,6 +30,6 @@ public class Comconst {
     public static final int[] MAINTYPEOFF={R.mipmap.equ_btn_warmwind_off,R.mipmap.equ_btn_warmlight_off,R.mipmap.equ_btn_lighting_off,R.mipmap.equ_btn_breath_off,R.mipmap.equ_btn_beiyong_off,R.mipmap.equ_btn_beiyong_off,R.mipmap.equ_btn_scene_drops_off};
     public static final int[] MAINTYPEOUT={R.mipmap.equ_btn_warmwind_drops,R.mipmap.equ_btn_warmlight_drops,R.mipmap.equ_btn_lighting_drops,R.mipmap.equ_btn_breath_drops,R.mipmap.equ_btn_beiyong_drops,R.mipmap.equ_btn_scene_drops};
     public static final String LASTTIME ="lasttime" ;
-    public static final String[] SCENETEXT ={"开启照明，暖风全开工作12分钟后，蜂鸣器鸣叫20秒，关闭暖风后，转为光波全开","全天换气模式:选择此模式后，相应的背光灯点亮，负载工作逻辑如下:全天每四个小时打开换气（1档）10分钟","冷干燥模式:选择此模式后，相应的背光灯点亮，负载工作逻辑如下：打开换气1档和冷风5分钟，之后湿度如果大于50%，延时1小时后关闭，小于50%则立刻关闭"} ;
+    public static final String[] SCENETEXT ={"开启照明，暖风全开工作12分钟后，蜂鸣器鸣叫20秒，关闭暖风后，转为光波全开","全天换气模式:选择此模式后，相应的背光灯点亮，负载工作逻辑如下:全天每四个小时打开换气（1档）10分钟","冷干燥模式:选择此模式后，相应的背光灯点亮，负载工作逻辑如下：打开换气1档和暖风5分钟，之后湿度如果大于50%，延时1小时后关闭，小于50%则立刻关闭"} ;
     public static int CURRENTUSER;
 }

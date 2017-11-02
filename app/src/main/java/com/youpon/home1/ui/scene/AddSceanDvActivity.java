@@ -129,7 +129,7 @@ public class AddSceanDvActivity extends BaseActivity implements View.OnClickList
                     for (int j = 0; j < myDvs.size(); j++) {
                         SubDevice sub1 = myDvs.get(j);
                         if(sub1.getUnique().equals(subDevice.getUnique())){
-                            addLs.add(sub1);
+                            addLs.add(subDevice);
                             break;
                         }
                     }

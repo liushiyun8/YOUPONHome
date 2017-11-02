@@ -273,7 +273,7 @@ public class ZhuyueFragment extends Fragment implements View.OnClickListener {
             public void onPageSelected(int position) {
                 list1.clear();
                 pos=position;
-                for (int i = 9 * position; i < (list.size() > 9 * (position + 1) ? 9 * (position + 1) : (9 * position + list.size() % 9)); i++) {
+                for (int i = 9 * position; i < (list.size() >= 9 * (position + 1) ? 9 * (position + 1) : (9 * position + list.size() % 9)); i++) {
                     list1.add(list.get(i));
                 }
                 mainGridAdapter.notifyDataSetChanged();
@@ -387,7 +387,7 @@ public class ZhuyueFragment extends Fragment implements View.OnClickListener {
             if(pos>count-1){
                 pos=count-1;
             }
-            for (int i = 9 * pos; i < (list.size() > 9 * (pos + 1) ? 9 * (pos + 1) : (9 * pos + list.size() % 9)); i++) {
+            for (int i = 9 * pos; i < (list.size() >= 9 * (pos + 1) ? 9 * (pos + 1) : (9 * pos + list.size() % 9)); i++) {
                 list1.add(list.get(i));
             }
         }

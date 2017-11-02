@@ -112,7 +112,11 @@ public class  MysceneListAdapter extends BaseAdapter {
                         Device device = DeviceManage.getInstance().getDevice(scenebean.getGateway_id());
                         if (device!=null){
                             if(scenebean.getType()==0){
-                                Command.sendData(device.getXDevice(), Command.getCommands(action).getBytes(), "MysceneListAdapter");
+                                List<String> commands = Command.getCommands(action);
+                                for (String command : commands) {
+                                    Command.sendData(device.getXDevice(), command.getBytes(), "MysceneListAdapter");
+                                }
+
                             }else {
                                 if("0001".equals(scenebean.getGroupId())){
                                     Command.sendData(device.getXDevice(), Command.getCallSceneStr(scenebean.getGroupId(),scenebean.getSceneId(),"FFFF",0).getBytes(), "MysceneListAdapter");
@@ -141,8 +145,13 @@ public class  MysceneListAdapter extends BaseAdapter {
                     }
                     if (action1 != null && action.size() > 0) {
                         Device device = DeviceManage.getInstance().getDevice(scenebean.getGateway_id());
-                        if (device!=null)
-                        Command.sendData(DeviceManage.getInstance().getDevice(scenebean.getGateway_id()).getXDevice(), Command.getCommands(action1).getBytes(), "MysceneListAdapter");
+                        if (device!=null){
+                            List<String> commands = Command.getCommands(action1);
+                            for (String command : commands) {
+                                Command.sendData(device.getXDevice(), command.getBytes(), "MysceneListAdapter");
+                            }
+                        }
+
                     }
                 }
                 try {

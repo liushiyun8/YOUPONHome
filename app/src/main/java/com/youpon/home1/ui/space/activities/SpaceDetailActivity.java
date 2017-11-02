@@ -90,7 +90,6 @@ public class SpaceDetailActivity extends BaseActivity implements View.OnClickLis
     private boolean moveMode;
     private List<Devall> selectList=new ArrayList<>();
     private RoomDialog dialog;
-    private String s;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void eventData(EventData eventData){
@@ -178,7 +177,7 @@ public class SpaceDetailActivity extends BaseActivity implements View.OnClickLis
                                 name.setText(sub.getName());
                                 final Panel panel = PanelManage.getInstance().getPanel(sub.getMac());
                                 if(panel!=null){
-                                    helper.setText(R.id.panel_name,panel.getName());
+                                    helper.setText(R.id.panel_name,panel.getMyName());
                                     helper.getView(R.id.panel_name).setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -328,7 +327,6 @@ public class SpaceDetailActivity extends BaseActivity implements View.OnClickLis
                                 switch (spaceBean.getSort()){
                                     case 1:
                                         Device device = DeviceManage.getInstance().getDevice(spaceBean.getSID());
-                                        device.setRoom(s);
                                         DeviceManage.getInstance().updateDevice(device);
                                         break;
                                     case 3:
@@ -339,10 +337,10 @@ public class SpaceDetailActivity extends BaseActivity implements View.OnClickLis
                                         break;
                                 }
                             }
-                            App.db.replace(room1);
+//                            App.db.replace(room1);
                         } catch (DbException e) {
                             e.printStackTrace();
-                            MyToast.show(SpaceDetailActivity.this,MyToast.TYPE_ERROR,"删除失败",1);
+                            MyToast.show(SpaceDetailActivity.this,MyToast.TYPE_ERROR,"设备移动空间失败",1);
                         }
                     }
                 });

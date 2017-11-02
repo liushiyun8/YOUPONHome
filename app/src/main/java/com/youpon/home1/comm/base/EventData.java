@@ -5,11 +5,14 @@ package com.youpon.home1.comm.base;
  */
 public class EventData {
     public static final String REFRESHDB ="refresh_db" ;
+    public static final int CODE_REFRESH_DEVICE=100;
+    public static final int CODE_REFRESH_SENSOR=200;
     public static final int CODE_READ_STUTAS = 300;
     public static final int CODE_REFRESH_TASK = 400;
     public static final int CODE_GETDEVICE = 500;
     public static final int CODE_GETSCENE = 600;
     public static final int CODE_REFRESHLINK = 700;
+    public static final int CODE_RECONNECT= 800;
     public static final int TRANSDATA = 50;
     public String Tag;
     public String massage;
@@ -18,8 +21,7 @@ public class EventData {
     public Object data;
     public int code;
     public static final String TAG_REFRESH="refresh";
-    public static final int CODE_REFRESH_DEVICE=100;
-    public static final int CODE_REFRESH_SENSOR=200;
+
 
 
     public EventData(int code,String massage) {

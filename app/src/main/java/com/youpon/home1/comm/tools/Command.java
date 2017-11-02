@@ -6,13 +6,19 @@ import com.youpon.home1.bean.Scenebean;
 import com.youpon.home1.bean.SubDevice;
 import com.youpon.home1.bean.SceneDevice;
 import com.youpon.home1.comm.App;
+import com.youpon.home1.comm.base.EventData;
 import com.youpon.home1.manage.DeviceManage;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.ex.DbException;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import io.xlink.wifi.sdk.XDevice;
 import io.xlink.wifi.sdk.XlinkAgent;
@@ -139,9 +145,10 @@ public class Command {
         return Star+getRedam()+middle2+command+"]}";
     }
 
-    public static String getCommands(List<Scenebean.ActionsBean> actionbeans){
-        StringBuffer command=new StringBuffer();
+    public static List<String> getCommands(List<Scenebean.ActionsBean> actionbeans){
+        Map<String,StringBuffer> map=new HashMap<>();
         for (int i = 0; i <actionbeans.size(); i++) {
+            StringBuffer command=new StringBuffer();
             Scenebean.ActionsBean actionsBean = actionbeans.get(i);
             int dstid = actionsBean.getDstid();
             String mac = actionsBean.getMac();
@@ -183,6 +190,10 @@ public class Command {
                     command.append("{\"RIU\":0,\"D\":\"" + "55AA5500113100" + first.getId() + "00000" +  dstid + "010006" +"02000010" + ls + "FF" + "\"},");
                 }
             }
+            StringBuffer buffer = map.get(mac);
+            if(buffer==null){
+                map.put(mac,command);
+            }else buffer.append(command);
         }
 //            SceneDevice sceneDevice =sceneDevices.get(i);
 //            if(sceneDevice.isControl()){
@@ -239,10 +250,15 @@ public class Command {
 //                }
 //            }
 //        }
-        if(command.length()==0){
-            return "";
+        Set<Map.Entry<String, StringBuffer>> entries = map.entrySet();
+        List<String> list=new ArrayList<>();
+        for (Map.Entry<String, StringBuffer> entry : entries) {
+            StringBuffer value = entry.getValue();
+            if(value.length()>0){
+                list.add(Star+getRedam()+middle2+value.toString().substring(0,value.length()-1)+"]}");
+            }
         }
-        return Star+getRedam()+middle2+command.toString().substring(0,command.length()-1)+"]}";
+        return list;
     }
     public static String getExitNet(String id){
         String s=Star+getRedam()+middle+"zdo leave 0x"+id+" 1 0"+endStr;
@@ -267,7 +283,7 @@ public class Command {
         if(type==0){
             return Star+getRedam()+middle1+"55AA5500421200"+id+"00000101"+"000509"+groupId+sceneId+content+"FF"+endStr1;
         }
-        return Star+getRedam()+middle+SCENE+"write {"+groupId+sceneId+content+"}\\r\\n send 0x"+id+" 1 1"+endStr;
+        return Star+getRedam()+middle+SCENE+"write {"+("0001".equals(groupId)?"0100":groupId)+sceneId+content+"}\\r\\n send 0x"+id+" 1 1"+endStr;
     }
 
     public static String getCallSceneStr(String groupId,String sceneId,String id,int type){
@@ -293,7 +309,7 @@ public class Command {
         if (ret < 0) {
             switch (ret) {
                 case XlinkCode.NO_CONNECT_SERVER:
-                                                                             XlinkUtils.shortTips("发送数据失败，手机未连接服务器");
+                    XlinkUtils.shortTips("发送数据失败，手机未连接服务器");
                     MyLog.e(name,"发送数据失败，手机未连接服务器");
                     break;
                 case XlinkCode.NETWORD_UNAVAILABLE:
@@ -335,11 +351,10 @@ public class Command {
                     MyLog.e("pipe","发送数据,msgId:" + messageId + "成功");
                     break;
                 case XlinkCode.TIMEOUT:
-                    // 重新调用connect
-                    MyLog.e("pipe","发送数据,msgId:" + messageId + "超时");
+                    EventBus.getDefault().post(new EventData(EventData.CODE_RECONNECT,device));
+                    MyLog.e("pipe","发送数据,msgId:" + messageId + "超时"+",重连中...");
                     // XlinkUtils.shortTips("发送数据超时："
                     // + );
-
                     break;
                 case XlinkCode.SERVER_CODE_UNAUTHORIZED:
                     XlinkUtils.shortTips("控制设备失败,当前帐号未订阅此设备，请重新订阅");

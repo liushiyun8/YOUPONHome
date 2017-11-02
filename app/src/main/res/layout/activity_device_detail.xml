@@ -55,7 +55,8 @@
             android:layout_centerInParent="true"/>
     </RelativeLayout>
 
-    <RelativeLayout
+    <com.youpon.home1.comm.view.MyRelativeLayout
+        android:id="@+id/control_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -222,7 +223,7 @@
                     android:text="摆风"/>
             </RadioGroup>
         </LinearLayout>
-    </RelativeLayout>
+    </com.youpon.home1.comm.view.MyRelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
