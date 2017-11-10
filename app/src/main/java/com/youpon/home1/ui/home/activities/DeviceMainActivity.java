@@ -99,6 +99,7 @@ public class DeviceMainActivity extends BaseActivity {
         if(EventData.TAG_REFRESH.equals(eventData.getTag())){
             loadData();
         }else if(eventData.getCode()==EventData.CODE_RECONNECT){
+//            Log.e(TAG,"已经传递到了："+(XDevice) eventData.getData());
             connectDevice(DeviceManage.getInstance().getDevice((XDevice) eventData.getData()));
         }
     }
@@ -320,6 +321,7 @@ public class DeviceMainActivity extends BaseActivity {
 
 //        int ret = XlinkAgent.getInstance().connectDevice(device.getXDevice(), device.getXDevice().getAccessKey(), connectDeviceListener);
         int ret =XlinkAgent.getInstance().connectDevice(device.getXDevice(),connectDeviceListener);
+        Log.e(TAG,"连接设备的状态："+ret);
         if (ret < 0) {// 调用设备失败
             if (dialog != null) {
                 dialog.dismiss();
@@ -367,14 +369,15 @@ public class DeviceMainActivity extends BaseActivity {
 //            byte[] bs2=Command.getRead485("FFFF").getBytes();
             byte[] bs3=Command.getOtherStr(Command.CUSDEVICE).getBytes();
             String tips;
+            Log.e(TAG,"连接设备的listener:"+result);
             switch (result) {
                 // 连接设备成功 设备处于内网
                 case XlinkCode.DEVICE_STATE_LOCAL_LINK:
                     // 连接设备成功，成功后
 //                    DeviceManage.getInstance().updateDevice(xDevice);
-//                    tips = "正在局域网控制设备(" + xDevice.getMacAddress() + ")";
-//                    XlinkUtils.shortTips(tips);
-//                    Log(tips);
+                    tips = "正在局域网控制设备(" + xDevice.getMacAddress() + ")";
+                    XlinkUtils.shortTips(tips);
+                    Log(tips);
                     Command.sendData(xDevice,bs,TAG);
                     Command.sendData(xDevice,bs1,TAG);
 //                    Command.sendData(xDevice,bs2,TAG);

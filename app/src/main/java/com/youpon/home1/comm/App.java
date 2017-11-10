@@ -95,7 +95,7 @@ public class App extends Application implements XlinkNetListener{
 		XlinkAgent.getInstance().addXlinkListener(this);
 //		CrashHandler crashHandler = CrashHandler.getInstance();
 //        crashHandler.init(getApplicationContext());
-		MiCO.init("https://v2.fogcloud.io");
+//		MiCO.init("https://v2.fogcloud.io");
 
 		DisplayMetrics dm = ctx.getApplicationContext().getResources().getDisplayMetrics();
 		mWidth = dm.widthPixels;  // 屏幕宽度（像素）

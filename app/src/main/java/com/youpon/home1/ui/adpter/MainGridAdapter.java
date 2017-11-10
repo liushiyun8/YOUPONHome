@@ -99,9 +99,28 @@ public class MainGridAdapter extends BaseAdapter {
                             List<Scenebean.ActionsBean> action = scenebean.getAction();
                             if(scenebean.getStatus()!=1) {
                                 scenebean.setStatus(1);
-                                List<String> commands = Command.getCommands(action);
-                                for (String command : commands) {
-                                    Command.sendData1(scenebean.getGateway_id(), command.getBytes(),"MainGridAdapter");
+                                if (action != null && action.size() > 0) {
+                                    Device device = DeviceManage.getInstance().getDevice(scenebean.getGateway_id());
+                                    if (device!=null){
+                                        if(scenebean.getType()==0){
+                                            List<String> commands = Command.getCommands(action);
+                                            for (String command : commands) {
+                                                Command.sendData(device.getXDevice(), command.getBytes(), "MainGridAdapter");
+                                            }
+
+                                        }else {
+                                            if("0001".equals(scenebean.getGroupId())){
+                                                Command.sendData(device.getXDevice(), Command.getCallSceneStr(scenebean.getGroupId(),scenebean.getSceneId(),"FFFF",0).getBytes(), "MysceneListAdapter");
+                                                try {
+                                                    App.db.update(Scenebean.class, WhereBuilder.b("panel_mac","=",scenebean.getPanel_mac()).and("sceneId","!=",scenebean.getSceneId()),new KeyValue("status","0"));
+                                                } catch (DbException e) {
+
+                                                }
+                                            }else
+                                                Command.sendData(device.getXDevice(), Command.getCallSceneStr(scenebean.getGroupId(),scenebean.getSceneId(),scenebean.getId(),scenebean.getGateway_type()).getBytes(), "MysceneListAdapter");
+                                        }
+                                    }
+
                                 }
                             }else {
                                 scenebean.setStatus(0);
@@ -110,16 +129,26 @@ public class MainGridAdapter extends BaseAdapter {
                                     Scenebean.ActionsBean actionsBean = new Scenebean.ActionsBean();
                                     Scenebean.ActionsBean actionsBean1 = action.get(i);
                                     actionsBean.setMac(actionsBean1.getMac());
-                                    actionsBean.setDstid(actionsBean1.getDstid());
-                                    actionsBean.setNclu(actionsBean1.getNclu());
-                                    actionsBean.setVal(0);
+                                    int dstid = actionsBean1.getDstid();
+                                    actionsBean.setDstid(dstid);
+                                    String nclu = actionsBean1.getNclu();
+                                    if("0008".equals(nclu)&&dstid==2)
+                                        actionsBean.setVal(1);
+                                    else actionsBean.setVal(0);
+                                    if("0008".equals(nclu)&&dstid==3)
+                                        actionsBean.setNclu("0006");
+                                    else actionsBean.setNclu(nclu);
                                     action1.add(actionsBean);
                                 }
                                 if (action1 != null && action.size() > 0) {
-                                    List<String> commands = Command.getCommands(action);
-                                    for (String command : commands) {
-                                        Command.sendData1(scenebean.getGateway_id(), command.getBytes(),"MainGridAdapter");
+                                    Device device = DeviceManage.getInstance().getDevice(scenebean.getGateway_id());
+                                    if (device!=null){
+                                        List<String> commands = Command.getCommands(action1);
+                                        for (String command : commands) {
+                                            Command.sendData(device.getXDevice(), command.getBytes(), "MainGridAdapter");
+                                        }
                                     }
+
                                 }
                             }
                             try {

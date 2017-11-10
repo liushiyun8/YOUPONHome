@@ -12,7 +12,10 @@ import org.xutils.ex.DbException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -50,6 +53,22 @@ public class PanelManage {
             e.printStackTrace();
         }
         }
+
+    public synchronized void reload(){
+        clearAllPanel();
+        try {
+            List<Panel> panels= App.db.findAll(Panel.class);
+            if(panels!=null){
+                for (int i = 0; i < panels.size(); i++) {
+                    Panel panel = panels.get(i);
+                    panelMap.put(panel.getMac(),panel);
+                }
+
+            }
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+    }
 
     public synchronized List<Panel> getAllpanel(){
         List<Panel> list=new ArrayList<>();
@@ -177,5 +196,28 @@ public class PanelManage {
             }
         }
         return list;
+    }
+
+    public void keepPanles(int deviceid, List<String> list) {
+        Collection<Panel> values = panelMap.values();
+        Iterator<Panel> iterator = values.iterator();
+        while (iterator.hasNext()){
+            Panel next = iterator.next();
+            if(next.getGateway_id()==deviceid&&!list.contains(next.getMac())){
+                removePanel(next.getMac());
+            }
+        }
+
+    }
+
+    public Panel getPanelByClas(int cls, int deviceid) {
+        Collection<Panel> values = panelMap.values();
+        Log.e("PanleCls",values.toString());
+        for (Panel panel : values) {
+            if (cls==panel.getClas()&&panel.getGateway_id()==deviceid) {
+                return panel;
+            }
+        }
+        return null;
     }
 }

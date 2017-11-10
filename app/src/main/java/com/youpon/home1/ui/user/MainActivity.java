@@ -30,6 +30,7 @@ import com.youpon.home1.comm.tools.StringUtils;
 import com.youpon.home1.comm.tools.XlinkUtils;
 import com.youpon.home1.http.HttpManage;
 import com.youpon.home1.http.Net2db;
+import com.youpon.home1.manage.PanelManage;
 import com.youpon.home1.ui.home.activities.DeviceMainActivity;
 
 import org.apache.http.Header;
@@ -351,6 +352,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             // openActivity(MainActivity.class);
             Intent intent = new Intent(this, DeviceMainActivity.class);
             startActivity(intent);
+            PanelManage.getInstance().reload();
             finish();
             // openActivity(DeviceListActivity.class);
         }

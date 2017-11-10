@@ -539,7 +539,7 @@ public class HttpManage {
         x.http().request(HttpMethod.DELETE,entity,callback);
     }
 
-    public void updateDevice(int deviceid,Map<String,String> params,Callback.CommonCallback<String> callback) {
+    public void updateDevice(int deviceid,Map<String,String> params,MyCallback callback) {
         String url=updateDeviceURL.replace("{product_id}",Constant.PRODUCTID).replace("{device_id}",deviceid+"");
         RequestParams entity=new RequestParams(url);
         entity.setHeader("Access-Token", App.getApp().getAccessToken());

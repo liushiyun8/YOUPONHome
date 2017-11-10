@@ -138,9 +138,15 @@ public class  MysceneListAdapter extends BaseAdapter {
                         Scenebean.ActionsBean actionsBean = new Scenebean.ActionsBean();
                         Scenebean.ActionsBean actionsBean1 = action.get(i);
                         actionsBean.setMac(actionsBean1.getMac());
-                        actionsBean.setDstid(actionsBean1.getDstid());
-                        actionsBean.setNclu(actionsBean1.getNclu());
-                        actionsBean.setVal(0);
+                        int dstid = actionsBean1.getDstid();
+                        actionsBean.setDstid(dstid);
+                        String nclu = actionsBean1.getNclu();
+                        if("0008".equals(nclu)&&dstid==2)
+                        actionsBean.setVal(1);
+                        else actionsBean.setVal(0);
+                        if("0008".equals(nclu)&&dstid==3)
+                            actionsBean.setNclu("0006");
+                        else actionsBean.setNclu(nclu);
                         action1.add(actionsBean);
                     }
                     if (action1 != null && action.size() > 0) {

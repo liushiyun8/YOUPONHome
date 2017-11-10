@@ -1,7 +1,11 @@
 package com.youpon.home1.comm.tools;
 
+import android.content.Intent;
+
 import com.google.gson.Gson;
+import com.youpon.home1.comm.App;
 import com.youpon.home1.http.HttpManage;
+import com.youpon.home1.ui.user.MainActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +38,10 @@ public abstract class MyCallback implements Callback.CommonCallback<String> {
             JSONObject error = jsonObject.optJSONObject("error");
             int code = error.optInt("code");
             String msg = error.optString("msg");
+            if(code==4031021){
+                XlinkUtils.shortTips("Token过期，请重新登录");
+                App.ctx.startActivity(new Intent(App.ctx, MainActivity.class));
+            }
             onFail(code,"".equals(getMsg(code))?msg:getMsg(code));
         } catch (JSONException e) {
             e.printStackTrace();

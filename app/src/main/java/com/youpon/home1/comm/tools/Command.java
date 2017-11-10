@@ -4,14 +4,11 @@ import android.util.Log;
 
 import com.youpon.home1.bean.Scenebean;
 import com.youpon.home1.bean.SubDevice;
-import com.youpon.home1.bean.SceneDevice;
 import com.youpon.home1.comm.App;
 import com.youpon.home1.comm.base.EventData;
 import com.youpon.home1.manage.DeviceManage;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.xutils.ex.DbException;
 
 import java.util.ArrayList;
@@ -279,9 +276,9 @@ public class Command {
         return Star+getRedam()+middle+SCENE+"read 0x"+groupId+" "+sceneId+"\\r\\n send 0x"+id+" 1 1"+endStr;
     }
 
-    public static String getWriteSceneStr(String groupId,String sceneId,String id,int type,String content){
+    public static String getWriteSceneStr(String dataLen, String groupId, String sceneId, String id, int type, String content){
         if(type==0){
-            return Star+getRedam()+middle1+"55AA5500421200"+id+"00000101"+"000509"+groupId+sceneId+content+"FF"+endStr1;
+            return Star+getRedam()+middle1+"55AA55"+dataLen+"1200"+id+"00000101"+"000509"+groupId+sceneId+content+"FF"+endStr1;
         }
         return Star+getRedam()+middle+SCENE+"write {"+("0001".equals(groupId)?"0100":groupId)+sceneId+content+"}\\r\\n send 0x"+id+" 1 1"+endStr;
     }
@@ -305,7 +302,7 @@ public class Command {
     }
 
     public static boolean sendData(XDevice xDevice, final byte[] bs, String name) {
-        int ret = XlinkAgent.getInstance().sendPipeData(xDevice, bs, pipeListener);
+        int  ret = XlinkAgent.getInstance().sendPipeData(xDevice, bs, pipeListener);
         if (ret < 0) {
             switch (ret) {
                 case XlinkCode.NO_CONNECT_SERVER:

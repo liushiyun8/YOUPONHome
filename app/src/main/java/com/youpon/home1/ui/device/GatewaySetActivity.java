@@ -28,6 +28,7 @@ import com.youpon.home1.comm.App;
 import com.youpon.home1.comm.base.BaseActivity;
 import com.youpon.home1.comm.base.EventData;
 import com.youpon.home1.comm.tools.MyCallback;
+import com.youpon.home1.comm.tools.XlinkUtils;
 import com.youpon.home1.comm.view.MyDialog;
 import com.youpon.home1.comm.view.MyToast;
 import com.youpon.home1.comm.view.RoomDialog;
@@ -180,28 +181,18 @@ public class GatewaySetActivity extends BaseActivity implements View.OnClickList
                         name.setText(myDialog.getEditText());
                         HashMap<String, String> map = new HashMap<>();
                         map.put("name",myDialog.getEditText());
-                        HttpManage.getInstance().updateDevice(device_id, map, new Callback.CommonCallback<String>() {
+                        HttpManage.getInstance().updateDevice(device_id, map, new MyCallback() {
                             @Override
-                            public void onSuccess(String result) {
-                                Log.e(TAG,result);
+                            public void onSuc(String result) {
+                                Log.e(TAG, result);
                                 gateway.setName(myDialog.getEditText());
                                 DeviceManage.getInstance().updateDevice(gateway);
-                                EventBus.getDefault().post(new EventData(EventData.CODE_GETDEVICE,""));
+                                EventBus.getDefault().post(new EventData(EventData.CODE_GETDEVICE, ""));
                             }
 
                             @Override
-                            public void onError(Throwable ex, boolean isOnCallback) {
-                                ex.printStackTrace();
-                            }
+                            public void onFail(int code, String msg) {
 
-                            @Override
-                            public void onCancelled(CancelledException cex) {
-
-                            }
-
-                            @Override
-                            public void onFinished() {
-                                Log.e(TAG,"finish");
                             }
                         });
                         myDialog.dismiss();

@@ -39,6 +39,7 @@ import io.xlink.wifi.sdk.XDevice;
  */
 public class DataParser {
     private static DataParser instance;
+    private String TAG=getClass().getSimpleName();
 
     private DataParser(){}
     public static DataParser getInstance(){
@@ -84,6 +85,7 @@ public class DataParser {
         int src = Integer.parseInt(s485.substring(14, 16),16);
         String cluster=s485.substring(16,20);
 //        Log.e("verything", "cluster:" + cluster + ",id:" + id + ",dst:" + dst + ",src:" + src + ",uuu:" + s485.substring(22, 26));
+        String commandID = s485.substring(20, 22);
         switch (cluster) {
             case "0000":
                 Log.e("verything", "cluster:" + cluster + ",id:" + id + ",dst:" + dst + ",src:" + src + ",uuu:" + s485.substring(22, 26));
@@ -115,35 +117,47 @@ public class DataParser {
             case "0005":
                 synchronized (this) {
                     Scenebean sc = null;
-                    if ("05".equals(s485.substring(20, 22))) {
-                        id = s485.substring(4,8);
-                        if("FFFF".equals(id)){
-                            App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=", s485.substring(22, 26)),new KeyValue("status",0));
-                            App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=", s485.substring(22, 26)).and("sceneId", "=", s485.substring(26, 28)),new KeyValue("status",1));
+                    id = s485.substring(4,8);
+                    if("00".equals(commandID)){
+                        String groupID = s485.substring(22, 26);
+                        String scenenID = s485.substring(26, 28);
+                        if("0000".equals(groupID)){
+                            Panel panel = PanelManage.getInstance().getPanelByClas(299, deviceid);
+                            Command.sendData1(deviceid,Command.getReadSceneStr(groupID,scenenID,panel.getId(),0).getBytes(), TAG);
+                            App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=", groupID).and("gateway_type","=",1),new KeyValue("status",0));
+                            App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=", groupID).and("sceneId", "=", scenenID).and("gateway_type","=",1),new KeyValue("status",1));
                         }else {
-                            Panel panel = PanelManage.getInstance().getPanelById(id,deviceid);
-                            if (panel == null) break;
-                            String mac1 = panel.getMac();
-                            App.db.update(Scenebean.class,WhereBuilder.b("panel_mac","=",mac1).and("groupId", "=", s485.substring(22, 26)),new KeyValue("status",0));
-                            App.db.update(Scenebean.class,WhereBuilder.b("panel_mac","=",mac1).and("groupId", "=", s485.substring(22, 26)).and("sceneId", "=", s485.substring(26, 28)),new KeyValue("status",1));
+                            Command.sendData1(deviceid,Command.getAll(99).getBytes(),TAG);
+                            App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=",groupID),new KeyValue("status",0));
+                            App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=",groupID).and("sceneId", "=",scenenID),new KeyValue("status",1));
                         }
                         EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
                         EventBus.getDefault().post(new EventData(EventData.CODE_REFRESH_DEVICE, ""));
                         break;
-                    }else if("07".equals(s485.substring(20,22))){
-                        id=s485.substring(4,8);
-                        if("FFFF".equals(id)){
-                            App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=", s485.substring(22, 26)).and("sceneId","=",s485.substring(26, 28)),new KeyValue("status",0));
+                    } else if ("05".equals(commandID)) {
+                        String groupID = s485.substring(22, 26);
+                        String scenenID = s485.substring(26, 28);
+                        if("0000".equals(groupID)){
+                            App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=", groupID).and("gateway_type","=",1),new KeyValue("status",0));
+                            App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=", groupID).and("sceneId", "=", scenenID).and("gateway_type","=",1),new KeyValue("status",1));
                         }else {
-                            Panel panel = PanelManage.getInstance().getPanelById(id,deviceid);
-                            if (panel == null) break;
-                            String mac1 = panel.getMac();
-                            App.db.update(Scenebean.class,WhereBuilder.b("panel_mac","=",mac1).and("groupId", "=", s485.substring(22, 26)).and("sceneId","=",s485.substring(26, 28)),new KeyValue("status",0));
+                            App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=",groupID),new KeyValue("status",0));
+                            App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=",groupID).and("sceneId", "=",scenenID),new KeyValue("status",1));
                         }
                         EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
                         EventBus.getDefault().post(new EventData(EventData.CODE_REFRESH_DEVICE, ""));
-                    }else if ("09".equals(s485.substring(20, 22))) {
-                        id = s485.substring(4,8);
+                        break;
+                    }else if("07".equals(commandID)){
+                        String groupID = s485.substring(22, 26);
+                        String scenenID = s485.substring(26, 28);
+                        if("0000".equals(groupID)){
+                            App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=", groupID).and("sceneId","=",scenenID).and("gateway_type","=",1),new KeyValue("status",0));
+                        }else {
+                            App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=", groupID).and("sceneId","=",scenenID),new KeyValue("status",0));
+                        }
+                        EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
+                        EventBus.getDefault().post(new EventData(EventData.CODE_REFRESH_DEVICE, ""));
+                    }else if ("09".equals(commandID)) {
                         if("FFFF".equals(id)){
                             Message ms = Message.obtain();
                             ms.what = 2;
@@ -160,85 +174,85 @@ public class DataParser {
                             }
                             handler.sendMessage(ms);
                         }else {
-                        String groupId = s485.substring(22, 26);
-                        String sceneId = s485.substring(26, 28);
-                        Panel panel = PanelManage.getInstance().getPanelById(id,deviceid);
-                        if (panel == null) break;
-                        String mac1 = panel.getMac();
-                        List<Scenebean.ActionsBean> list = new ArrayList<>();
-                        int count = Integer.parseInt(s485.substring(28, 30), 16);
-                        Log.e("485场景","groupId:"+groupId+" sceneId:"+sceneId+"count:"+count);
-                        for (int i = 0; i < count; i++) {
-                            int dstid = Integer.parseInt(s485.substring(30 + 14 * i, 32 + 14 * i), 16);
-                            String clu = s485.substring(32 + 14 * i, 36 + 14 * i);
-                            int val = Integer.parseInt(s485.substring(42 + 14 * i, 44 + 14 * i), 16);
-                            Scenebean.ActionsBean actionsBean = new Scenebean.ActionsBean();
-                            actionsBean.setVal(val);
-                            actionsBean.setNwkid(id);
-                            actionsBean.setNclu("0800".equals(clu) ? "0008" : "0006");
-                            actionsBean.setDstid(dstid);
-                            actionsBean.setMac(mac1);
-                            Log.e("actionbean", actionsBean.toString());
-                            if("0001".equals(groupId)&&panel.getClas()==299){
-                                if(dstid==4||dstid==5){
-                                    list.add(actionsBean);
+                            String groupId = s485.substring(22, 26);
+                            String sceneId = s485.substring(26, 28);
+                            Panel panel = PanelManage.getInstance().getPanelById(id,deviceid);
+                            if (panel == null) break;
+                            String mac1 = panel.getMac();
+                            List<Scenebean.ActionsBean> list = new ArrayList<>();
+                            int count = Integer.parseInt(s485.substring(28, 30), 16);
+                            Log.e("485场景","groupId:"+groupId+" sceneId:"+sceneId+"count:"+count);
+                            for (int i = 0; i < count; i++) {
+                                int dstid = Integer.parseInt(s485.substring(30 + 14 * i, 32 + 14 * i), 16);
+                                String clu = s485.substring(32 + 14 * i, 36 + 14 * i);
+                                int val = Integer.parseInt(s485.substring(42 + 14 * i, 44 + 14 * i), 16);
+                                Scenebean.ActionsBean actionsBean = new Scenebean.ActionsBean();
+                                actionsBean.setVal(val);
+                                actionsBean.setNwkid(id);
+                                actionsBean.setNclu("0800".equals(clu) ? "0008" : "0006");
+                                actionsBean.setDstid(dstid);
+                                actionsBean.setMac(mac1);
+                                Log.e("actionbean", actionsBean.toString());
+                                if("0001".equals(groupId)&&panel.getClas()==299){
+                                    if(dstid==4||dstid==5){
+                                        list.add(actionsBean);
+                                    }
+                                    continue;
                                 }
-                                continue;
+                                list.add(actionsBean);
                             }
-                            list.add(actionsBean);
-                        }
 //                    if (panel.getClas() == 5 || panel.getClas() == 6 || panel.getClas() == 7) {
 //                        panel.getMap().put(sceneId, list);
 //                        EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
 //                        break;
 //                    }
-                        boolean Tag = false;
-                        if ("0001".equals(groupId)&&list.size()>0) {
-                            panel.getMap().put(sceneId, list);
-                            EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
-                            break;
-                        } else if ("0000".equals(groupId)&&(panel.getClas()==9||panel.getClas()==299)) {
-                            sc = App.db.selector(Scenebean.class).where("panel_mac", "=", mac1).and("gateway_id","=",deviceid).and("groupId", "=", groupId).and("sceneId", "=", sceneId).findFirst();
-                            if (sc == null) {
-                                Tag = true;
-                                sc = new Scenebean();
-                                sc.setGateway_id(deviceid);
-                                sc.setPanel_mac(mac1);
-                                sc.setGroupId(groupId);
-                                sc.setSceneId(sceneId);
-                            }
-                            sc.setType(1);
-                            sc.setGateway_id(deviceid);
-                            sc.setGateway_type(1);
-                            sc.setId(id);
-                            sc.setAction(list);
-                            if (!Tag) {
-                                App.db.update(sc);
+                            boolean Tag = false;
+                            if ("0001".equals(groupId)&&list.size()>0) {
+                                panel.getMap().put(sceneId, list);
                                 EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
-                            } else {
-                                App.db.replace(sc);
-                                HttpManage.getInstance().addSub(HttpManage.TYPE_SINGLE, HttpManage.SCENETABLE, new Gson().toJson(sc), new MyCallback() {
-                                    @Override
-                                    public void onSuc(String result) {
-                                        Scenebean scenebean = new Gson().fromJson(result, Scenebean.class);
-                                        try {
-                                            App.db.replace(scenebean);
-                                            EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
-                                        } catch (DbException e) {
-                                            e.printStackTrace();
+                                break;
+                            } else if ("0000".equals(groupId)&&(panel.getClas()==9||panel.getClas()==299)) {
+                                sc = App.db.selector(Scenebean.class).where("panel_mac", "=", mac1).and("gateway_id","=",deviceid).and("groupId", "=", groupId).and("sceneId", "=", sceneId).findFirst();
+                                if (sc == null) {
+                                    Tag = true;
+                                    sc = new Scenebean();
+                                    sc.setGateway_id(deviceid);
+                                    sc.setPanel_mac(mac1);
+                                    sc.setGroupId(groupId);
+                                    sc.setSceneId(sceneId);
+                                }
+                                sc.setType(1);
+                                sc.setGateway_id(deviceid);
+                                sc.setGateway_type(1);
+                                sc.setId(id);
+                                sc.setAction(list);
+                                if (!Tag) {
+                                    App.db.update(sc);
+                                    EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
+                                } else {
+                                    HttpManage.getInstance().addSub(HttpManage.TYPE_SINGLE, HttpManage.SCENETABLE, new Gson().toJson(sc), new MyCallback() {
+                                        @Override
+                                        public void onSuc(String result) {
+                                            Scenebean scenebean = new Gson().fromJson(result, Scenebean.class);
+                                            try {
+                                                App.db.saveOrUpdate(scenebean);
+                                                EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
+                                            } catch (DbException e) {
+                                                e.printStackTrace();
+                                            }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onFail(int code, String msg) {
-                                        Log.e("code and msg", code + " msg:" + msg);
-                                    }
-                                });
+                                        @Override
+                                        public void onFail(int code, String msg) {
+                                            Log.e("code and msg", code + " msg:" + msg);
+                                        }
+                                    });
+                                }
                             }
                         }
-                    }
                         break;
-                    }else if("08".equals(s485.substring(20, 22))){
+                    }else if("08".equals(commandID)){
+                        id=s485.substring(8,12);
                         String status=s485.substring(22,24);
                         String groupId = s485.substring(24, 28);
                         String sceneId = s485.substring(28, 30);
@@ -246,6 +260,9 @@ public class DataParser {
                         if (panel == null) break;
                         String mac1 = panel.getMac();
                         List<Scenebean.ActionsBean> list = new ArrayList<>();
+                        if(s485.length()<=32){
+                            break;
+                        }
                         int count = Integer.parseInt(s485.substring(30, 32), 16);
                         Log.e("12位场景","groupId:"+groupId+" sceneId:"+sceneId);
                         for (int i = 0; i < count; i++) {
@@ -299,13 +316,13 @@ public class DataParser {
                                 App.db.update(sc);
                                 EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
                             } else {
-                                App.db.replace(sc);
+//                                App.db.replace(sc);
                                 HttpManage.getInstance().addSub(HttpManage.TYPE_SINGLE, HttpManage.SCENETABLE, new Gson().toJson(sc), new MyCallback() {
                                     @Override
                                     public void onSuc(String result) {
                                         Scenebean scenebean = new Gson().fromJson(result, Scenebean.class);
                                         try {
-                                            App.db.replace(scenebean);
+                                            App.db.saveOrUpdate(scenebean);
                                             EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
                                         } catch (DbException e) {
                                             e.printStackTrace();
@@ -314,17 +331,19 @@ public class DataParser {
 
                                     @Override
                                     public void onFail(int code, String msg) {
+
                                         Log.e("code and msg", code + " msg:" + msg);
                                     }
                                 });
                             }
                         }
                     }
-                    }
+                }
                 break;
             case "0006":
-                String cons = s485.substring(20, 22);
+                String cons = commandID;
                 int tap;
+
                 if ("04".equals(cons)) {
                     if(s485.substring(22,24).equals("86")){
                         Message massge = Message.obtain();
@@ -347,8 +366,7 @@ public class DataParser {
                         if (dbdevi == null) {
                             if("FFFF".equals(id)){
                                 dbdevi = App.db.selector(SubDevice.class).where("clas", "=",299).and("gateway_id", "=", deviceid).and("dst","=",src).findFirst();
-                            }else
-                            return;
+                            }
                         }
                         if(dbdevi.getTp()==1){
                             dbdevi.setValue2(tap);
@@ -359,16 +377,14 @@ public class DataParser {
                     EventBus.getDefault().postSticky(new EventData(EventData.CODE_REFRESH_DEVICE, "刷新子设备"));
                     EventBus.getDefault().postSticky(new EventData(EventData.CODE_REFRESH_DEVICE, "刷新子设备"));
 //                    EventBus.getDefault().post(new EventData(EventData.CODE_READ_STUTAS, ""));
+                    updateScene(deviceid,src,dbdevi.getMac(), tap);
                 } catch (DbException e) {
                     e.printStackTrace();
                 }
-                Panel panel1 = PanelManage.getInstance().getPanelById(id, deviceid);
-                if(panel1!=null){
-                    updateScene(deviceid,src,panel1.getMac(), tap);
-                }
+
                 break;
             case "0008":
-                cons = s485.substring(20, 22);
+                cons = commandID;
                 int sst=Integer.parseInt(s485.substring(15,16));
                 tap = 0;
                 if ("04".equals(cons)) {
@@ -422,7 +438,6 @@ public class DataParser {
                         dbdevi.setValue1(tap);
                     }
                     dbdevi.setOnline(true);
-//                    Log.e("dededde",dbdevi.toString());
                     App.db.update(dbdevi,"value1","value2","online");
                     EventBus.getDefault().postSticky(new EventData(EventData.CODE_REFRESH_DEVICE, "刷新子设备"));
                     Panel panel2= PanelManage.getInstance().getPanelById(id, deviceid);
@@ -449,7 +464,7 @@ public class DataParser {
                        } sensor_type_def_e;
                   */
                 synchronized (this) {
-                    if("03".equals(s485.substring(20,22))&&"0000".equals(id)){
+                    if("03".equals(commandID)&&"0000".equals(id)){
                         App.db.update(SubDevice.class,WhereBuilder.b("gateway_id","=",deviceid).and("clas","=",299).and("type","!=",2),new KeyValue[]{new KeyValue("value1",0),new KeyValue("value2",0)});
                         App.db.update(SubDevice.class,WhereBuilder.b("gateway_id","=",deviceid).and("clas","=",299).and("type","=",2),new KeyValue("value2",0));
                     }
@@ -476,13 +491,13 @@ public class DataParser {
                                             break;
                                         }
                                         if(dbdevi.getTp()==1&&"0006".equals(clu)){
-
                                             dbdevi.setValue2(ttap);
                                         }else
                                             dbdevi.setValue1(ttap);
                                         dbdevi.setOnline(true);
                                         Log.e("dbdevi",dbdevi.toString());
                                         App.db.update(dbdevi,"value1","value2","online");
+                                        updateScene(deviceid,ddst,dbdevi.getMac(),ttap);
                                     }
                                 } catch (DbException e) {
                                     e.printStackTrace();
@@ -680,6 +695,10 @@ public class DataParser {
                     subDe.setMyType(endpBean.getT());
                     if(endpBean.getDstid()==2&&endpBean.getT()==1){
                         subDe.setValue2(endpBean.getVal());
+                    }else if(endpBean.getT()==2){
+                        int val = endpBean.getVal();
+                        subDe.setValue1(val>>16);
+                        subDe.setValue2((val&0xFFFF)>0?1:0);
                     }else
                     subDe.setValue1(endpBean.getVal());
                     if(flag){
@@ -739,15 +758,22 @@ public class DataParser {
             synchronized (this){
                 App.db.update(SubDevice.class,WhereBuilder.b("gateway_id","=",deviceid),new KeyValue("alloc",1));
                 App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid),new KeyValue("chnl_id",1));
+//                App.db.update(Panel.class,WhereBuilder.b("gateway_id","=",deviceid),new KeyValue("online",true));
                 JSONObject jo1 = new JSONObject(s);
                 JSONArray devMacArray = jo1.optJSONArray("devMacArray");
+                List<String> list=new ArrayList();
                 for (int i = 0; i < devMacArray.length(); i++) {
                     String mac = devMacArray.optString(i);
+                    list.add(mac);
+//                    App.db.update(Panel.class,WhereBuilder.b("gateway_id","=",deviceid).and("mac","=",mac),new KeyValue("online",false));
                     App.db.update(SubDevice.class,WhereBuilder.b("gateway_id","=",deviceid).and("mac","=",mac),new KeyValue("alloc",0));
                     App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("panel_mac","=",mac),new KeyValue("chnl_id",0));
                 }
+                PanelManage.getInstance().keepPanles(deviceid,list);
+//                App.db.delete(Panel.class,WhereBuilder.b("gateway_id","=",deviceid).and("online","=",true));
                 App.db.delete(SubDevice.class,WhereBuilder.b("gateway_id","=",deviceid).and("alloc","=",1));
-                App.db.delete(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("type","=",1).or("type","=",2).and("chnl_id","=",1));
+                App.db.delete(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("type","!=",0).and("chnl_id","=",1));
+                return;
             }
         }else if(s.contains("\"CMD\":110")){
 //            synchronized (this){
@@ -968,19 +994,9 @@ public class DataParser {
                                 if(dbde==null){
                                     return;
                                 }else if(dbde.getClas()==6||dbde.getClas()==7){
-                                    SubDevice dbdevi = App.db.selector(SubDevice.class).where("id", "=", id).and("gateway_id","=",deviceid).and("dst","=",dst).findFirst();
-                                    if(dbdevi==null){
-                                        return;
-                                    }else {
                                         App.db.update(SubDevice.class,WhereBuilder.b("id", "=", id).and("gateway_id","=",deviceid).and("dst","=",dst),new KeyValue[]{new KeyValue("value1",tap),new KeyValue("online",true)});
                                         EventBus.getDefault().postSticky(new EventData(EventData.CODE_REFRESH_DEVICE,"刷新子设备"));
-                                        return;
-                                    }
                                 }else {
-                                    SubDevice dbdevi = App.db.selector(SubDevice.class).where("id", "=", id).and("gateway_id","=",deviceid).and("dst","=",dst==2?1:dst).findFirst();
-                                    if(dbdevi==null){
-                                        return;
-                                    }
                                     if(dst==3&&"0006".equals(cluster)||dst==2){
                                         App.db.update(SubDevice.class,WhereBuilder.b("id", "=", id).and("gateway_id","=",deviceid).and("dst","=",dst==2?1:dst),new KeyValue[]{new KeyValue("value2",tap),new KeyValue("online",true)});
                                     }else
@@ -1072,7 +1088,26 @@ public class DataParser {
 //                        break;
                     case "0005":
                         String commandId = pay.substring(8, 10);
-                        if ("05".equals(pay.substring(4,6))) {
+                        if("00".equals(pay.substring(4,6))){
+                            if(pay.substring(6,10).equals("0100")){
+                                Command.sendData1(deviceid,Command.getAll(99).getBytes(),TAG);
+                                App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=","0001"),new KeyValue("status",0));
+                                App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=","0001").and("sceneId","=",pay.substring(10,12)),new KeyValue("status",1));
+                            }else {
+                                Command.sendData1(deviceid, Command.getReadSceneStr(pay.substring(6,10),pay.substring(10,12),id,1).getBytes(), TAG);
+                                Panel panel = PanelManage.getInstance().getPanelById(id,deviceid);
+                                if (panel == null) break;
+                                String mac1 = panel.getMac();
+//                                Log.e("9位场景：",mac1);
+//                                List<Scenebean> all = App.db.selector(Scenebean.class).where("panel_mac", "=", mac1).and("gateway_id", "=", deviceid).and("groupId", "=", pay.substring(6, 10)).and("sceneId", "=", pay.substring(10, 12)).findAll();
+//                                Log.e("all:",all.toString());
+                                App.db.update(Scenebean.class,WhereBuilder.b("panel_mac","=",mac1).and("gateway_id","=",deviceid).and("groupId", "=", pay.substring(6,10)),new KeyValue("status",0));
+                                App.db.update(Scenebean.class,WhereBuilder.b("panel_mac","=",mac1).and("gateway_id","=",deviceid).and("groupId", "=", pay.substring(6,10)).and("sceneId", "=",pay.substring(10, 12)),new KeyValue("status",1));
+                            }
+                            EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
+                            EventBus.getDefault().post(new EventData(EventData.CODE_REFRESH_DEVICE, ""));
+                            break;
+                        }else if ("05".equals(pay.substring(4,6))) {
                             if(pay.substring(6,10).equals("0100")){
                                 App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=","0001"),new KeyValue("status",0));
                                 App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=","0001").and("sceneId","=",pay.substring(10,12)),new KeyValue("status",1));
@@ -1087,6 +1122,7 @@ public class DataParser {
                                 App.db.update(Scenebean.class,WhereBuilder.b("panel_mac","=",mac1).and("gateway_id","=",deviceid).and("groupId", "=", pay.substring(6,10)).and("sceneId", "=",pay.substring(10, 12)),new KeyValue("status",1));
                             }
                             EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
+                            EventBus.getDefault().post(new EventData(EventData.CODE_REFRESH_DEVICE, ""));
                             break;
                         }else if("07".equals(commandId)){
                             String groupid = pay.substring(10, 14);
@@ -1099,6 +1135,7 @@ public class DataParser {
                                 App.db.update(Scenebean.class,WhereBuilder.b("panel_mac","=",mac1).and("groupId", "=",groupid).and("sceneId","=",pay.substring(14,16)),new KeyValue("status",0));
                             }
                             EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
+                            EventBus.getDefault().post(new EventData(EventData.CODE_REFRESH_DEVICE, ""));
                             break;
 //                            EventBus.getDefault().post(new EventData(EventData.CODE_REFRESH_DEVICE, ""));
                         }else if("09".equals(commandId)){
@@ -1153,7 +1190,7 @@ public class DataParser {
                                 EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE,""));
                                 break;
                             }else if("0000".equals(groupId)&&(panel.getClas()==9||panel.getClas()==299)){
-                                Scenebean sc = App.db.selector(Scenebean.class).where("panel_mac", "=", mac1).and("groupId", "=", groupId).and("sceneId", "=", sceneId).findFirst();
+                                Scenebean sc = App.db.selector(Scenebean.class).where("panel_mac", "=", mac1).and("gateway_id","=",deviceid).and("groupId", "=", groupId).and("sceneId", "=", sceneId).findFirst();
                                 boolean Tag=false;
                                 if(sc==null){
                                     Tag=true;
@@ -1175,13 +1212,12 @@ public class DataParser {
                                     EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE,""));
                                 }
                                 if(Tag){
-                                    App.db.replace(sc);
                                     HttpManage.getInstance().addSub(HttpManage.TYPE_SINGLE, HttpManage.SCENETABLE, new Gson().toJson(sc), new MyCallback() {
                                         @Override
                                         public void onSuc(String result) {
                                             Scenebean scenebean = new Gson().fromJson(result, Scenebean.class);
                                             try {
-                                                App.db.replace(scenebean);
+                                                App.db.saveOrUpdate(scenebean);
                                                 EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE,""));
                                             } catch (DbException e) {
                                                 e.printStackTrace();
@@ -1323,9 +1359,9 @@ public class DataParser {
                     App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=", pay.substring(6,10)),new KeyValue("status",0));
                     App.db.update(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("groupId", "=", pay.substring(6,10)).and("sceneId", "=",pay.substring(10, 12)),new KeyValue("status",1));
                     EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
-                    break;
+                    return;
                 }
-                break;
+                return;
         }
     }
 
@@ -1355,10 +1391,8 @@ public class DataParser {
 
     }
 
+
     private void deleData(int deviceid) {
-//        Device gateway=DeviceManage.getInstance().getDevice(deviceid);
-//        DeviceManage.getInstance().removeDevice(gateway.getMacAddress());
-//        DeviceManage.getInstance().removeCurrentdev(gateway);
         try {
             List<SubDevice> subs = App.db.selector(SubDevice.class).where("gateway_id","=",deviceid).findAll();
             List<Sensor> sensors=App.db.selector(Sensor.class).where("device_id","=",deviceid).findAll();

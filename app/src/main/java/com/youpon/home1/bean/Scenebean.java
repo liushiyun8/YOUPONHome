@@ -51,7 +51,7 @@ public class Scenebean extends Devall{
     int status;
     @Column(name = "actions")
     String actions;
-    @Column(name = "unique",property = "Unique")
+    @Column(name = "unique")
     String unique;
 
     private List<ActionsBean> action;

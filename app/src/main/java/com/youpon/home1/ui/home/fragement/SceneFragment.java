@@ -81,6 +81,8 @@ public class SceneFragment extends Fragment {
                 List<Scenebean.ActionsBean> list=new ArrayList<>();
                 for (int j = 0; j <allScenepanel.size() ; j++) {
                     Panel panel = allScenepanel.get(j);
+                    if(panel.getGateway_id()!=first.getGateway_id())
+                        continue;
                     List<Scenebean.ActionsBean> been = panel.getMap().get(first.getSceneId());
                     if (been!=null){
                         list.addAll(been);
@@ -96,7 +98,11 @@ public class SceneFragment extends Fragment {
 
         }
         lists.addAll(DbUtil.findMyScene());
-        Log.e("lists111:",lists.toString());
+        Log.e("lists111数量",lists.size()+"");
+        for (int j = 0; j < lists.size(); j++) {
+            Log.e("lists111内容",lists.get(j).toString());
+        }
+
         if (lists.size() == 0) {
             noscene.setVisibility(View.VISIBLE);
         } else {

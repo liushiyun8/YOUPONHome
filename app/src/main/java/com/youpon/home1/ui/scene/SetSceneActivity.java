@@ -374,7 +374,26 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                     break;
                 }
                 if (s.equals(sceneBean.getActions())) {
-                    Toast.makeText(this, "场景未做任何修改！", Toast.LENGTH_LONG).show();
+                    HttpManage.getInstance().upDateSub("Scenebean", sceneBean.getObjectId(), new Gson().toJson(sceneBean), new MyCallback() {
+                        @Override
+                        public void onSuc(String result) {
+                            Log.e(TAG, result);
+                            Scenebean scenebean = new Gson().fromJson(result, Scenebean.class);
+                            try {
+                                App.db.update(scenebean);
+                            } catch (DbException e) {
+                                e.printStackTrace();
+                            }
+                            EventBus.getDefault().post(new EventData(EventData.REFRESHDB, "刷新场景"));
+                            finish();
+                        }
+
+                        @Override
+                        public void onFail(int code, String msg) {
+                            Log.e(TAG,code+msg);
+                        }
+                    });
+//                    Toast.makeText(this, "场景未做任何修改！", Toast.LENGTH_LONG).show();
                     break;
                 } else {
                     sceneBean.setActions(s);
@@ -426,6 +445,7 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                         if (s1.length() < 2) {
                             s1 = "0" + s1;
                         }
+                        String dataLen="00"+Integer.toHexString(17+action1.size()*7).toUpperCase();
                         StringBuilder sb = new StringBuilder();
                         sb.append(s1);
                         for (int j = 0; j < action1.size(); j++) {
@@ -442,9 +462,9 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                         }
                         if (panel != null)
                             if (panel.getClas() == 299) {
-                                Command.sendData1(panel.getGateway_id(), Command.getWriteSceneStr(sceneBean.getGroupId(), sceneBean.getSceneId(), panel.getId(), 0, sb.toString()).getBytes(), TAG);
+                                Command.sendData1(panel.getGateway_id(), Command.getWriteSceneStr(dataLen,sceneBean.getGroupId(), sceneBean.getSceneId(), panel.getId(), 0, sb.toString()).getBytes(), TAG);
                             } else {
-                                Command.sendData1(panel.getGateway_id(), Command.getWriteSceneStr(sceneBean.getGroupId(), sceneBean.getSceneId(), panel.getId(), 1, sb.toString()).getBytes(), TAG);
+                                Command.sendData1(panel.getGateway_id(), Command.getWriteSceneStr("", sceneBean.getGroupId(), sceneBean.getSceneId(), panel.getId(), 1, sb.toString()).getBytes(), TAG);
                             }
                     }
                 }
