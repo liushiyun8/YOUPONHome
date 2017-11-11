@@ -320,6 +320,9 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                         }
                         if(subDevice.getValue2()==1){
                             gaodang.setVisibility(View.GONE);
+                            if(subDevice.getValue1()>1){
+                                subDevice.setValue1(1);
+                            }
                         }else gaodang.setVisibility(View.VISIBLE);
                         huanqu.setTag(position);
                         huanqu.setOnCheckedChangeListener(null);
@@ -394,6 +397,7 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                         }
                     });
 //                    Toast.makeText(this, "场景未做任何修改！", Toast.LENGTH_LONG).show();
+                    finish();
                     break;
                 } else {
                     sceneBean.setActions(s);
@@ -417,11 +421,6 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                         Log.e(TAG,code+msg);
                     }
                 });
-                try {
-                    App.db.update(sceneBean);
-                } catch (DbException e) {
-                    e.printStackTrace();
-                }
                 if (sceneBean.getType() == 1||sceneBean.getType()==2) {
 //                    String panel_mac = sceneBean.getPanel_mac();
 //                    Panel panel = PanelManage.getInstance().getPanel(panel_mac);
@@ -441,6 +440,9 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                         String panel_mac = enty.getKey();
                         Panel panel = PanelManage.getInstance().getPanel(panel_mac);
                         List<Scenebean.ActionsBean> action1 = enty.getValue();
+                        if("0001".equals(sceneBean.getGroupId())){
+                            panel.getMap().put(sceneBean.getSceneId(),action1);
+                        }
                         String s1 = Integer.toHexString(action1.size());
                         if (s1.length() < 2) {
                             s1 = "0" + s1;
@@ -468,32 +470,12 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                             }
                     }
                 }
-//                    String s = Integer.toHexString(action.size());
-//                    if (s.length() < 2) {
-//                        s = "0" + s;
-//                    }
-//                    StringBuilder sb = new StringBuilder();
-//                    sb.append(s);
-//                    for (int j = 0; j < action.size(); j++) {
-//                        Scenebean.ActionsBean actionsBean = action.get(j);
-//                        int dstid = actionsBean.getDstid();
-//                        int val = actionsBean.getVal();
-//                        String va = Integer.toHexString(val);
-//                        if (va.length() < 2) {
-//                            va = "0" + va;
-//                        }
-//                        String nclu = actionsBean.getNclu();
-//                        boolean eq = "0008".equals(nclu);
-//                        sb.append("0" + dstid + (eq ? "0800" : "0600") + "0000" + (eq ? "20" : "10") + va);
-//                    }
-//                    if (panel != null)
-//                        if (panel.getClas() == 299) {
-//                            Command.sendData1(panel.getGateway_id(), Command.getWriteSceneStr(sceneBean.getGroupId(), sceneBean.getSceneId(), panel.getId(), 0, sb.toString()).getBytes(), TAG);
-//                        } else {
-//                            Command.sendData1(panel.getGateway_id(), Command.getWriteSceneStr(sceneBean.getGroupId(), sceneBean.getSceneId(), panel.getId(), 1, sb.toString()).getBytes(), TAG);
-//                        }
-//                }
-                EventBus.getDefault().post(new EventData(EventData.REFRESHDB, ""));
+                try {
+                    App.db.update(sceneBean);
+                    EventBus.getDefault().post(new EventData(EventData.REFRESHDB, "刷新场景"));
+                } catch (DbException e) {
+                    e.printStackTrace();
+                }
                 finish();
                 break;
             case R.id.edit:

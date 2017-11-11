@@ -58,44 +58,51 @@ public class SceneFragment extends Fragment {
     private UpdateUI updateUI;
     private int i;
     private TimerTask task;
+    private boolean IsFromMap=false;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void eventData(EventData eventData) {
         if (eventData.getTag() == EventData.REFRESHDB || eventData.getCode() == EventData.CODE_GETSCENE) {
+            if("0100".equals(eventData.getMassage()) )
+                IsFromMap=true;
+            else IsFromMap=false;
             updateUI.updade();
         }
     }
 
     private void updateDate() {
         lists.clear();
-        List<Panel> allScenepanel = PanelManage.getInstance().getAllScenepanel();
-        for (int i = 0; i < fourthScene.size(); i++) {
-            Scenebean scenebean = fourthScene.get(i);
-            Scenebean first=null;
-            try {
-                first = App.db.selector(Scenebean.class).where("panel_mac", "=", scenebean.getPanel_mac()).and("gateway_id","=",scenebean.getGateway_id()).and("groupId", "=", scenebean.getGroupId()).and("sceneId", "=", scenebean.getSceneId()).findFirst();
-            } catch (DbException e) {
-                e.printStackTrace();
-            }
-            if(first!=null){
-                List<Scenebean.ActionsBean> list=new ArrayList<>();
-                for (int j = 0; j <allScenepanel.size() ; j++) {
-                    Panel panel = allScenepanel.get(j);
-                    if(panel.getGateway_id()!=first.getGateway_id())
-                        continue;
-                    List<Scenebean.ActionsBean> been = panel.getMap().get(first.getSceneId());
-                    if (been!=null){
-                        list.addAll(been);
-                    }
-                }
-                first.setAction(list);
+        if(IsFromMap){
+            List<Panel> allScenepanel = PanelManage.getInstance().getAllScenepanel();
+            for (int i = 0; i < fourthScene.size(); i++) {
+                Scenebean scenebean = fourthScene.get(i);
+                Scenebean first=null;
                 try {
-                    App.db.update(first);
+                    first = App.db.selector(Scenebean.class).where("panel_mac", "=", scenebean.getPanel_mac()).and("gateway_id","=",scenebean.getGateway_id()).and("groupId", "=", scenebean.getGroupId()).and("sceneId", "=", scenebean.getSceneId()).findFirst();
                 } catch (DbException e) {
                     e.printStackTrace();
                 }
+                if(first!=null){
+                    List<Scenebean.ActionsBean> list=new ArrayList<>();
+                    for (int j = 0; j <allScenepanel.size() ; j++) {
+                        Panel panel = allScenepanel.get(j);
+                        if(panel.getGateway_id()!=first.getGateway_id())
+                            continue;
+                        List<Scenebean.ActionsBean> been = panel.getMap().get(first.getSceneId());
+                        if (been!=null){
+                            list.addAll(been);
+                        }
+                    }
+                    if(list.size()>0){
+                        first.setAction(list);
+                        try {
+                            App.db.update(first);
+                        } catch (DbException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
             }
-
         }
         lists.addAll(DbUtil.findMyScene());
         Log.e("lists111数量",lists.size()+"");

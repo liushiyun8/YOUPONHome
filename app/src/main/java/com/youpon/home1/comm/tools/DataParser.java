@@ -159,20 +159,21 @@ public class DataParser {
                         EventBus.getDefault().post(new EventData(EventData.CODE_REFRESH_DEVICE, ""));
                     }else if ("09".equals(commandID)) {
                         if("FFFF".equals(id)){
-                            Message ms = Message.obtain();
-                            ms.what = 2;
-                            switch (s485.substring(22, 24)) {
-                                case "00":
-                                    ms.obj = "场景写入成功";
-                                    break;
-                                case "01":
-                                    ms.obj = "场景写入无效";
-                                    break;
-                                case "02":
-                                    ms.obj = "场景写入失败";
-                                    break;
-                            }
-                            handler.sendMessage(ms);
+//                            Message ms = Message.obtain();
+//                            ms.what = 2;
+//                            switch (s485.substring(22, 24)) {
+//                                case "00":
+//                                    ms.obj = "场景写入成功";
+//                                    break;
+//                                case "01":
+//                                    ms.obj = "场景写入无效";
+//                                    break;
+//                                case "02":
+//                                    ms.obj = "场景写入失败";
+//                                    break;
+//                            }
+//                            handler.sendMessage(ms);
+                            break;
                         }else {
                             String groupId = s485.substring(22, 26);
                             String sceneId = s485.substring(26, 28);
@@ -209,7 +210,7 @@ public class DataParser {
                             boolean Tag = false;
                             if ("0001".equals(groupId)&&list.size()>0) {
                                 panel.getMap().put(sceneId, list);
-                                EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
+                                EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, "0100"));
                                 break;
                             } else if ("0000".equals(groupId)&&(panel.getClas()==9||panel.getClas()==299)) {
                                 sc = App.db.selector(Scenebean.class).where("panel_mac", "=", mac1).and("gateway_id","=",deviceid).and("groupId", "=", groupId).and("sceneId", "=", sceneId).findFirst();
@@ -290,51 +291,56 @@ public class DataParser {
 //                        break;
 //                    }
                         boolean Tag = false;
-                        if ("0001".equals(groupId)) {
-                            panel.getMap().put(sceneId, list);
-                            EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
-                            break;
-                        } else if ("0000".equals(groupId)&&(panel.getClas()==9||panel.getClas()==299)) {
-                            sc = App.db.selector(Scenebean.class).where("panel_mac", "=", mac1).and("gateway_id","=",deviceid).and("groupId", "=", groupId).and("sceneId", "=", sceneId).findFirst();
-                            if (sc == null) {
-                                Tag = true;
-                                sc = new Scenebean();
-                                sc.setGateway_id(deviceid);
-                                sc.setPanel_mac(mac1);
-                                sc.setGroupId(groupId);
-                                sc.setSceneId(sceneId);
-                            }
-                            if("04".equals(status)){
-                                sc.setType(2);
-                            }else
-                                sc.setType(1);
-                            sc.setGateway_id(deviceid);
-                            sc.setGateway_type(1);
-                            sc.setId(id);
-                            sc.setAction(list);
-                            if (!Tag) {
-                                App.db.update(sc);
+                        synchronized (this){
+                            if ("0001".equals(groupId)) {
+                                panel.getMap().put(sceneId, list);
                                 EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
-                            } else {
+                                break;
+                            } else if ("0000".equals(groupId)&&(panel.getClas()==9||panel.getClas()==299)) {
+                                sc = App.db.selector(Scenebean.class).where("panel_mac", "=", mac1).and("gateway_id","=",deviceid).and("groupId", "=", groupId).and("sceneId", "=", sceneId).findFirst();
+                                if (sc == null) {
+                                    Tag = true;
+                                    sc = new Scenebean();
+                                    sc.setGateway_id(deviceid);
+                                    sc.setPanel_mac(mac1);
+                                    sc.setGroupId(groupId);
+                                    sc.setSceneId(sceneId);
+                                }
+                                if("04".equals(status)){
+                                    sc.setType(2);
+                                }else
+                                    sc.setType(1);
+                                sc.setGateway_id(deviceid);
+                                sc.setGateway_type(1);
+                                sc.setId(id);
+                                sc.setAction(list);
+                                if (!Tag) {
+                                    App.db.update(sc);
+                                    EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
+                                } else {
 //                                App.db.replace(sc);
-                                HttpManage.getInstance().addSub(HttpManage.TYPE_SINGLE, HttpManage.SCENETABLE, new Gson().toJson(sc), new MyCallback() {
-                                    @Override
-                                    public void onSuc(String result) {
-                                        Scenebean scenebean = new Gson().fromJson(result, Scenebean.class);
-                                        try {
-                                            App.db.saveOrUpdate(scenebean);
-                                            EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
-                                        } catch (DbException e) {
-                                            e.printStackTrace();
+                                    HttpManage.getInstance().addSub(HttpManage.TYPE_SINGLE, HttpManage.SCENETABLE, new Gson().toJson(sc), new MyCallback() {
+                                        @Override
+                                        public void onSuc(String result) {
+                                            Scenebean scenebean = new Gson().fromJson(result, Scenebean.class);
+                                            try {
+                                                List<Scenebean> all = App.db.selector(Scenebean.class).where("panel_mac", "=", scenebean.getPanel_mac()).and("gateway_id", "=", scenebean.getGateway_id()).and("groupId", "=", scenebean.getGroupId()).and("sceneId", "=", scenebean.getSceneId()).findAll();
+                                                Log.e("上传485场景",all+"");
+                                                if(all==null||(all!=null&&all.size()==0))
+                                                App.db.saveOrUpdate(scenebean);
+                                                EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
+                                            } catch (DbException e) {
+                                                e.printStackTrace();
+                                            }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onFail(int code, String msg) {
+                                        @Override
+                                        public void onFail(int code, String msg) {
 
-                                        Log.e("code and msg", code + " msg:" + msg);
-                                    }
-                                });
+                                            Log.e("code and msg", code + " msg:" + msg);
+                                        }
+                                    });
+                                }
                             }
                         }
                     }
@@ -1139,21 +1145,22 @@ public class DataParser {
                             break;
 //                            EventBus.getDefault().post(new EventData(EventData.CODE_REFRESH_DEVICE, ""));
                         }else if("09".equals(commandId)){
-                            String status = pay.substring(10, 12);
-                            Message ms = Message.obtain();
-                            ms.what = 2;
-                            switch (status) {
-                                case "00":
-                                    ms.obj = "场景写入成功";
-                                    break;
-                                case "01":
-                                    ms.obj = "场景写入无效";
-                                    break;
-                                default:
-                                    ms.obj = "场景写入失败";
-                                     break;
-                            }
-                            myhandle.sendMessage(ms);
+//                            String status = pay.substring(10, 12);
+//                            Message ms = Message.obtain();
+//                            ms.what = 2;
+//                            switch (status) {
+//                                case "00":
+//                                    ms.obj = "场景写入成功";
+//                                    break;
+//                                case "01":
+//                                    ms.obj = "场景写入无效";
+//                                    break;
+//                                default:
+//                                    ms.obj = "场景写入失败";
+//                                     break;
+//                            }
+//                            myhandle.sendMessage(ms);
+
                             break;
                         }else if("08".equals(commandId)){
                             String status=pay.substring(10,12);
@@ -1184,51 +1191,57 @@ public class DataParser {
                                 }
                                 list.add(actionsBean);
                             }
-                            if ("0100".equals(groupId)||"0001".equals(groupId)){
-                                if(list.size()>0)
-                                panel.getMap().put(sceneId,list);
-                                EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE,""));
-                                break;
-                            }else if("0000".equals(groupId)&&(panel.getClas()==9||panel.getClas()==299)){
-                                Scenebean sc = App.db.selector(Scenebean.class).where("panel_mac", "=", mac1).and("gateway_id","=",deviceid).and("groupId", "=", groupId).and("sceneId", "=", sceneId).findFirst();
-                                boolean Tag=false;
-                                if(sc==null){
-                                    Tag=true;
-                                    sc=new Scenebean();
-                                    sc.setPanel_mac(mac1);
-                                    sc.setGroupId(groupId);
-                                    sc.setSceneId(sceneId);
-                                    if("04".equals(status)){
-                                        sc.setType(2);
-                                    }else
-                                        sc.setType(1);
-                                }
-                                sc.setGateway_id(deviceid);
-                                sc.setGateway_type(0);
-                                sc.setId(id);
-                                sc.setAction(list);
-                                if(!Tag){
-                                    App.db.update(sc);
-                                    EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE,""));
-                                }
-                                if(Tag){
-                                    HttpManage.getInstance().addSub(HttpManage.TYPE_SINGLE, HttpManage.SCENETABLE, new Gson().toJson(sc), new MyCallback() {
-                                        @Override
-                                        public void onSuc(String result) {
-                                            Scenebean scenebean = new Gson().fromJson(result, Scenebean.class);
-                                            try {
-                                                App.db.saveOrUpdate(scenebean);
-                                                EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE,""));
-                                            } catch (DbException e) {
-                                                e.printStackTrace();
+                            synchronized (this){
+                                if ("0100".equals(groupId)||"0001".equals(groupId)){
+                                    if(list.size()>0)
+                                        panel.getMap().put(sceneId,list);
+                                    EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE,"0100"));
+                                    break;
+                                }else if("0000".equals(groupId)&&(panel.getClas()==9||panel.getClas()==299)){
+                                    Scenebean sc = App.db.selector(Scenebean.class).where("panel_mac", "=", mac1).and("gateway_id","=",deviceid).and("groupId", "=", groupId).and("sceneId", "=", sceneId).findFirst();
+                                    boolean Tag=false;
+                                    if(sc==null){
+                                        Tag=true;
+                                        sc=new Scenebean();
+                                        sc.setPanel_mac(mac1);
+                                        sc.setGroupId(groupId);
+                                        sc.setSceneId(sceneId);
+                                        if("04".equals(status)){
+                                            sc.setType(2);
+                                        }else
+                                            sc.setType(1);
+                                    }
+                                    sc.setGateway_id(deviceid);
+                                    sc.setGateway_type(0);
+                                    sc.setId(id);
+                                    sc.setAction(list);
+                                    if(!Tag){
+                                        App.db.update(sc);
+                                        EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE,""));
+                                    }
+                                    if(Tag){
+                                        HttpManage.getInstance().addSub(HttpManage.TYPE_SINGLE, HttpManage.SCENETABLE, new Gson().toJson(sc), new MyCallback() {
+                                            @Override
+                                            public void onSuc(String result) {
+                                                Scenebean scenebean = new Gson().fromJson(result, Scenebean.class);
+                                                try {
+                                                    List<Scenebean> all = App.db.selector(Scenebean.class).where("panel_mac", "=", scenebean.getPanel_mac()).and("gateway_id", "=", scenebean.getGateway_id()).and("groupId", "=", scenebean.getGroupId()).and("sceneId", "=", scenebean.getSceneId()).findAll();
+                                                    Log.e("上传ZigBee场景",all+"");
+                                                    if(all==null||(all!=null&&all.size()==0))
+                                                    App.db.saveOrUpdate(scenebean);
+                                                    EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE,""));
+                                                } catch (DbException e) {
+                                                    e.printStackTrace();
+                                                }
                                             }
-                                        }
 
-                                        @Override
-                                        public void onFail(int code, String msg) {
-                                            Log.e("code and msg",code+" msg:"+msg);
-                                        }
-                                    });
+                                            @Override
+                                            public void onFail(int code, String msg) {
+                                                Log.e("code and msg",code+" msg:"+msg);
+                                            }
+                                        });
+                                    }
+
                                 }
                             }
                         }
@@ -1377,6 +1390,13 @@ public class DataParser {
                 for (int j = 0; j < action.size(); j++) {
                     Scenebean.ActionsBean actionsBean = action.get(j);
                     if(actionsBean.getMac().equals(mac)&&actionsBean.getDstid()==dst&&actionsBean.getVal()!=tap){
+                        if(dst==6&&actionsBean.getVal()==2){
+                            SubDevice sub = App.db.selector(SubDevice.class).where("gateway_id", "=", deviceid).and("mac", "=", mac).and("dst", "=", dst).findFirst();
+                            if(sub!=null){
+                                if(sub.getValue2()==1&&tap==1)
+                                    break;
+                            }
+                        }
                         scenebean.setStatus(0);
                         haschange=true;
                         break;

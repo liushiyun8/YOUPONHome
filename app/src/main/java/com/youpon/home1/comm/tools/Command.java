@@ -164,6 +164,10 @@ public class Command {
                     }else
                     first.setValue1(actionsBean.getVal());
                 }
+                if(first.getTp()==3&&first.getValue2()==1&&first.getValue1()>1){
+                    first.setValue1(1);
+                    actionsBean.setVal(1);
+                }
                 if(first!=null)
                 App.db.update(first);
             } catch (DbException e) {

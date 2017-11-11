@@ -279,6 +279,8 @@ public class Panel extends Devall {
                 ", online=" + online +
                 ", clas=" + clas +
                 ", chnls='" + chnls + '\'' +
+                ", map=" + map +
+                ", chnlBeanList=" + chnlBeanList +
                 '}';
     }
 }
