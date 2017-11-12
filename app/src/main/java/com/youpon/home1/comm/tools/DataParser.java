@@ -294,7 +294,7 @@ public class DataParser {
                         synchronized (this){
                             if ("0001".equals(groupId)) {
                                 panel.getMap().put(sceneId, list);
-                                EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
+                                EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, "0100"));
                                 break;
                             } else if ("0000".equals(groupId)&&(panel.getClas()==9||panel.getClas()==299)) {
                                 sc = App.db.selector(Scenebean.class).where("panel_mac", "=", mac1).and("gateway_id","=",deviceid).and("groupId", "=", groupId).and("sceneId", "=", sceneId).findFirst();

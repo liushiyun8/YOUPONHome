@@ -93,14 +93,12 @@ public class SceneFragment extends Fragment {
                             list.addAll(been);
                         }
                     }
-                    if(list.size()>0){
                         first.setAction(list);
                         try {
                             App.db.update(first);
                         } catch (DbException e) {
                             e.printStackTrace();
                         }
-                    }
                 }
             }
         }
@@ -151,7 +149,22 @@ public class SceneFragment extends Fragment {
                         public void onSuc(String result) {
                            Scenebean sc = new Gson().fromJson(result, Scenebean.class);
                             try {
-                                App.db.saveOrUpdate(sc);
+                                List<Scenebean> first = App.db.selector(Scenebean.class).where("panel_mac", "=", sc.getPanel_mac()).and("gateway_id","=",sc.getGateway_id()).and("groupId", "=", sc.getGroupId()).and("sceneId", "=", sc.getSceneId()).findAll();
+                                if(first==null||first.size()==0){
+                                    App.db.saveOrUpdate(sc);
+                                }else
+                                    HttpManage.getInstance().deleSub(sc.getObjectId(), HttpManage.SCENETABLE, new MyCallback() {
+                                        @Override
+                                        public void onSuc(String result) {
+
+                                        }
+
+                                        @Override
+                                        public void onFail(int code, String msg) {
+
+                                        }
+                                    });
+
                             } catch (DbException e) {
                                 e.printStackTrace();
                             }
@@ -189,8 +202,12 @@ public class SceneFragment extends Fragment {
             Panel panel = panels.get(i);
             Device device = DeviceManage.getInstance().getDevice(panel.getGateway_id());
             if(device!=null){
-                if(device.isOnline())
-                Command.sendData(device.getXDevice(), Command.getReadSceneStr("FFFF","00",panel.getId(),0).getBytes(), TAG);
+                if(device.isOnline()){
+                    Command.sendData(device.getXDevice(), Command.getReadSceneStr("0000","00",panel.getId(),0).getBytes(), TAG);
+                    Command.sendData(device.getXDevice(), Command.getReadSceneStr("0000","01",panel.getId(),0).getBytes(), TAG);
+                    Command.sendData(device.getXDevice(), Command.getReadSceneStr("0000","02",panel.getId(),0).getBytes(), TAG);
+                }
+
             }
         }
 
@@ -200,8 +217,11 @@ public class SceneFragment extends Fragment {
             Panel panel = panels1.get(i);
             Device device = DeviceManage.getInstance().getDevice(panel.getGateway_id());
             if(device!=null){
-                if(device.isOnline())
-                    Command.sendData(device.getXDevice(), Command.getReadSceneStr("FFFF","00",panel.getId(),1).getBytes(), TAG);
+                if(device.isOnline()){
+                    Command.sendData(device.getXDevice(), Command.getReadSceneStr("0000","00",panel.getId(),1).getBytes(), TAG);
+                    Command.sendData(device.getXDevice(), Command.getReadSceneStr("0000","01",panel.getId(),1).getBytes(), TAG);
+                }
+
             }
         }
 
