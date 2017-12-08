@@ -175,7 +175,7 @@ public class DeviceMainActivity extends BaseActivity {
 
             @Override
             public void onUserPresent() {
-                loadData();
+//                loadData();
             }
         });
     }

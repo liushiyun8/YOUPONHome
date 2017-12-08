@@ -58,21 +58,16 @@ public class SceneFragment extends Fragment {
     private UpdateUI updateUI;
     private int i;
     private TimerTask task;
-    private boolean IsFromMap=false;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void eventData(EventData eventData) {
         if (eventData.getTag() == EventData.REFRESHDB || eventData.getCode() == EventData.CODE_GETSCENE) {
-            if("0100".equals(eventData.getMassage()) )
-                IsFromMap=true;
-            else IsFromMap=false;
             updateUI.updade();
         }
     }
 
     private void updateDate() {
         lists.clear();
-        if(IsFromMap){
             List<Panel> allScenepanel = PanelManage.getInstance().getAllScenepanel();
             for (int i = 0; i < fourthScene.size(); i++) {
                 Scenebean scenebean = fourthScene.get(i);
@@ -100,7 +95,6 @@ public class SceneFragment extends Fragment {
                             e.printStackTrace();
                         }
                 }
-            }
         }
         lists.addAll(DbUtil.findMyScene());
         Log.e("lists111数量",lists.size()+"");

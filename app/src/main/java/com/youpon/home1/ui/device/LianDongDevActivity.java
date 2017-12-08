@@ -1,5 +1,6 @@
 package com.youpon.home1.ui.device;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -45,6 +46,8 @@ public class LianDongDevActivity extends AppCompatActivity implements View.OnCli
     List<SubDevice> myDvs=new ArrayList<>();
     private CommonAdapter<SubDevice> commonAdapter;
     private List<SubDevice> addLs=new ArrayList();
+    private int type;
+    private int value4;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void event(EventData eventData) {
@@ -63,9 +66,21 @@ public class LianDongDevActivity extends AppCompatActivity implements View.OnCli
     private void init() {
         back.setOnClickListener(this);
         save.setOnClickListener(this);
-        device_id = getIntent().getIntExtra("device_id", 0);
+        Intent intent = getIntent();
+        device_id = intent.getIntExtra("device_id", 0);
+        type = intent.getIntExtra("type", 0);
+        value4 = intent.getIntExtra("value4", 299);
         try {
-            List<SubDevice> subs = App.db.selector(SubDevice.class).where("gateway_id", "=", device_id).findAll();
+            List<SubDevice> subs =null;
+            if(value4==299||value4==0){
+                subs=App.db.selector(SubDevice.class).where("gateway_id","=",device_id).and("clas","=",299).and("type","!=",0).findAll();
+            }else if(value4==9){
+                if(type==1){
+                    subs=App.db.selector(SubDevice.class).where("gateway_id","=",device_id).and("clas","=",9).and("type","=",3).findAll();
+                }else {
+                    subs=App.db.selector(SubDevice.class).where("gateway_id","=",device_id).and("clas","=",9).and("type","=",4).findAll();
+                }
+            }
             if(subs!=null){
                 myDvs.addAll(subs);
             }

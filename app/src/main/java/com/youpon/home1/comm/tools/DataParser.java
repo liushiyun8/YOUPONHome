@@ -516,7 +516,7 @@ public class DataParser {
                                 int ttap1=Integer.parseInt(s485.substring(index+11,index+15),16);
                                 Log.e("S485","clu:"+clu+",type:"+type);
                                 Log.e("S485","ttap:"+ttap1);
-                                    App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",type),new KeyValue[]{new KeyValue("value1",ttap1),new KeyValue("online",true)});
+                                    App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",type),new KeyValue[]{new KeyValue("value1",ttap1),new KeyValue("online",true),new KeyValue("value4",299)});
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -541,9 +541,9 @@ public class DataParser {
 //                                    }else first.setValue1(ttap2);
 //                                    App.db.replace(first);
                                     if("0405".equals(clu)){
-                                        App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",tp),new KeyValue[]{new KeyValue("value2",tap2),new KeyValue("online",true)});
+                                        App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",tp),new KeyValue[]{new KeyValue("value2",tap2),new KeyValue("online",true),new KeyValue("value4",299)});
                                     }else
-                                    App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",tp),new KeyValue[]{new KeyValue("value1",tap2),new KeyValue("online",true)});
+                                    App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",tp),new KeyValue[]{new KeyValue("value1",tap2),new KeyValue("online",true),new KeyValue("value4",299)});
                                 } catch (DbException e) {
                                     e.printStackTrace();
                                 }
@@ -565,7 +565,7 @@ public class DataParser {
 //                                        return;
 //                                    }else first.setValue1(ttap2);
 //                                    App.db.replace(first);
-                                    App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",ty),new KeyValue[]{new KeyValue("value1",ttap2),new KeyValue("online",true)});
+                                    App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",ty),new KeyValue[]{new KeyValue("value1",ttap2),new KeyValue("online",true),new KeyValue("value4",299)});
                                 } catch (DbException e) {
                                     e.printStackTrace();
                                 }
@@ -577,7 +577,7 @@ public class DataParser {
                                 Log.e("S485","clu:"+clu);
                                 Log.e("S485","ttap:"+ttap3);
                                 try {
-                                    App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",typ),new KeyValue[]{new KeyValue("value1",ttap3),new KeyValue("online",true)});
+                                    App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",typ),new KeyValue[]{new KeyValue("value1",ttap3),new KeyValue("online",true),new KeyValue("value4",299)});
                                 } catch (DbException e) {
                                     e.printStackTrace();
                                 }
@@ -1062,12 +1062,12 @@ public class DataParser {
                         }else if("0405".equals(cluster)){
                             type1=3;
                             value/=100;
-                            App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("type","=",type1).and("device_id","=",deviceid),new KeyValue[]{new KeyValue("online",true),new KeyValue("value2",value)});
+                            App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("type","=",type1).and("device_id","=",deviceid),new KeyValue[]{new KeyValue("online",true),new KeyValue("value2",value),new KeyValue("value4",9)});
                         }else if("0406".equals(cluster)){
                             type1=1;
                         }
                             if(!"0405".equals(cluster))
-                            App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("type","=",type1).and("device_id","=",deviceid),new KeyValue[]{new KeyValue("online",true),new KeyValue("value1",value)});
+                            App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("type","=",type1).and("device_id","=",deviceid),new KeyValue[]{new KeyValue("online",true),new KeyValue("value1",value),new KeyValue("value4",9)});
                         } catch (DbException e) {
                             e.printStackTrace();
                         }

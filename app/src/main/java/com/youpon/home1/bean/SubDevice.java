@@ -147,7 +147,7 @@ public class SubDevice extends Devall implements Serializable {
                     my=panel.getMyName();
                 this.name=my+dst;
             }else if(type==1){
-                this.name=first+"风暖";
+                this.name=first+(clas==9?"风扇":"风暖");
             }else if(type==2){
                 this.name=first+"光暖";
             }else if(type==3){

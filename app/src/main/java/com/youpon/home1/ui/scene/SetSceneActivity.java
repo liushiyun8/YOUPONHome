@@ -539,13 +539,52 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                     public void onYesClick() {
                         if(sceneBean.getType()!=0){
                             try {if("0001".equals(sceneBean.getGroupId())){
-                                App.db.delete(SubDevice.class, WhereBuilder.b("mac","=",sceneBean.getPanel_mac()).and("dst","=",Integer.parseInt(sceneBean.getSceneId())+1));
+                                App.db.delete(SubDevice.class, WhereBuilder.b("mac","=",sceneBean.getPanel_mac()));
+                                Command.sendData1(sceneBean.getGateway_id(),Command.dele(sceneBean.getPanel_mac(),sceneBean.getId()).getBytes(),TAG);
                             }else {
                                 App.db.delete(SubDevice.class,WhereBuilder.b("mac","=",sceneBean.getPanel_mac()).and("dst","=",Integer.parseInt(sceneBean.getSceneId())+1));
                             }
                             } catch (DbException e) {
                             e.printStackTrace();
                         }
+                        }
+                        if(sceneBean.getType()!=0&&"0001".equals(sceneBean.getGroupId())){
+                            try {
+                                List<Scenebean> scenebeans = App.db.selector(Scenebean.class).where("gateway_id", "=", sceneBean.getGateway_id()).and("panel_mac", "=", sceneBean.getPanel_mac()).findAll();
+                                if(scenebeans!=null){
+                                    for (int i = 0; i < scenebeans.size(); i++) {
+                                        final Scenebean scenebean = scenebeans.get(i);
+                                        HttpManage.getInstance().deleSub(scenebean.getObjectId(), "Scenebean", new MyCallback() {
+                                            @Override
+                                            public void onSuc(String result) {
+                                                try {
+                                                    App.db.delete(scenebean);
+                                                    MyToast.show(SetSceneActivity.this, MyToast.TYPE_OK, "删除成功", 1);
+                                                    EventBus.getDefault().post(new EventData(EventData.REFRESHDB, ""));
+                                                    if(dialog.isShowing())
+                                                    dialog.dismiss();
+                                                } catch (DbException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFail(int code, String msg) {
+                                                try {
+                                                    App.db.delete(scenebean);
+                                                } catch (DbException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                if(dialog.isShowing())
+                                                dialog.dismiss();
+                                                EventBus.getDefault().post(new EventData(EventData.REFRESHDB, ""));
+                                            }
+                                        });
+                                    }
+                                }
+                            } catch (DbException e) {
+                                e.printStackTrace();
+                            }
                         }
                         HttpManage.getInstance().deleSub(sceneBean.getObjectId(), "Scenebean", new MyCallback() {
                             @Override
@@ -555,7 +594,6 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                                     MyToast.show(SetSceneActivity.this, MyToast.TYPE_OK, "删除成功", 1);
                                     EventBus.getDefault().post(new EventData(EventData.REFRESHDB, ""));
                                     dialog.dismiss();
-                                    finish();
                                 } catch (DbException e) {
                                     e.printStackTrace();
                                 }
@@ -571,10 +609,9 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                                 MyToast.show(SetSceneActivity.this, MyToast.TYPE_OK, "删除失败", 1);
                                 dialog.dismiss();
                                 EventBus.getDefault().post(new EventData(EventData.REFRESHDB, ""));
-                                finish();
                             }
                         });
-
+                        finish();
                     }
                 });
                 dialog.show();

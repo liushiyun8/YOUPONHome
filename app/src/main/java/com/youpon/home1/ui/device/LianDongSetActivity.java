@@ -413,6 +413,8 @@ public class LianDongSetActivity extends BaseActivity implements View.OnClickLis
             case R.id.addshebei:
                 Intent intent = new Intent(this, LianDongDevActivity.class);
                 intent.putExtra("device_id", sensor.getDevice_id());
+                intent.putExtra("type",sensor.getType());
+                intent.putExtra("value4",sensor.getValue4());
                 startActivity(intent);
                 break;
         }

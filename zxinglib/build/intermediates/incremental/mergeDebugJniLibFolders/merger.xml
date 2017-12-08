@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="E:\androidproject\YouponHome\zxinglib\src\main\jniLibs"/></dataSet><dataSet config="debug"><source path="E:\androidproject\YouponHome\zxinglib\src\debug\jniLibs"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="E:\demo\Home\zxinglib\src\main\jniLibs"/></dataSet><dataSet config="debug"><source path="E:\demo\Home\zxinglib\src\debug\jniLibs"/></dataSet></merger>

@@ -153,8 +153,18 @@ public class PanelManage {
     }
 
     public void addPanel(Panel panel) {
-        panelMap.put(panel.getMac(),panel);
-        savePanel(panel);
+        Panel panel1 = panelMap.get(panel.getMac());
+        if(panel1!=null){
+            panel1.setGateway_id(panel.getGateway_id());
+            panel1.setGateway_type(panel.getGateway_type());
+            panel1.setClas(panel.getClas());
+            panel1.setMac(panel.getMac());
+            panel1.setId(panel.getId());
+            panel1.setOnline(panel.isOnline());
+        }else {
+            panelMap.put(panel.getMac(),panel);
+            savePanel(panel);
+        }
     }
 
     public void updatePanel(Panel panel) {
