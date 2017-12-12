@@ -1,7 +1,16 @@
 *.iml
-.gradle
-/local.properties
-/.idea/
+local.properties
+.idea/
 .DS_Store
-/build
-/captures
+captures/
+.navigation/
+*.log
+
+# Built application files
+*.apk
+*.ap_
+
+# Gradle files
+build/
+.gradle/
+*/build/
