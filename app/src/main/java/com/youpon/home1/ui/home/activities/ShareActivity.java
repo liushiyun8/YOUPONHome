@@ -13,7 +13,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
 import android.util.Base64;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -133,7 +133,7 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
                         helper.setText(R.id.name,item.getName());
                 ImageView iv = helper.getView(R.id.touxiang);
                 iv.setTag(item.getUser_id());
-                Log.e("TTTAG",item.getUser_id()+"");
+                MyLog.e("TTTAG",item.getUser_id()+"");
                 updateShareJson(item.getUser_id(),iv);
             }
         };
@@ -240,7 +240,7 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
 
             @Override
             public void onSuccess(int code, String response) {
-                Log.e("TAG", response);
+                MyLog.e("TAG", response);
                 list.clear();
                 try {
                     JSONArray jsonArray = new JSONArray(response);
@@ -384,7 +384,7 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
             getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Log.e("YYY",position+"");
+                    MyLog.e("YYY",position+"");
                     ShareUser shareUser = list1.get(position);
                     Intent intent = new Intent(ShareActivity.this, ShareUserInfoActivity.class);
                     intent.putExtra("user",shareUser);
@@ -402,7 +402,7 @@ public class ShareActivity extends BaseActivity implements View.OnClickListener 
             getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Log.e("YYY",position+"");
+                    MyLog.e("YYY",position+"");
                     ShareUser shareJson = list2.get(position);
                     Intent intent = new Intent(ShareActivity.this, ShareUserInfoActivity.class);
                     intent.putExtra("type",1);

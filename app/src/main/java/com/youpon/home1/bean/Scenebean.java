@@ -1,11 +1,7 @@
 package com.youpon.home1.bean;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.youpon.home1.comm.App;
-import com.youpon.home1.comm.Comconst;
-import com.youpon.home1.manage.DeviceManage;
 import com.youpon.home1.manage.PanelManage;
 
 import org.json.JSONArray;
@@ -13,7 +9,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.db.annotation.Column;
 import org.xutils.db.annotation.Table;
-import org.xutils.db.sqlite.WhereBuilder;
 import org.xutils.ex.DbException;
 
 import java.io.Serializable;

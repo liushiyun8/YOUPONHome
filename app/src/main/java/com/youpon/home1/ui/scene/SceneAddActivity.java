@@ -2,7 +2,7 @@ package com.youpon.home1.ui.scene;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -187,7 +187,7 @@ public class SceneAddActivity extends BaseActivity implements View.OnClickListen
                 helper.setText(R.id.panel_name,panel==null?"":panel.getMyName());
                 switch (subDevice.getTp()) {
                     case 0:
-                        Log.e(TAG, subDevice.getValue1() + "");
+                        MyLog.e(TAG, subDevice.getValue1() + "");
                         if (subDevice.getValue1() != 0) {
                             nuanqu.setVisibility(View.VISIBLE);
                         }
@@ -362,7 +362,7 @@ public class SceneAddActivity extends BaseActivity implements View.OnClickListen
                     HttpManage.getInstance().addSub(HttpManage.TYPE_SINGLE, "Scenebean", new Gson().toJson(scenebean), new Callback.CommonCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
-                            Log.e(TAG, result);
+                            MyLog.e(TAG, result);
                             Scenebean scenebean = new Gson().fromJson(result, Scenebean.class);
                             try {
                                 App.db.saveOrUpdate(scenebean);

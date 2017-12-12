@@ -1,9 +1,5 @@
 package com.youpon.home1.bean;
 
-import android.util.Log;
-
-import com.youpon.home1.comm.App;
-import com.youpon.home1.manage.DeviceManage;
 import com.youpon.home1.manage.PanelManage;
 
 import org.xutils.db.annotation.Column;

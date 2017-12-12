@@ -3,7 +3,7 @@ package com.youpon.home1.ui.space.activities;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -147,11 +147,11 @@ public class SpaceDetailActivity extends BaseActivity implements View.OnClickLis
                         if(isChecked){
                             if(!selectList.contains(item))
                             selectList.add(item);
-                            Log.e("adpter_add",item.getSID());
+                            MyLog.e("adpter_add",item.getSID());
                         }else {
                             if (selectList.contains(item))
                                 selectList.remove(item);
-                            Log.e("adpter_remove", item.getSID());
+                            MyLog.e("adpter_remove", item.getSID());
                         }
                         count.setText(selectList.size()+"");
                     }
@@ -303,7 +303,7 @@ public class SpaceDetailActivity extends BaseActivity implements View.OnClickLis
                                 HttpManage.getInstance().deleSub(roombean.getObjectId(), "Roombean", new MyCallback() {
                                     @Override
                                     public void onSuc(String result) {
-                                        Log.e("delet",result);
+                                        MyLog.e("delet",result);
                                         try {
                                             App.db.delete(roombean);
                                         } catch (DbException e) {

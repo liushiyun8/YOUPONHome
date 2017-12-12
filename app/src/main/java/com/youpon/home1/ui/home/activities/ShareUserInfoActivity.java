@@ -3,7 +3,7 @@ package com.youpon.home1.ui.home.activities;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -267,11 +267,11 @@ public class ShareUserInfoActivity extends BaseActivity implements View.OnClickL
 //                                        }
 //                                    });
                                 } else {
-                                    Log.e("tag",user.getInvite_code()+"");
+                                    MyLog.e("tag",user.getInvite_code()+"");
                                     HttpManage.getInstance().cancelShare(user.getInvite_code(), new MyCallback() {
                                         @Override
                                         public void onSuc(String result) {
-                                            Log.e("TAG,success:",result);
+                                            MyLog.e("TAG,success:",result);
                                             MyToast.show(ShareUserInfoActivity.this, MyToast.TYPE_OK,"删除分享成功", 1);
                                             EventBus.getDefault().post(new EventData(EventData.REFRESHDB, ""));
                                             dialog.dismiss();
@@ -280,7 +280,7 @@ public class ShareUserInfoActivity extends BaseActivity implements View.OnClickL
 
                                         @Override
                                         public void onFail(int code, String msg) {
-                                            Log.e("TAG,fail:",msg);
+                                            MyLog.e("TAG,fail:",msg);
                                             MyToast.show(ShareUserInfoActivity.this, MyToast.TYPE_ERROR,msg, 1);
                                             EventBus.getDefault().post(new EventData(EventData.REFRESHDB, ""));
                                             dialog.dismiss();
@@ -299,7 +299,7 @@ public class ShareUserInfoActivity extends BaseActivity implements View.OnClickL
         HttpManage.getInstance().unsubscribe(deviceId, new HttpManage.ResultCallback<Map<String,Object>>() {
             @Override
             public void onError(Header[] headers, HttpManage.Error error) {
-                Log.e("fail",error.getCode()+"  info:"+error.getMsg());
+                MyLog.e("fail",error.getCode()+"  info:"+error.getMsg());
                 MyToast.show(ShareUserInfoActivity.this,MyToast.TYPE_ERROR,error.getMsg(),1);
             }
 

@@ -10,7 +10,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -321,7 +321,7 @@ public class ZhuyueFragment extends Fragment implements View.OnClickListener {
         list.clear();
         try {
             List<MainBean> all = App.db.selector(MainBean.class).orderBy("order").findAll();
-            Log.e("tag",all+"");
+            MyLog.e("tag",all+"");
             if (all != null) {
                 list.addAll(all);
             }
@@ -378,7 +378,7 @@ public class ZhuyueFragment extends Fragment implements View.OnClickListener {
         } catch (DbException e) {
             e.printStackTrace();
         }
-        Log.e(TAG, list.size() + "");
+        MyLog.e(TAG, list.size() + "");
         count = (list.size() - 1) / 9 + 1;
         list1.clear();
         if (count == 1) {

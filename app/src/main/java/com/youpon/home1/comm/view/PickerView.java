@@ -7,7 +7,7 @@ import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -304,7 +304,7 @@ public class PickerView extends View {
 
     private void doUp(final MotionEvent event) {
 //
-//        Log.e("mMoveLen","Y:"+event.getY()+"mMovelen:"+(mstep));
+//        MyLog.e("mMoveLen","Y:"+event.getY()+"mMovelen:"+(mstep));
 //        step =Math.abs(mstep);
 //        post(null);
 //        postDelayed(new Runnable() {

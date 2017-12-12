@@ -1,6 +1,6 @@
 package com.youpon.home1.http;
 
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 
 import com.google.gson.Gson;
 import com.google.gson.internal.$Gson$Types;

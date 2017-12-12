@@ -2,7 +2,7 @@ package com.youpon.home1.http;
 
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 
 import com.google.gson.Gson;
 import com.youpon.home1.bean.MainBean;
@@ -65,7 +65,7 @@ public class Net2db {
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         updateTime=dateFormat.format(date);
-        Log.e("YYYY",updateTime);
+        MyLog.e("YYYY",updateTime);
         lastTime = (String) App.getSp().get(Comconst.CURRENTUSER+Comconst.LASTTIME,"");
         for (int i = 0; i < tables.length; i++) {
             queryNet(i);
@@ -79,7 +79,7 @@ public class Net2db {
         HttpManage.getInstance().querySub(tables[j],queryString , new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e("WDEWDEWDE",result);
+                MyLog.e("WDEWDEWDE",result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     int count = jsonObject.optInt("count");
@@ -112,7 +112,7 @@ public class Net2db {
 
             @Override
             public void onFinished() {
-                Log.e("FFFFFF","finish");
+                MyLog.e("FFFFFF","finish");
                 Message msg = Message.obtain();
                 msg.what=1;
                 handler.sendMessage(msg);

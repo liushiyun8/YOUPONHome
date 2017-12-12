@@ -4,7 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -53,7 +53,7 @@ public class RoomDialog implements View.OnClickListener {
                     textView.setOnTouchListener(new View.OnTouchListener() {
                         @Override
                         public boolean onTouch(View v, MotionEvent motionEvent) {
-                            Log.e("onclick","我被点击了");
+                            MyLog.e("onclick","我被点击了");
                             TextView tv= (TextView) v;
                             for (int j = 0; j < flow.getChildCount(); j++) {
                                 flow.getChildAt(j).setSelected(false);

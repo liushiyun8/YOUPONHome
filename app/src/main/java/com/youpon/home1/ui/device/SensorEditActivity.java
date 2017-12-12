@@ -1,7 +1,7 @@
 package com.youpon.home1.ui.device;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -141,7 +141,7 @@ public class SensorEditActivity extends BaseActivity implements View.OnClickList
 //                        e.printStackTrace();
 //                    }
 //                    if (de != null && de.size() > 0 && !subDevice.getName().equals(s)) {
-//                        Log.e("Dev", s.toString() + ":::" + de.toString());
+//                        MyLog.e("Dev", s.toString() + ":::" + de.toString());
 //                        Toast.makeText(DevEditActivity.this, "设备名称不能重复，请重新命名！", Toast.LENGTH_SHORT).show();
 //                    }
 //                }
@@ -175,7 +175,7 @@ public class SensorEditActivity extends BaseActivity implements View.OnClickList
                 sensor.setRoom(room.getText().toString());
                 try {
                     App.db.replace(sensor);
-                    Log.e(TAG, sensor.toString());
+                    MyLog.e(TAG, sensor.toString());
                     HttpManage.getInstance().upDateSub(HttpManage.SENSORTABLE, sensor.getObjectId(), new Gson().toJson(sensor), new MyCallback() {
                         @Override
                         public void onSuc(String result) {
@@ -216,7 +216,7 @@ public class SensorEditActivity extends BaseActivity implements View.OnClickList
                         sensor.setName(name.getText().toString());
                         try {
                             App.db.replace(sensor);
-                            Log.e(TAG, sensor.toString());
+                            MyLog.e(TAG, sensor.toString());
                             HttpManage.getInstance().upDateSub(HttpManage.SENSORTABLE, sensor.getObjectId(), new Gson().toJson(sensor), new MyCallback() {
                                 @Override
                                 public void onSuc(String result) {
@@ -246,7 +246,7 @@ public class SensorEditActivity extends BaseActivity implements View.OnClickList
                         sensor.setRoom(s);
                         try {
                             App.db.replace(sensor);
-                            Log.e(TAG, sensor.toString());
+                            MyLog.e(TAG, sensor.toString());
                             HttpManage.getInstance().upDateSub(HttpManage.SENSORTABLE, sensor.getObjectId(), new Gson().toJson(sensor), new MyCallback() {
                                 @Override
                                 public void onSuc(String result) {

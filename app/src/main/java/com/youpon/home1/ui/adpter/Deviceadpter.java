@@ -1,7 +1,7 @@
 package com.youpon.home1.ui.adpter;
 
 import android.content.Context;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -148,7 +148,7 @@ public class Deviceadpter extends BaseAdapter {
             XlinkAgent.getInstance().setDeviceAccessKey(device, key, new SetDeviceAccessKeyListener() {
                 @Override
                 public void onSetLocalDeviceAccessKey(XDevice device, int code, int messageId) {
-                    Log.e("设置AccessKey:", "" + code);
+                    MyLog.e("设置AccessKey:", "" + code);
                     switch (code) {
                         case XlinkCode.SUCCEED:
                             dev.setAccessKey(key);
@@ -164,7 +164,7 @@ public class Deviceadpter extends BaseAdapter {
         XlinkAgent.getInstance().getInstance().getDeviceSubscribeKey(dev.getXDevice(), dev.getXDevice().getAccessKey(), new GetSubscribeKeyListener() {
             @Override
             public void onGetSubscribekey(XDevice xdevice, int code, int subKey) {
-                Log.e(TAG,"getDeviceSubscribeKey"+ subKey);
+                MyLog.e(TAG,"getDeviceSubscribeKey"+ subKey);
                 dev.getXDevice().setSubKey(subKey);
                 DeviceManage.getInstance().updateDevice(dev);
             }
@@ -173,7 +173,7 @@ public class Deviceadpter extends BaseAdapter {
         XlinkAgent.getInstance().subscribeDevice(dev.getXDevice(), dev.getXDevice().getSubKey(), new SubscribeDeviceListener() {
             @Override
             public void onSubscribeDevice(XDevice xdevice, int code) {
-                Log.e(TAG,"subscribeDevice:"+ code + " xdevice:" + xdevice);
+                MyLog.e(TAG,"subscribeDevice:"+ code + " xdevice:" + xdevice);
                 bind.setEnabled(false);
                 if (code == XlinkCode.SUCCEED) {
                     dev.setSubscribe(true);

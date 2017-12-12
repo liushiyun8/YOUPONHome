@@ -17,6 +17,7 @@
 package com.google.zxing.client.android;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.view.*;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
@@ -83,7 +84,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 //        window.setStatusBarColor(Color.parseColor("#192548"));
-        window.setStatusBarColor(Color.TRANSPARENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.setStatusBarColor(Color.TRANSPARENT);
+        }
         setContentView(R.layout.activity_zxing_capture);
 
         hasSurface = false;

@@ -2,7 +2,7 @@ package com.youpon.home1.ui.space.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -84,7 +84,7 @@ public class RoomsetActivity extends BaseActivity implements View.OnClickListene
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("tag","点击到我了");
+                MyLog.e("tag","点击到我了");
                 Intent intent = new Intent(RoomsetActivity.this, SpaceDetailActivity.class);
                 intent.putExtra("room",all.get(position).getName());
                 startActivity(intent);
@@ -152,7 +152,7 @@ public class RoomsetActivity extends BaseActivity implements View.OnClickListene
         all.clear();
         try {
            List<Roombean> all1 = App.db.selector(Roombean.class).findAll();
-            Log.e("all",App.db.getDaoConfig()+all1.toString());
+            MyLog.e("all",App.db.getDaoConfig()+all1.toString());
             if(all1!=null){
                 all.addAll(all1);
             }

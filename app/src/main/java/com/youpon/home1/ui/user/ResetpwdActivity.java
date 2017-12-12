@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -105,13 +105,13 @@ public class ResetpwdActivity extends BaseActivity {
                 HttpManage.getInstance().resetPassword(newpwd.getText().toString(), oldpwd.getText().toString(), new HttpManage.ResultCallback<Map<String, Object>>() {
                     @Override
                     public void onError(Header[] headers, HttpManage.Error error) {
-                        Log.e("OOOO", error.getCode() + error.getMsg());
+                        MyLog.e("OOOO", error.getCode() + error.getMsg());
                         MyToast.show(ResetpwdActivity.this, 2, error.getMsg(), Toast.LENGTH_LONG);
                     }
 
                     @Override
                     public void onSuccess(int code, Map<String, Object> response) {
-                        Log.e("GGGG", "OK");
+                        MyLog.e("GGGG", "OK");
                         MyToast.show(ResetpwdActivity.this, 1, "密码重置成功！", Toast.LENGTH_LONG);
                         finish();
                     }

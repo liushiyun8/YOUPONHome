@@ -1,7 +1,7 @@
 package com.youpon.home1.ui.home.activities;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -159,7 +159,7 @@ public class MainAddActivity extends BaseActivity implements View.OnClickListene
                     HttpManage.getInstance().addSub(HttpManage.TYPE_MORE, "MainBean", new Gson().toJson(list), new Callback.CommonCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
-                            Log.e(TAG,"上传首页数据成功"+result);
+                            MyLog.e(TAG,"上传首页数据成功"+result);
                             try {
                                 JSONArray jsonArray = new JSONArray(result);
                                 for (int i = 0; i < jsonArray.length(); i++) {

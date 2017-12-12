@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -161,11 +161,11 @@ public class MySceneExAdapter extends BaseExpandableListAdapter {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if(isChecked){
                         sceneDevice.setValue1(1);
-                        Log.e("onff","开");
+                        MyLog.e("onff","开");
                     }else{
                         sceneDevice.setValue1(0);
                         sceneDevice.setValue2(0);
-                        Log.e("onff","关");
+                        MyLog.e("onff","关");
                     }
                     notifyDataSetChanged();
                 }
@@ -229,7 +229,7 @@ public class MySceneExAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void afterTextChanged(Editable s) {
                         if(s.toString().trim()!=null&&!s.toString().trim().equals("")){
-                            Log.e("我的光",s.toString().trim());
+                            MyLog.e("我的光",s.toString().trim());
                             sceneDevice.setValue1(Integer.parseInt(s.toString().trim()));
                         }
                 }

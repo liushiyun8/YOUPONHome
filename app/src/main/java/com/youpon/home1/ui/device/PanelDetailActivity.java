@@ -1,7 +1,7 @@
 package com.youpon.home1.ui.device;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -42,7 +42,7 @@ public class PanelDetailActivity extends BaseActivity implements View.OnClickLis
         set.setOnClickListener(this);
         Panel panel = (Panel) getIntent().getSerializableExtra("panel");
         List<Panel.ChnlBean> chnlBeanList = panel.getChnlBeanList();
-        Log.e(TAG,panel.getChnls()+"::::"+panel.getChnlBeanList().toString());
+        MyLog.e(TAG,panel.getChnls()+"::::"+panel.getChnlBeanList().toString());
         if(chnlBeanList.size()<=4){
             for (int i = 0; i < chnlBeanList.size(); i++) {
                 Panel.ChnlBean chnlBean = chnlBeanList.get(i);
@@ -61,7 +61,7 @@ public class PanelDetailActivity extends BaseActivity implements View.OnClickLis
                     if(i * 4 + j>=chnlBeanList.size())
                        break;
                     Panel.ChnlBean chnlBean = chnlBeanList.get(i * 4 + j);
-                    Log.e(TAG,chnlBean.getChnl_id()+"");
+                    MyLog.e(TAG,chnlBean.getChnl_id()+"");
                     TextView textView = new TextView(this);
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     params.setMargins(30,30,30,30);

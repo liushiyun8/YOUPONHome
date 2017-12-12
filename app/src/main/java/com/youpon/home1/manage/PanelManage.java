@@ -1,7 +1,7 @@
 package com.youpon.home1.manage;
 
 
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 
 import com.youpon.home1.bean.Device;
 import com.youpon.home1.bean.Panel;
@@ -222,7 +222,7 @@ public class PanelManage {
 
     public Panel getPanelByClas(int cls, int deviceid) {
         Collection<Panel> values = panelMap.values();
-        Log.e("PanleCls",values.toString());
+        MyLog.e("PanleCls",values.toString());
         for (Panel panel : values) {
             if (cls==panel.getClas()&&panel.getGateway_id()==deviceid) {
                 return panel;

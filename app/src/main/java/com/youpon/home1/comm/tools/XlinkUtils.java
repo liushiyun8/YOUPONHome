@@ -17,7 +17,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Base64;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Toast;
@@ -321,7 +321,7 @@ public class XlinkUtils {
     }
 
     public static void shortTips(String tip) {
-	Log.e("Tips", tip);
+	MyLog.e("Tips", tip);
 	Toast.makeText(App.ctx, tip, Toast.LENGTH_SHORT).show();
     }
 

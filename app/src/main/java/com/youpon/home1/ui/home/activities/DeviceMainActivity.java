@@ -10,7 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
@@ -99,7 +99,7 @@ public class DeviceMainActivity extends BaseActivity {
         if(EventData.TAG_REFRESH.equals(eventData.getTag())){
             loadData();
         }else if(eventData.getCode()==EventData.CODE_RECONNECT){
-//            Log.e(TAG,"已经传递到了："+(XDevice) eventData.getData());
+//            MyLog.e(TAG,"已经传递到了："+(XDevice) eventData.getData());
             connectDevice(DeviceManage.getInstance().getDevice((XDevice) eventData.getData()));
         }
     }
@@ -184,7 +184,6 @@ public class DeviceMainActivity extends BaseActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            // TODO Auto-generated method stub
             String action = intent.getAction();
             if (action.equals(Constant.BROADCAST_EVENT_NOTIFY)) {
                 EventNotify notify = (EventNotify) intent.getSerializableExtra(Constant.NOTIDATA);
@@ -212,7 +211,7 @@ public class DeviceMainActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                     loadData();
-                    Log.e(TAG, "Notify:" + msg);
+                    MyLog.e(TAG, "Notify:" + msg);
                 }
             } else {
                 String mac = intent.getStringExtra(Constant.DEVICE_MAC);
@@ -311,7 +310,7 @@ public class DeviceMainActivity extends BaseActivity {
             XlinkAgent.getInstance().subscribeDevice(device.getXDevice(), device.getXDevice().getSubKey(), new SubscribeDeviceListener() {
                 @Override
                 public void onSubscribeDevice(XDevice xdevice, int code) {
-                    Log.e("Subscribe",code+"");
+                    MyLog.e("Subscribe",code+"");
                     if (code == XlinkCode.SUCCEED) {
                         device.setSubscribe(true);
                     }
@@ -321,7 +320,7 @@ public class DeviceMainActivity extends BaseActivity {
 
 //        int ret = XlinkAgent.getInstance().connectDevice(device.getXDevice(), device.getXDevice().getAccessKey(), connectDeviceListener);
         int ret =XlinkAgent.getInstance().connectDevice(device.getXDevice(),connectDeviceListener);
-        Log.e(TAG,"连接设备的状态："+ret);
+        MyLog.e(TAG,"连接设备的状态："+ret);
         if (ret < 0) {// 调用设备失败
             if (dialog != null) {
                 dialog.dismiss();
@@ -363,13 +362,12 @@ public class DeviceMainActivity extends BaseActivity {
         @Override
         public void onConnectDevice(XDevice xDevice, int result) {
 //            dialog.dismiss();
-            // TODO: handle exception
             byte[] bs=Command.getAll(Command.ALLDEVICE).getBytes();
             byte[] bs1=Command.getAll(Command.ALLSENSOR).getBytes();
 //            byte[] bs2=Command.getRead485("FFFF").getBytes();
             byte[] bs3=Command.getOtherStr(Command.CUSDEVICE).getBytes();
             String tips;
-            Log.e(TAG,"连接设备的listener:"+result);
+            MyLog.e(TAG,"连接设备的listener:"+result);
             switch (result) {
                 // 连接设备成功 设备处于内网
                 case XlinkCode.DEVICE_STATE_LOCAL_LINK:
@@ -381,7 +379,7 @@ public class DeviceMainActivity extends BaseActivity {
                     Command.sendData(xDevice,bs,TAG);
                     Command.sendData(xDevice,bs1,TAG);
 //                    Command.sendData(xDevice,bs2,TAG);
-//                    Command.sendData(xDevice,bs3,TAG);
+                    Command.sendData(xDevice,bs3,TAG);
                     XlinkAgent.getInstance().sendProbe(xDevice);
                     break;
                 // 连接设备成功 设备处于云端
@@ -399,19 +397,19 @@ public class DeviceMainActivity extends BaseActivity {
                     break;
                 // 设备授权码错误
                 case XlinkCode.CONNECT_DEVICE_INVALID_KEY:
-                    Log.e(TAG, "Device:" + xDevice.getDeviceName() + "设备认证失败");
+                    MyLog.e(TAG, "Device:" + xDevice.getDeviceName() + "设备认证失败");
                     XlinkUtils.shortTips("设备认证失败");
                     break;
                 // 设备不在线
                 case XlinkCode.CONNECT_DEVICE_OFFLINE:
-                    // Log.e(TAG, "Device:" + xDevice.getMacAddress() + "设备不在线");
+                    // MyLog.e(TAG, "Device:" + xDevice.getMacAddress() + "设备不在线");
                     XlinkUtils.shortTips("设备不在线");
                     Log("设备不在线");
                     break;
 
                 // 连接设备超时了，（设备未应答，或者服务器未应答）
                 case XlinkCode.CONNECT_DEVICE_TIMEOUT:
-                    // Log.e(TAG, "Device:" + xDevice.getMacAddress() + "连接设备超时");
+                    // MyLog.e(TAG, "Device:" + xDevice.getMacAddress() + "连接设备超时");
                     XlinkUtils.shortTips("连接设备超时");
 //                    connectDevice(DeviceManage.getInstance().getDevice(xDevice));
                     break;
@@ -480,7 +478,7 @@ public class DeviceMainActivity extends BaseActivity {
                     JSONArray datas = new JSONArray(result);
                     for (int i = 0; i < datas.length(); i++) {
                         JSONObject jsonObject = datas.optJSONObject(i);
-                        Log.e("JSONGateway", jsonObject.toString());
+                        MyLog.e("JSONGateway", jsonObject.toString());
                         DeviceManage.getInstance().parseXDevice(jsonObject);
                     }
                 } catch (JSONException e) {
@@ -488,7 +486,7 @@ public class DeviceMainActivity extends BaseActivity {
                 }
                 EventBus.getDefault().post(new EventData(EventData.CODE_GETDEVICE, ""));
                 for (int j = 0; j < DeviceManage.getInstance().getCurrentdev().size(); j++) {
-//                    Log.e("JSONCurrent", DeviceManage.getInstance().getCurrentdev().toString());
+//                    MyLog.e("JSONCurrent", DeviceManage.getInstance().getCurrentdev().toString());
                     connectDevice(DeviceManage.getInstance().getCurrentdev().get(j));
                 }
             }
@@ -525,7 +523,7 @@ public class DeviceMainActivity extends BaseActivity {
             switch (msg.what){
 //                case _REFRESHTEXTVIEW:
 //                    String s = msg.obj.toString().trim();
-//                    Log.e("Handle", s);
+//                    MyLog.e("Handle", s);
 //                    break;
                 case 2:
                     Toast.makeText(DeviceMainActivity.this,msg.obj!=null?msg.obj.toString():"",Toast.LENGTH_SHORT).show();

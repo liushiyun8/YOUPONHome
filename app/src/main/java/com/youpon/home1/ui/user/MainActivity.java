@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -136,7 +136,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         sure.setEnabled(true);
                     }
                     if(StringUtils.isPhoneNum(s.toString())){
-                        Log.e(TAG,"被调用了");
+                        MyLog.e(TAG,"被调用了");
                         acount.clearFocus();
                         pwd.requestFocus();
                         pwd.performClick();
@@ -218,7 +218,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 finish();
                  break;
             case R.id.sure:
-                Log.e(TAG,"sure被点击");
+                MyLog.e(TAG,"sure被点击");
                 imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 login();
                 break;
@@ -244,12 +244,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 //用户验证失败， 错误码提示见 </a>《错误码说明》 </a>文档
                 Toast.makeText(MainActivity.this,"登录失败", Toast.LENGTH_SHORT).show();
                 XlinkUtils.shortTips(error.getMsg()+"");
-                Log.e("HHHHE", error.getMsg()+"");
+                MyLog.e("HHHHE", error.getMsg()+"");
             }
 
             @Override
             public void onSuccess(int code, Map<String, Object> response) {
-                Log.e("HHHHS", response.toString());
+                MyLog.e("HHHHS", response.toString());
                 //验证成功， 解析返回的 JSON 获取"user_id"、"access_token"、"refresh_token"、"authorize"并保存
                 String authKey = (String) response.get("authorize");
                 String accessToken = (String) response.get("access_token");
@@ -293,7 +293,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //        micoUser.login(loginname, pwd1, appid, new MiCOCallBack() {
 //            @Override
 //            public void onSuccess(String message) {
-//                Log.e("TTTAG", message);
+//                MyLog.e("TTTAG", message);
 //                if (message.contains("token")) {
 //                    try {
 //                        JSONObject jsonObject = new JSONObject(message);
@@ -333,7 +333,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //
 //            @Override
 //            public void onFailure(int code, String message) {
-//                Log.e("TTTG", message);
+//                MyLog.e("TTTG", message);
 //                Toast.makeText(MainActivity.this, code + " " + message, Toast.LENGTH_LONG).show();
 //            }
 //        });

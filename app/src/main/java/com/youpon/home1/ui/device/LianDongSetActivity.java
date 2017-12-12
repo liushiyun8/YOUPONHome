@@ -2,7 +2,7 @@ package com.youpon.home1.ui.device;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -325,7 +325,7 @@ public class LianDongSetActivity extends BaseActivity implements View.OnClickLis
                 String mac = liandong.getMac();
                 name.setText(liandong.getCtrl_n());
                 int obj_id = liandong.getObj_id();
-                Log.e("MAC:", mac + " id:" + obj_id);
+                MyLog.e("MAC:", mac + " id:" + obj_id);
                 try {
                     SubDevice subDevice = App.db.selector(SubDevice.class).where("mac", "like", mac + "%").and("dst", "=", obj_id).findFirst();
                     if (subDevice != null) {
@@ -352,9 +352,9 @@ public class LianDongSetActivity extends BaseActivity implements View.OnClickLis
                     break;
                 }
                 SubDevice subDevice = list.get(0);
-                Log.e("sensor",sensor.toString());
-                Log.e("pos",pos);
-                Log.e("val:",Sensor.getStatusValue(sensor.getType(), pos)+"");
+                MyLog.e("sensor",sensor.toString());
+                MyLog.e("pos",pos);
+                MyLog.e("val:",Sensor.getStatusValue(sensor.getType(), pos)+"");
                 if (addTag) {
                     Liandong liandong = new Liandong();
                     liandong.setMac(subDevice.getMac());
@@ -397,7 +397,7 @@ public class LianDongSetActivity extends BaseActivity implements View.OnClickLis
                         int sensor_type = envParasBean.getSensor_type();
                         if (sensor.getType() == sensor_type && mac.equals(sensor.getMac())) {
                             long statusValue = Sensor.getStatusValue(sensor.getType(), pos);
-                            Log.e("value", statusValue + "");
+                            MyLog.e("value", statusValue + "");
                             envParasBean.setVal(statusValue);
                         }
                         li.add(envParasBean);

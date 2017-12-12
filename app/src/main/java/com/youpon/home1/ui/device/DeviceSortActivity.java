@@ -1,7 +1,7 @@
 package com.youpon.home1.ui.device;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;

@@ -1,7 +1,7 @@
 package com.youpon.home1.manage;
 
 import android.content.Intent;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.widget.ArrayAdapter;
 
 import com.youpon.home1.bean.Device;
@@ -74,7 +74,7 @@ public class DeviceManage {
             JSONObject obj;
             try {
                 obj = new JSONObject(entry.getValue());
-                Log.e(TAG,"jsonObj:"+obj);
+                MyLog.e(TAG,"jsonObj:"+obj);
                 XDevice xdev = XlinkAgent.JsonToDevice(obj);
                 if (xdev != null) {
                     Device device = new Device(xdev);
@@ -93,7 +93,7 @@ public class DeviceManage {
                     if (!obj.isNull(ROOM)) {
                         device.setRoom(obj.getString(ROOM));
                     }
-                    Log.e(TAG, "get Device :" + device);
+                    MyLog.e(TAG, "get Device :" + device);
                     deviceMap.put(xdev.getMacAddress(), device);
                 }
             } catch (JSONException e) {
@@ -241,7 +241,7 @@ public class DeviceManage {
         catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.e(TAG, "save device:" + jo);
+        MyLog.e(TAG, "save device:" + jo);
         XTGlobals.setProperty(device.getMacAddress(), jo.toString());
     }
 

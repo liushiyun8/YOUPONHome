@@ -5,7 +5,7 @@ import java.util.List;
   
 import android.content.Context;  
 import android.util.AttributeSet;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;  
@@ -212,7 +212,7 @@ public class XCFlowLayout extends ViewGroup{
      */
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        Log.e("onInterceptTouchEvent",ev.getAction()+"");
+        MyLog.e("onInterceptTouchEvent",ev.getAction()+"");
         boolean intercepted = false;
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:

@@ -2,7 +2,7 @@ package com.youpon.home1.ui.index;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.OvershootInterpolator;
@@ -97,7 +97,7 @@ public class IndexActivity extends BaseActivity {
             public void onError(Header[] headers, HttpManage.Error error) {
                 //用户验证失败， 错误码提示见 </a>《错误码说明》 </a>文档
                 XlinkUtils.longTips(error.getMsg());
-                Log.e("HHHH", error.getMsg());
+                MyLog.e("HHHH", error.getMsg());
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
@@ -109,7 +109,7 @@ public class IndexActivity extends BaseActivity {
 
             @Override
             public void onSuccess(int code, Map<String, Object> response) {
-                Log.e("HHHH", response.toString());
+                MyLog.e("HHHH", response.toString());
                 //验证成功， 解析返回的 JSON 获取"user_id"、"access_token"、"refresh_token"、"authorize"并保存
                 String authKey = (String) response.get("authorize");
                 String accessToken = (String) response.get("access_token");

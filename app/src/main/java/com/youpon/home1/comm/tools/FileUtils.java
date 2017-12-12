@@ -31,7 +31,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 
 import com.orhanobut.logger.Logger;
 
@@ -276,7 +276,7 @@ public class FileUtils {
 	public boolean checkSDCARD() {
 
 		String status = Environment.getExternalStorageState();
-		Log.e("MMMMMMMMMMMMMMM",status);
+		MyLog.e("MMMMMMMMMMMMMMM",status);
 		if (status.equals(Environment.MEDIA_MOUNTED)) {
 			return true;
 		}

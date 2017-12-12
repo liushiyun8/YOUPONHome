@@ -1,7 +1,7 @@
 package com.youpon.home1.ui.device;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -135,7 +135,7 @@ public class DevEditActivity extends BaseActivity implements View.OnClickListene
 //                        e.printStackTrace();
 //                    }
 //                    if (de != null && de.size() > 0 && !subDevice.getName().equals(s)) {
-//                        Log.e("Dev", s.toString() + ":::" + de.toString());
+//                        MyLog.e("Dev", s.toString() + ":::" + de.toString());
 //                        Toast.makeText(DevEditActivity.this, "设备名称不能重复，请重新命名！", Toast.LENGTH_SHORT).show();
 //                    }
 //                }
@@ -181,7 +181,7 @@ public class DevEditActivity extends BaseActivity implements View.OnClickListene
                         subDevice.setName(name.getText().toString());
                         try {
                             App.db.replace(subDevice);
-                            Log.e(TAG, subDevice.toString());
+                            MyLog.e(TAG, subDevice.toString());
                             HttpManage.getInstance().upDateSub("subdevice", subDevice.getObjectId(), new Gson().toJson(subDevice), new MyCallback() {
                                 @Override
                                 public void onSuc(String result) {
@@ -210,7 +210,7 @@ public class DevEditActivity extends BaseActivity implements View.OnClickListene
                         subDevice.setRoom(s);
                         try {
                             App.db.replace(subDevice);
-                            Log.e(TAG, subDevice.toString());
+                            MyLog.e(TAG, subDevice.toString());
                             HttpManage.getInstance().upDateSub("subdevice", subDevice.getObjectId(), new Gson().toJson(subDevice), new MyCallback() {
                                 @Override
                                 public void onSuc(String result) {

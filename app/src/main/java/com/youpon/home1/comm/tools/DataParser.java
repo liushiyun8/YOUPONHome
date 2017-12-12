@@ -2,7 +2,7 @@ package com.youpon.home1.comm.tools;
 
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 
 import com.google.gson.Gson;
 import com.youpon.home1.bean.Device;
@@ -84,11 +84,11 @@ public class DataParser {
         int dst =Integer.parseInt(s485.substring(12, 14),16) ;
         int src = Integer.parseInt(s485.substring(14, 16),16);
         String cluster=s485.substring(16,20);
-//        Log.e("verything", "cluster:" + cluster + ",id:" + id + ",dst:" + dst + ",src:" + src + ",uuu:" + s485.substring(22, 26));
+//        MyLog.e("verything", "cluster:" + cluster + ",id:" + id + ",dst:" + dst + ",src:" + src + ",uuu:" + s485.substring(22, 26));
         String commandID = s485.substring(20, 22);
         switch (cluster) {
             case "0000":
-                Log.e("verything", "cluster:" + cluster + ",id:" + id + ",dst:" + dst + ",src:" + src + ",uuu:" + s485.substring(22, 26));
+                MyLog.e("verything", "cluster:" + cluster + ",id:" + id + ",dst:" + dst + ",src:" + src + ",uuu:" + s485.substring(22, 26));
                 if ("0005".equals(s485.substring(22, 26))) {
                     int type = Integer.parseInt(s485.substring(33, 34));
                     SubDevice devisortdb = App.db.selector(SubDevice.class).where("id", "=", id).and("gateway_id", "=", deviceid).findFirst();
@@ -182,7 +182,7 @@ public class DataParser {
                             String mac1 = panel.getMac();
                             List<Scenebean.ActionsBean> list = new ArrayList<>();
                             int count = Integer.parseInt(s485.substring(28, 30), 16);
-                            Log.e("485场景","groupId:"+groupId+" sceneId:"+sceneId+"count:"+count);
+                            MyLog.e("485场景","groupId:"+groupId+" sceneId:"+sceneId+"count:"+count);
                             for (int i = 0; i < count; i++) {
                                 int dstid = Integer.parseInt(s485.substring(30 + 14 * i, 32 + 14 * i), 16);
                                 String clu = s485.substring(32 + 14 * i, 36 + 14 * i);
@@ -193,7 +193,7 @@ public class DataParser {
                                 actionsBean.setNclu("0800".equals(clu) ? "0008" : "0006");
                                 actionsBean.setDstid(dstid);
                                 actionsBean.setMac(mac1);
-                                Log.e("actionbean", actionsBean.toString());
+                                MyLog.e("actionbean", actionsBean.toString());
                                 if("0001".equals(groupId)&&panel.getClas()==299){
                                     if(dstid==4||dstid==5){
                                         list.add(actionsBean);
@@ -245,7 +245,7 @@ public class DataParser {
 
                                         @Override
                                         public void onFail(int code, String msg) {
-                                            Log.e("code and msg", code + " msg:" + msg);
+                                            MyLog.e("code and msg", code + " msg:" + msg);
                                         }
                                     });
                                 }
@@ -265,7 +265,7 @@ public class DataParser {
                             break;
                         }
                         int count = Integer.parseInt(s485.substring(30, 32), 16);
-                        Log.e("12位场景","groupId:"+groupId+" sceneId:"+sceneId);
+                        MyLog.e("12位场景","groupId:"+groupId+" sceneId:"+sceneId);
                         for (int i = 0; i < count; i++) {
                             int dstid = Integer.parseInt(s485.substring(32 + 14 * i, 34 + 14 * i), 16);
                             String clu = s485.substring(34 + 14 * i, 38 + 14 * i);
@@ -276,7 +276,7 @@ public class DataParser {
                             actionsBean.setNclu("0800".equals(clu) ? "0008" : "0006");
                             actionsBean.setDstid(dstid);
                             actionsBean.setMac(mac1);
-                            Log.e("actionbean", actionsBean.toString());
+                            MyLog.e("actionbean", actionsBean.toString());
                             if("0001".equals(groupId)){
                                 if(dstid==4||dstid==5){
                                     list.add(actionsBean);
@@ -325,7 +325,7 @@ public class DataParser {
                                             Scenebean scenebean = new Gson().fromJson(result, Scenebean.class);
                                             try {
                                                 List<Scenebean> all = App.db.selector(Scenebean.class).where("panel_mac", "=", scenebean.getPanel_mac()).and("gateway_id", "=", scenebean.getGateway_id()).and("groupId", "=", scenebean.getGroupId()).and("sceneId", "=", scenebean.getSceneId()).findAll();
-                                                Log.e("上传485场景",all+"");
+                                                MyLog.e("上传485场景",all+"");
                                                 if(all==null||(all!=null&&all.size()==0))
                                                 App.db.saveOrUpdate(scenebean);
                                                 EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
@@ -337,7 +337,7 @@ public class DataParser {
                                         @Override
                                         public void onFail(int code, String msg) {
 
-                                            Log.e("code and msg", code + " msg:" + msg);
+                                            MyLog.e("code and msg", code + " msg:" + msg);
                                         }
                                     });
                                 }
@@ -413,7 +413,7 @@ public class DataParser {
                 } else if("01".equals(cons)){
                     if("0016".equals(s485.substring(22,26))){
                         tap = Integer.parseInt(s485.substring(30,32), 16);
-                        Log.e("换气档位","tap:"+tap);
+                        MyLog.e("换气档位","tap:"+tap);
                         App.db.update(SubDevice.class,WhereBuilder.b("id", "=", id).and("gateway_id", "=", deviceid).and("dst","=",sst),new KeyValue("value2",tap));
                         EventBus.getDefault().postSticky(new EventData(EventData.CODE_REFRESH_DEVICE, "刷新子设备"));
                     }
@@ -422,9 +422,9 @@ public class DataParser {
                     sst=Integer.parseInt(s485.substring(13,14));
                     id=s485.substring(4,8);
                     tap = Integer.parseInt(s485.substring(22,24), 16);
-//                    Log.e("换气设备切换","tap:"+tap);
+//                    MyLog.e("换气设备切换","tap:"+tap);
                     App.db.update(SubDevice.class,WhereBuilder.b("id", "=", id).and("gateway_id", "=", deviceid).and("dst","=",sst),new KeyValue("value2",tap));
-//                    Log.e("换气设备切换","subdevice:"+App.db.selector(SubDevice.class).where("id", "=", id).and("gateway_id", "=", deviceid).and("dst","=",sst).findFirst());
+//                    MyLog.e("换气设备切换","subdevice:"+App.db.selector(SubDevice.class).where("id", "=", id).and("gateway_id", "=", deviceid).and("dst","=",sst).findFirst());
                     EventBus.getDefault().postSticky(new EventData(EventData.CODE_REFRESH_DEVICE, "刷新子设备"));
                     break;
                 }
@@ -476,17 +476,17 @@ public class DataParser {
                     }
                     int index=25;
                     while (index+13<=s485.length()){
-                        Log.e("while",index+"");
+                        MyLog.e("while",index+"");
                         String clu=s485.substring(index+1,index+5);
                         switch (clu){
                             case "0008":
                             case "0006":
                                 int ddst=Integer.parseInt(s485.substring(index,index+1));
                                 int ttap=Integer.parseInt(s485.substring(index+11,index+13),16);
-                                Log.e("S485","clu:"+clu);
-                                Log.e("S485","ttap:"+ttap);
-                                Log.e("S485","id:"+id);
-                                Log.e("S485","dst:"+ddst);
+                                MyLog.e("S485","clu:"+clu);
+                                MyLog.e("S485","ttap:"+ttap);
+                                MyLog.e("S485","id:"+id);
+                                MyLog.e("S485","dst:"+ddst);
                                 index=index+14;
                                 try {
                                     if(ddst==2&&"0008".equals(clu)){
@@ -501,7 +501,7 @@ public class DataParser {
                                         }else
                                             dbdevi.setValue1(ttap);
                                         dbdevi.setOnline(true);
-                                        Log.e("dbdevi",dbdevi.toString());
+                                        MyLog.e("dbdevi",dbdevi.toString());
                                         App.db.update(dbdevi,"value1","value2","online");
                                         updateScene(deviceid,ddst,dbdevi.getMac(),ttap);
                                     }
@@ -514,8 +514,8 @@ public class DataParser {
                                     int i = Integer.parseInt(s485.substring(index + 8, index + 9));
                                 int type=5+i;
                                 int ttap1=Integer.parseInt(s485.substring(index+11,index+15),16);
-                                Log.e("S485","clu:"+clu+",type:"+type);
-                                Log.e("S485","ttap:"+ttap1);
+                                MyLog.e("S485","clu:"+clu+",type:"+type);
+                                MyLog.e("S485","ttap:"+ttap1);
                                     App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",type),new KeyValue[]{new KeyValue("value1",ttap1),new KeyValue("online",true),new KeyValue("value4",299)});
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -530,13 +530,13 @@ public class DataParser {
                                     tap2=(tap2&0x8000)>0?(tap2-0x10000):tap2;
                                 }
                                 tap2/=100;
-                                Log.e("S485","clu:"+clu);
-                                Log.e("S485","ttap:"+tap2);
+                                MyLog.e("S485","clu:"+clu);
+                                MyLog.e("S485","ttap:"+tap2);
                                 try {
-//                                    Log.e("UUUUJJJ","id:"+id+" device_id:"+deviceid+" type:"+tp);
+//                                    MyLog.e("UUUUJJJ","id:"+id+" device_id:"+deviceid+" type:"+tp);
 //                                    Sensor first = App.db.selector(Sensor.class).where("devisort_id", "=", id).and("device_id", "=", deviceid).and("type", "=", ty).findFirst();
 //                                    if (first==null){
-//                                        Log.e("UUUU","sensor为空");
+//                                        MyLog.e("UUUU","sensor为空");
 //                                        return;
 //                                    }else first.setValue1(ttap2);
 //                                    App.db.replace(first);
@@ -555,13 +555,13 @@ public class DataParser {
                             case "0400":
                                 int ty=2;
                                 int ttap2=Integer.parseInt(s485.substring(index+11,index+15),16);
-                                Log.e("S485","clu:"+clu);
-                                Log.e("S485","ttap:"+ttap2);
+                                MyLog.e("S485","clu:"+clu);
+                                MyLog.e("S485","ttap:"+ttap2);
                                 try {
-                                    Log.e("UUUUJJJ","id:"+id+" device_id:"+deviceid+" type:"+ty);
+                                    MyLog.e("UUUUJJJ","id:"+id+" device_id:"+deviceid+" type:"+ty);
 //                                    Sensor first = App.db.selector(Sensor.class).where("devisort_id", "=", id).and("device_id", "=", deviceid).and("type", "=", ty).findFirst();
 //                                    if (first==null){
-//                                        Log.e("UUUU","sensor为空");
+//                                        MyLog.e("UUUU","sensor为空");
 //                                        return;
 //                                    }else first.setValue1(ttap2);
 //                                    App.db.replace(first);
@@ -574,8 +574,8 @@ public class DataParser {
                             case "0406":
                                 int typ=1;
                                 int ttap3=Integer.parseInt(s485.substring(index+11,index+13),16);
-                                Log.e("S485","clu:"+clu);
-                                Log.e("S485","ttap:"+ttap3);
+                                MyLog.e("S485","clu:"+clu);
+                                MyLog.e("S485","ttap:"+ttap3);
                                 try {
                                     App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",typ),new KeyValue[]{new KeyValue("value1",ttap3),new KeyValue("online",true),new KeyValue("value4",299)});
                                 } catch (DbException e) {
@@ -647,7 +647,7 @@ public class DataParser {
                 HttpManage.getInstance().addSub(HttpManage.TYPE_MORE,"panel", new Gson().toJson(list1), new Callback.CommonCallback<String>() {
                          @Override
                          public void onSuccess(String result) {
-                             Log.e("HTTT","上传面板数据成功"+result);
+                             MyLog.e("HTTT","上传面板数据成功"+result);
                              try {
                                  JSONArray jsonArray = new JSONArray(result);
                                  for (int i = 0; i < jsonArray.length(); i++) {
@@ -672,7 +672,7 @@ public class DataParser {
 
                          @Override
                          public void onFinished() {
-                             Log.e("HTTT","上传面板数据完成");
+                             MyLog.e("HTTT","上传面板数据完成");
                          }
                      });
                 for (int j = 0; j < endp.size(); j++) {
@@ -727,7 +727,7 @@ public class DataParser {
             HttpManage.getInstance().addSub(HttpManage.TYPE_MORE,"subdevice", new Gson().toJson(list), new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
-                    Log.e("HTTT","上传子设备数据成功"+result);
+                    MyLog.e("HTTT","上传子设备数据成功"+result);
                     try {
                         JSONArray jsonArray = new JSONArray(result);
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -755,7 +755,7 @@ public class DataParser {
 
                 @Override
                 public void onFinished() {
-                    Log.e("HTTT","上传子设备数据完成");
+                    MyLog.e("HTTT","上传子设备数据完成");
                 }
             });
             return;
@@ -815,7 +815,7 @@ public class DataParser {
 //                    HttpManage.getInstance().addSub(HttpManage.TYPE_MORE,"panel", new Gson().toJson(list), new Callback.CommonCallback<String>() {
 //                        @Override
 //                        public void onSuccess(String result) {
-//                            Log.e("HTTT","上传面板数据成功"+result);
+//                            MyLog.e("HTTT","上传面板数据成功"+result);
 //                            try {
 //                                JSONArray jsonArray = new JSONArray(result);
 //                                for (int i = 0; i < jsonArray.length(); i++) {
@@ -840,7 +840,7 @@ public class DataParser {
 //
 //                        @Override
 //                        public void onFinished() {
-//                            Log.e("HTTT","上传面板数据完成");
+//                            MyLog.e("HTTT","上传面板数据完成");
 //                        }
 //                    });
 //                return;
@@ -873,7 +873,7 @@ public class DataParser {
                         boolean flag=false;
                         GsonAllSensor.ChnlBean chnlBean = chnl.get(j);
                         int type=chnlBean.getType();
-                        Log.e("Sensor","device_id:"+deviceid+" mac:"+gsonAllSensor.getMac()+" nwkid:"+gsonAllSensor.getNwkid()+" type:"+type);
+                        MyLog.e("Sensor","device_id:"+deviceid+" mac:"+gsonAllSensor.getMac()+" nwkid:"+gsonAllSensor.getNwkid()+" type:"+type);
                         try {
                             Sensor sensor = App.db.selector(Sensor.class).where("mac", "=", gsonAllSensor.getMac()).and("type","=",type==4?3:type).findFirst();
                             if(sensor==null){
@@ -903,7 +903,7 @@ public class DataParser {
                     HttpManage.getInstance().addSub(HttpManage.TYPE_MORE,"Dbsensor", new Gson().toJson(list), new Callback.CommonCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
-                            Log.e("HTTT","上传传感器数据成功"+result);
+                            MyLog.e("HTTT","上传传感器数据成功"+result);
                             try {
                                 JSONArray jsonArray = new JSONArray(result);
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -931,7 +931,7 @@ public class DataParser {
 
                         @Override
                         public void onFinished() {
-                            Log.e("HTTT","上传传感器数据完成");
+                            MyLog.e("HTTT","上传传感器数据完成");
                         }
                     });
                 return;
@@ -1033,7 +1033,7 @@ public class DataParser {
                         int type=ty+5;
                         if(v>10000)
                             break;
-                        Log.e("sensor:","type:"+type+"  value:"+v);
+                        MyLog.e("sensor:","type:"+type+"  value:"+v);
                         try {
                             App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("type","=",type).and("device_id","=",deviceid),new KeyValue[]{new KeyValue("online",true),new KeyValue("value1",v)});
                         } catch (DbException e) {
@@ -1104,9 +1104,9 @@ public class DataParser {
                                 Panel panel = PanelManage.getInstance().getPanelById(id,deviceid);
                                 if (panel == null) break;
                                 String mac1 = panel.getMac();
-//                                Log.e("9位场景：",mac1);
+//                                MyLog.e("9位场景：",mac1);
 //                                List<Scenebean> all = App.db.selector(Scenebean.class).where("panel_mac", "=", mac1).and("gateway_id", "=", deviceid).and("groupId", "=", pay.substring(6, 10)).and("sceneId", "=", pay.substring(10, 12)).findAll();
-//                                Log.e("all:",all.toString());
+//                                MyLog.e("all:",all.toString());
                                 App.db.update(Scenebean.class,WhereBuilder.b("panel_mac","=",mac1).and("gateway_id","=",deviceid).and("groupId", "=", pay.substring(6,10)),new KeyValue("status",0));
                                 App.db.update(Scenebean.class,WhereBuilder.b("panel_mac","=",mac1).and("gateway_id","=",deviceid).and("groupId", "=", pay.substring(6,10)).and("sceneId", "=",pay.substring(10, 12)),new KeyValue("status",1));
                             }
@@ -1121,9 +1121,9 @@ public class DataParser {
                                 Panel panel = PanelManage.getInstance().getPanelById(id,deviceid);
                                 if (panel == null) break;
                                 String mac1 = panel.getMac();
-//                                Log.e("9位场景：",mac1);
+//                                MyLog.e("9位场景：",mac1);
                                 List<Scenebean> all = App.db.selector(Scenebean.class).where("panel_mac", "=", mac1).and("gateway_id", "=", deviceid).and("groupId", "=", pay.substring(6, 10)).and("sceneId", "=", pay.substring(10, 12)).findAll();
-                                Log.e("all:",all.toString());
+                                MyLog.e("all:",all.toString());
                                 App.db.update(Scenebean.class,WhereBuilder.b("panel_mac","=",mac1).and("gateway_id","=",deviceid).and("groupId", "=", pay.substring(6,10)),new KeyValue("status",0));
                                 App.db.update(Scenebean.class,WhereBuilder.b("panel_mac","=",mac1).and("gateway_id","=",deviceid).and("groupId", "=", pay.substring(6,10)).and("sceneId", "=",pay.substring(10, 12)),new KeyValue("status",1));
                             }
@@ -1167,7 +1167,7 @@ public class DataParser {
                             String groupId=pay.substring(12,16);
                             String sceneId=pay.substring(16,18);
                             int count=Integer.parseInt(pay.substring(18,20),16);
-                            Log.e("Zigbee场景","groupId:"+groupId+" sceneId:"+sceneId+"count:"+count);
+                            MyLog.e("Zigbee场景","groupId:"+groupId+" sceneId:"+sceneId+"count:"+count);
                             Panel panel = PanelManage.getInstance().getPanelById(id,deviceid);
                             if (panel==null)break;
                             String mac1 = panel.getMac();
@@ -1182,7 +1182,7 @@ public class DataParser {
                                 actionsBean.setNclu("0800".equals(clu)?"0008":"0006");
                                 actionsBean.setDstid(dstid);
                                 actionsBean.setMac(mac1);
-                                Log.e("actionbean", actionsBean.toString());
+                                MyLog.e("actionbean", actionsBean.toString());
                                 if("0001".equals(groupId)&&panel.getClas()==9){
                                     if(dstid==4||dstid==5){
                                         list.add(actionsBean);
@@ -1226,7 +1226,7 @@ public class DataParser {
                                                 Scenebean scenebean = new Gson().fromJson(result, Scenebean.class);
                                                 try {
                                                     List<Scenebean> all = App.db.selector(Scenebean.class).where("panel_mac", "=", scenebean.getPanel_mac()).and("gateway_id", "=", scenebean.getGateway_id()).and("groupId", "=", scenebean.getGroupId()).and("sceneId", "=", scenebean.getSceneId()).findAll();
-                                                    Log.e("上传ZigBee场景",all+"");
+                                                    MyLog.e("上传ZigBee场景",all+"");
                                                     if(all==null||(all!=null&&all.size()==0))
                                                     App.db.saveOrUpdate(scenebean);
                                                     EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE,""));
@@ -1237,7 +1237,7 @@ public class DataParser {
 
                                             @Override
                                             public void onFail(int code, String msg) {
-                                                Log.e("code and msg",code+" msg:"+msg);
+                                                MyLog.e("code and msg",code+" msg:"+msg);
                                             }
                                         });
                                     }
@@ -1262,14 +1262,14 @@ public class DataParser {
 //                                        SubDevice.setMac(mac);
 //                                        SubDevice.setGateway_id(deviceid);
 //                                        App.db.replace(SubDevice);
-//                                        Log.e("SubDevice",SubDevice.toString());
+//                                        MyLog.e("SubDevice",SubDevice.toString());
 //                                    }else {
 //                                        if(SubDevices.get(0).getType()==5){
 //                                            SubDevice SubDevice = SubDevices.get(0);
 //                                            App.db.delete(SubDevices);
-//                                            Log.e("DSt",SubDevice.toString());
+//                                            MyLog.e("DSt",SubDevice.toString());
 //                                            SubDevice.setMyType(1);
-//                                            Log.e("DSt1",SubDevice.toString());
+//                                            MyLog.e("DSt1",SubDevice.toString());
 //                                            SubDevice.setMac(mac);
 //                                            App.db.replace(SubDevice);
 //                                            for (int i = 3; i < 7; i++) {
@@ -1277,7 +1277,7 @@ public class DataParser {
 //                                                if (first == null) {
 //                                                    SubDevice.setName("");
 //                                                    SubDevice.setMyType(i);
-//                                                    Log.e("DSt2",SubDevice.toString());
+//                                                    MyLog.e("DSt2",SubDevice.toString());
 //                                                    SubDevice.setMac(mac);
 //                                                    App.db.replace(SubDevice);
 //                                                }
@@ -1316,7 +1316,7 @@ public class DataParser {
                     try {
                         App.db.delete(SubDevice.class,WhereBuilder.b("id","=",nId).and("gateway_id","=",deviceid));
                         App.db.delete(Sensor.class,WhereBuilder.b("devisort_id","=",nId).and("device_id","=",deviceid));
-                        Log.e("UUUUU","设备已删除");
+                        MyLog.e("UUUUU","设备已删除");
                     } catch (DbException e) {
                         e.printStackTrace();
                     }
@@ -1379,14 +1379,14 @@ public class DataParser {
     }
 
     private void updateScene(int deviceid, int dst, String mac, int tap) throws DbException {
-        Log.e("sceneChange","deviceId:"+deviceid+"dst:"+dst+"mac:"+mac+"tap:"+tap);
+        MyLog.e("sceneChange","deviceId:"+deviceid+"dst:"+dst+"mac:"+mac+"tap:"+tap);
         List<Scenebean> sces = App.db.selector(Scenebean.class).where("gateway_id", "=", deviceid).and("status", "=", 1).and("type","=",0).findAll();
         boolean haschange=false;
         if(sces!=null){
             for (int i = 0; i < sces.size(); i++) {
                 Scenebean scenebean = sces.get(i);
                 List<Scenebean.ActionsBean> action = scenebean.getAction();
-                Log.e("scenebean",scenebean.toString());
+                MyLog.e("scenebean",scenebean.toString());
                 for (int j = 0; j < action.size(); j++) {
                     Scenebean.ActionsBean actionsBean = action.get(j);
                     if(actionsBean.getMac().equals(mac)&&actionsBean.getDstid()==dst&&actionsBean.getVal()!=tap){

@@ -3,7 +3,7 @@ package com.youpon.home1.comm.tools;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 
 public class getAPNType {
 	private static final int WIFI=1;
@@ -33,7 +33,7 @@ public class getAPNType {
 
         if(nType==ConnectivityManager.TYPE_MOBILE){ 
 
-            Log.e("networkInfo", "networkInfo.getExtraInfo() is "+networkInfo.getExtraInfo());
+            MyLog.e("networkInfo", "networkInfo.getExtraInfo() is "+networkInfo.getExtraInfo());
 
             if(networkInfo.getExtraInfo().toLowerCase().equals("cmnet")){ 
 

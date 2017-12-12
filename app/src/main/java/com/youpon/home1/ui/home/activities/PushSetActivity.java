@@ -1,7 +1,7 @@
 package com.youpon.home1.ui.home.activities;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -63,16 +63,16 @@ public class PushSetActivity extends BaseActivity{
                 sheziList.add(new NoticeInfo(2,sensorChek));
                 sheziList.add(new NoticeInfo(3,liandongChek));
                 String s = new Gson().toJson(sheziList);
-                Log.e("TTGGGG",s);
+                MyLog.e("TTGGGG",s);
                 HttpManage.getInstance().userSet("[{\"type\": 1,\"enable\": true}]", s, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
-                        Log.e("CCCC",result);
+                        MyLog.e("CCCC",result);
                     }
 
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
-                        Log.e("XXXX",ex.getMessage());
+                        MyLog.e("XXXX",ex.getMessage());
                     }
 
                     @Override
@@ -82,7 +82,7 @@ public class PushSetActivity extends BaseActivity{
 
                     @Override
                     public void onFinished() {
-                        Log.e("XXXX","finish");
+                        MyLog.e("XXXX","finish");
                     }
                 });
                 finish();

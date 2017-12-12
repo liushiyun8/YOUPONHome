@@ -5,7 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -210,7 +210,7 @@ public class MyExlvAdapter extends BaseExpandableListAdapter {
 //
 //                }
 //            });
-//            Log.e("ExLvAdapter",gateway.getName());
+//            MyLog.e("ExLvAdapter",gateway.getName());
 //            viewHolder.name.setText(gateway.getName());
 //        }else if(child instanceof SubDevice){
 //            final SubDevice subDevice = (SubDevice) child;

@@ -2,7 +2,7 @@ package com.youpon.home1.ui.adpter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -163,7 +163,7 @@ public class MyMainExAdapter extends BaseExpandableListAdapter {
                 viewHolder.icon.setImageResource(Comconst.SENSORTYPE[sensor.getType()-1]);
                 viewHolder.name.setText(sensor.getName());
                 viewHolder.check.setChecked(sensor.isMain());
-                Log.e("Sensor",sensor.isMain()+"1");
+                MyLog.e("Sensor",sensor.isMain()+"1");
                 viewHolder.check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -171,7 +171,7 @@ public class MyMainExAdapter extends BaseExpandableListAdapter {
                             sensor.setMain(true);
                         else sensor.setMain(false);
                         getCount();
-                        Log.e("Sensor",sensor.isMain()+"2");
+                        MyLog.e("Sensor",sensor.isMain()+"2");
                     }
                 });
             }

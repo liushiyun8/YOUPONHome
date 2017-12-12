@@ -1,7 +1,7 @@
 package com.youpon.home1.ui.device;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -88,7 +88,7 @@ public class UserListActivity extends BaseActivity {
         miCODevice.getMemberList(device_id, new MiCOCallBack() {
             @Override
             public void onSuccess(String message) {
-                Log.e("SSSUUCC",message);
+                MyLog.e("SSSUUCC",message);
                 String fogData = JsonHelper.getFogData(message);
                 try {
                     JSONArray jsonArray = new JSONArray(fogData);
@@ -106,7 +106,7 @@ public class UserListActivity extends BaseActivity {
 
             @Override
             public void onFailure(int code, String message) {
-                Log.e("fail",code+message);
+                MyLog.e("fail",code+message);
             }
         }, token);
         commonAdapter = new CommonAdapter<UserList>(this, lists, R.layout.userlist_item) {

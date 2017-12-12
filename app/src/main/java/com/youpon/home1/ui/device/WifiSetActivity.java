@@ -8,7 +8,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
@@ -119,10 +119,10 @@ public class WifiSetActivity extends BaseActivity implements View.OnClickListene
                 Log.d(TAG, "[onGlobalLayout] .. in ..");
                 boolean mKeyboardUp = isKeyboardShown(rootView);
                 if (mKeyboardUp) {
-                    Log.e(TAG, "键盘弹出..");
+                    MyLog.e(TAG, "键盘弹出..");
                     setlay.setPadding(0,0,0,DeviceUtils.dip2px(10));
                 } else {
-                    Log.e(TAG, "键盘收起..");
+                    MyLog.e(TAG, "键盘收起..");
                     setlay.setPadding(0,0,0, DeviceUtils.dip2px(60));
                 }
             }
@@ -178,13 +178,13 @@ public class WifiSetActivity extends BaseActivity implements View.OnClickListene
         miCODevice.stopEasyLink(new EasyLinkCallBack() {
             @Override
             public void onSuccess(int code, String message) {
-                Log.e("success", message);
+                MyLog.e("success", message);
                 Toast.makeText(WifiSetActivity.this, message, Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(int code, String message) {
-                Log.e("fail", message);
+                MyLog.e("fail", message);
                 Toast.makeText(WifiSetActivity.this, message, Toast.LENGTH_LONG).show();
             }
         });
@@ -198,13 +198,13 @@ public class WifiSetActivity extends BaseActivity implements View.OnClickListene
         miCODevice.startEasyLink(miCODevice.getSSID(), pwd.getText().toString().trim(), 40000, 20, "", "", new EasyLinkCallBack() {
             @Override
             public void onSuccess(int code, String message) {
-                Log.e("success", message);
+                MyLog.e("success", message);
 //                Toast.makeText(WifiSetActivity.this, message, Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(int code, String message) {
-                Log.e("fail", message);
+                MyLog.e("fail", message);
 //                Toast.makeText(WifiSetActivity.this, message, Toast.LENGTH_LONG).show();
             }
         });
@@ -240,12 +240,12 @@ public class WifiSetActivity extends BaseActivity implements View.OnClickListene
             public void run() {
                 while (true){
                     try {
-                        Log.e("TAG","到这来");
+                        MyLog.e("TAG","到这来");
                         udpSocket.receive(new DatagramPacket(buffer,1024));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    Log.e("TAG",new String(buffer).trim().toString());
+                    MyLog.e("TAG",new String(buffer).trim().toString());
                     // Log.d("UDP_SEND", "--------" + Integer.toHexString(length) +"   "
                     // + port + "--------");
 

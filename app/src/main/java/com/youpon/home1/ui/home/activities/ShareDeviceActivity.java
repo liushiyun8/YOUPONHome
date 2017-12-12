@@ -3,7 +3,7 @@ package com.youpon.home1.ui.home.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -131,7 +131,7 @@ public class ShareDeviceActivity extends BaseActivity implements View.OnClickLis
                     HttpManage.getInstance().shareDevice(device.getXDevice().getDeviceId(), new MyCallback() {
                         @Override
                         public void onSuc(String result) {
-                            Log.e("TAG",result);
+                            MyLog.e("TAG",result);
                             list.add(result);
                             if(list.size()>=selectList.size()){
                                 dialog.dismiss();

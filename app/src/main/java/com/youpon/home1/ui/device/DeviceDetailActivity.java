@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -326,7 +326,7 @@ public class DeviceDetailActivity extends BaseActivity implements View.OnClickLi
 
     private void sendCommand(int t, int tap) {
 //        progressDialog.show();
-        Log.e(TAG, "commend:" + Command.getDeviceStr(tap, subDevice, t));
+        MyLog.e(TAG, "commend:" + Command.getDeviceStr(tap, subDevice, t));
         Command.sendData(xDevice, Command.getDeviceStr(tap, subDevice, t).getBytes(), TAG);
     }
 
@@ -444,7 +444,7 @@ public class DeviceDetailActivity extends BaseActivity implements View.OnClickLi
             super.handleMessage(msg);
             switch (msg.what) {
                 case _REFRESHTEXTVIEW:
-                    Log.e("Handler", msg.obj.toString().trim());
+                    MyLog.e("Handler", msg.obj.toString().trim());
                     break;
             }
         }

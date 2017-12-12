@@ -1,6 +1,6 @@
 package com.youpon.home1.comm.tools;
 
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 
 import com.youpon.home1.bean.Scenebean;
 import com.youpon.home1.bean.SubDevice;
@@ -94,7 +94,7 @@ public class Command {
         } catch (DbException e) {
             e.printStackTrace();
         }
-        Log.e("devisort","T:"+t+devisort.toString());
+        MyLog.e("devisort","T:"+t+devisort.toString());
         if(devisort.getGateway_type()==0){
                 String ls = Integer.toHexString(level);
                 if(ls.length()==1){

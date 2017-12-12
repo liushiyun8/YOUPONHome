@@ -3,7 +3,7 @@ package com.youpon.home1.ui.space.activities;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -102,7 +102,7 @@ public class AddRoomActivity extends BaseActivity implements View.OnClickListene
                     HttpManage.getInstance().addSub(HttpManage.TYPE_SINGLE, "Roombean", new Gson().toJson(entity), new Callback.CommonCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
-                            Log.e(TAG, "保存数据成功：" + entity.getName());
+                            MyLog.e(TAG, "保存数据成功：" + entity.getName());
                             Roombean roombean = new Gson().fromJson(result, Roombean.class);
                             try {
                                 App.db.replace(roombean);

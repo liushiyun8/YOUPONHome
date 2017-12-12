@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.os.Vibrator;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 
 import com.youpon.home1.comm.App;
 import com.youpon.home1.comm.tools.MyCallback;
@@ -37,14 +37,14 @@ public class MyTokenService extends Service {
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e("tag","start");
+        MyLog.e("tag","start");
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 HttpManage.getInstance().refreshToken(new MyCallback() {
                     @Override
                     public void onSuc(String result) {
-                        Log.e("tag",result);
+                        MyLog.e("tag",result);
                         JSONObject jsonObject = null;
                         try {
                             jsonObject = new JSONObject(result);
@@ -57,7 +57,7 @@ public class MyTokenService extends Service {
 
                     @Override
                     public void onFail(int code, String msg) {
-                        Log.e("tag1",msg);
+                        MyLog.e("tag1",msg);
                     }
                 });
             }

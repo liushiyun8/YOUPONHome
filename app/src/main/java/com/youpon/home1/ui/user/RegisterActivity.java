@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -221,7 +221,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         HttpManage.getInstance().registerUserByPhone(account.getText().toString().trim(), "友邦小智", code.getText().toString().trim(), pwd.getText().toString().trim(), new HttpManage.ResultCallback<Map<String, Object>>() {
             @Override
             public void onError(Header[] headers, HttpManage.Error error) {
-                Log.e("register", error.getCode() + ";" + error.getMsg());
+                MyLog.e("register", error.getCode() + ";" + error.getMsg());
                 Toast.makeText(RegisterActivity.this, error.getMsg(), Toast.LENGTH_SHORT).show();
             }
 

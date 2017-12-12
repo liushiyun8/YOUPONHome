@@ -2,7 +2,7 @@ package com.youpon.home1.ui.device;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -195,7 +195,7 @@ public class LianDongActivity extends BaseActivity implements View.OnClickListen
         liandongs.addAll(Liandong.getMap().values());
         for (int i = 0; i < liandongs.size(); i++) {
             Liandong liandong = liandongs.get(i);
-            Log.e(TAG, liandong.toString());
+            MyLog.e(TAG, liandong.toString());
             List<Liandong.EnvParasBean> env_paras = liandong.getEnv_paras();
             for (int j = 0; j < env_paras.size(); j++) {
                 Liandong.EnvParasBean envParasBean = env_paras.get(j);

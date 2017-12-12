@@ -2,7 +2,7 @@ package com.youpon.home1.ui.scene;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;

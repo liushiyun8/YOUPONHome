@@ -4,7 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -122,7 +122,7 @@ public class GatewaySetActivity extends BaseActivity implements View.OnClickList
         HttpManage.getInstance().getDeviceUpdate(device_id, new MyCallback() {
             @Override
             public void onSuc(String result) {
-                Log.e(TAG,result);
+                MyLog.e(TAG,result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     if(jsonObject!=null){
@@ -139,7 +139,7 @@ public class GatewaySetActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFail(int code, String msg) {
-                Log.e(TAG,msg);
+                MyLog.e(TAG,msg);
             }
         });
         String mac =gateway.getMac();
@@ -184,7 +184,7 @@ public class GatewaySetActivity extends BaseActivity implements View.OnClickList
                         HttpManage.getInstance().updateDevice(device_id, map, new MyCallback() {
                             @Override
                             public void onSuc(String result) {
-                                Log.e(TAG, result);
+                                MyLog.e(TAG, result);
                                 gateway.setName(myDialog.getEditText());
                                 DeviceManage.getInstance().updateDevice(gateway);
                                 EventBus.getDefault().post(new EventData(EventData.CODE_GETDEVICE, ""));
@@ -210,7 +210,7 @@ public class GatewaySetActivity extends BaseActivity implements View.OnClickList
                         HttpManage.getInstance().unsubscribe(device_id, new HttpManage.ResultCallback<Map<String,Object>>() {
                             @Override
                             public void onError(Header[] headers, HttpManage.Error error) {
-                                Log.e("fail",error.getCode()+"  info:"+error.getMsg());
+                                MyLog.e("fail",error.getCode()+"  info:"+error.getMsg());
                                 dialog1.dismiss();
                                 MyToast.show(GatewaySetActivity.this,MyToast.TYPE_ERROR,error.getMsg(),1);
                             }

@@ -7,7 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,7 +106,7 @@ public class AppSetActivity extends BaseActivity implements View.OnClickListener
             name.setText(user.getName());
             nickTv.setText(user.getNickname());
             if(user.getAvatar()!=null&& user.getAvatar()!=""){
-                Log.e("BBBBB",user.getAvatar());
+                MyLog.e("BBBBB",user.getAvatar());
                 Picasso.with(this).load(user.getAvatar()).into(touxiang);
             }
         }

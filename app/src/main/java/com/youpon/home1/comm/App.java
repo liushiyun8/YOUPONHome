@@ -20,7 +20,7 @@ import android.os.Handler;
 import android.support.v7.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
+import io.xlink.wifi.sdk.util.MyLog;
 
 
 import com.se7en.utils.DeviceUtils;
@@ -34,15 +34,11 @@ import com.youpon.home1.manage.DeviceManage;
 import com.youpon.home1.ui.home.activities.NotifyEventInfoActivity;
 
 import org.xutils.DbManager;
-import org.xutils.ex.DbException;
 import org.xutils.x;
 
-import java.io.File;
+
 import java.io.Serializable;
 import java.util.List;
-import java.util.Random;
-
-import io.fog.helper.MiCO;
 import io.xlink.wifi.sdk.XDevice;
 import io.xlink.wifi.sdk.XlinkAgent;
 import io.xlink.wifi.sdk.XlinkCode;
@@ -84,6 +80,7 @@ public class App extends Application implements XlinkNetListener{
 	@Override
 	public void onCreate() {
 		super.onCreate();
+//		MyLog.a=Boolean.FALSE;
 		application=this;
 		ctx = this.getApplicationContext();
 		SystemUtil.setContext(this);
@@ -107,10 +104,10 @@ public class App extends Application implements XlinkNetListener{
 		}
 		mDensity = dm.density;  // 屏幕密度（0.75 / 1.0 / 1.5）
 		mDensityDpi = dm.densityDpi;  // 屏幕密度DPI（120 / 160 / 240）
-		Log.e("qh", "mWidth:"+mWidth);
-		Log.e("qh", "mHeight:"+mHeight);
-		Log.e("qh", "mDensity:"+mDensity);
-		Log.e("qh", "mDensityDpi:"+mDensityDpi);
+		MyLog.e("qh", "mWidth:"+mWidth);
+		MyLog.e("qh", "mHeight:"+mHeight);
+		MyLog.e("qh", "mDensity:"+mDensity);
+		MyLog.e("qh", "mDensityDpi:"+mDensityDpi);
 		x.Ext.init(this);
 		sharedPreferences = getSharedPreferences("XlinkOfficiaDemo", Context.MODE_PRIVATE);
 		appid = (int) getSp().get(Constant.SAVE_appId,0);
@@ -133,7 +130,7 @@ public class App extends Application implements XlinkNetListener{
 		// Constant.PRODUCTID=Constant.PRODUCTID.replace(" ", "");
 		initHandler();
 		for (Device device : DeviceManage.getInstance().getDevices()) {// 向sdk初始化设备
-			Log.e(TAG, "init device:" + device.getMacAddress());
+			MyLog.e(TAG, "init device:" + device.getMacAddress());
 			XlinkAgent.getInstance().initDevice(device.getXDevice());
 		}
 
@@ -245,7 +242,7 @@ public class App extends Application implements XlinkNetListener{
 	public static String getCountryCode() {
 		String able = ctx.getResources().getConfiguration().locale
 				.getCountry();
-		Log.v("qh", "able"+able);
+		MyLog.v("qh", "able"+able);
 		return able;
 	}
 	
@@ -269,14 +266,14 @@ public class App extends Application implements XlinkNetListener{
 	@Override
 	public void onStart(int code) {
 // TODO Auto-generated method stub
-		Log.e(TAG, "onStart code" + code);
+		MyLog.e(TAG, "onStart code" + code);
 		sendBroad(Constant.BROADCAST_ON_START, code);
 	}
 
 	@Override
 	public void onLogin(int code) {
 // TODO Auto-generated method stub
-		Log.e(TAG, "login code" + code);
+		MyLog.e(TAG, "login code" + code);
 		sendBroad(Constant.BROADCAST_ON_LOGIN, code);
 		if (code == XlinkCode.SUCCEED) {
 			XlinkUtils.shortTips("云端网络已可用");
@@ -314,7 +311,7 @@ public class App extends Application implements XlinkNetListener{
 	@Override
 	public void onRecvPipeData(short i, XDevice xdevice, byte[] data) {
 // TODO Auto-generated method stub
-//		Log.e(TAG, "onRecvPipeData::device:" + xdevice.toString() + "data:"
+//		MyLog.e(TAG, "onRecvPipeData::device:" + xdevice.toString() + "data:"
 //				+ new String(data).trim());
 		Device device = DeviceManage.getInstance().getDevice(
 				xdevice.getMacAddress());
@@ -328,7 +325,7 @@ public class App extends Application implements XlinkNetListener{
 	@Override
 	public void onRecvPipeSyncData(short messageId, XDevice xdevice, byte[] data) {
 		// TODO Auto-generated method stub
-//		Log.e(TAG, "onRecvPipeSyncData::device:" + xdevice.toString() + "data:"
+//		MyLog.e(TAG, "onRecvPipeSyncData::device:" + xdevice.toString() + "data:"
 //				+new String(data).trim());
 		Device device = DeviceManage.getInstance().getDevice(
 				xdevice.getMacAddress());
@@ -358,7 +355,7 @@ public class App extends Application implements XlinkNetListener{
 
 	@Override
 	public void onDeviceStateChanged(XDevice xdevice, int state) {
-		Log.e(TAG, "onDeviceStateChanged::" + xdevice.getMacAddress()
+		MyLog.e(TAG, "onDeviceStateChanged::" + xdevice.getMacAddress()
 				+ " state:" + state);
 		Device device = DeviceManage.getInstance().getDevice(
 				xdevice.getMacAddress());
@@ -373,7 +370,7 @@ public class App extends Application implements XlinkNetListener{
 
 	@Override
 	public void onDataPointUpdate(XDevice xDevice, List<DataPoint> dataPionts, int i) {
-		Log.e(TAG,"onDataPointUpdate:"+dataPionts.toString());
+		MyLog.e(TAG,"onDataPointUpdate:"+dataPionts.toString());
 
 		Device device = DeviceManage.getInstance().getDevice(xDevice.getMacAddress());
 		if (device != null) {
@@ -395,7 +392,7 @@ public class App extends Application implements XlinkNetListener{
 				", messageType=" + eventNotify.messageType +
 				", notifyData=" +new String(eventNotify.notifyData).trim() +
 				'}';
-		Log.e("APP",str);
+		MyLog.e("APP",str);
 		Intent intent1=new Intent(Constant.BROADCAST_EVENT_NOTIFY);
 		intent1.putExtra(Constant.NOTIDATA,eventNotify);
 		sendBroadcast(intent1);

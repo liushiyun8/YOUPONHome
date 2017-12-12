@@ -10,7 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
@@ -228,7 +228,7 @@ public class DeviceImageView extends ImageView {
                 }
                 paint.setStrokeWidth(1);
                 paint.setColor(Color.GREEN);
-//                Log.e("TAGPaint","width:"+width+" height:"+height+" radio:"+radios);
+//                MyLog.e("TAGPaint","width:"+width+" height:"+height+" radio:"+radios);
 //                canvas.drawCircle(centerX,centerY,radios,paint);
                 canvas.drawBitmap(temp1,centerX-temp1.getWidth()/2,centerY-temp1.getHeight()/2,paint);
                 int flag = canvas.saveLayer(0, 0, width, height, paint);

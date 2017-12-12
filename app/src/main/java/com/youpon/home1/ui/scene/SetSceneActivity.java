@@ -3,7 +3,7 @@ package com.youpon.home1.ui.scene;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -197,7 +197,7 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                 });
                 switch (subDevice.getTp()) {
                     case 0:
-                        Log.e(TAG, subDevice.getValue1() + "");
+                        MyLog.e(TAG, subDevice.getValue1() + "");
                         if (subDevice.getValue1() != 0) {
                             nuanqu.setVisibility(View.VISIBLE);
                         }
@@ -380,7 +380,7 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                     HttpManage.getInstance().upDateSub("Scenebean", sceneBean.getObjectId(), new Gson().toJson(sceneBean), new MyCallback() {
                         @Override
                         public void onSuc(String result) {
-                            Log.e(TAG, result);
+                            MyLog.e(TAG, result);
                             Scenebean scenebean = new Gson().fromJson(result, Scenebean.class);
                             try {
                                 App.db.update(scenebean);
@@ -393,7 +393,7 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
 
                         @Override
                         public void onFail(int code, String msg) {
-                            Log.e(TAG,code+msg);
+                            MyLog.e(TAG,code+msg);
                         }
                     });
 //                    Toast.makeText(this, "场景未做任何修改！", Toast.LENGTH_LONG).show();
@@ -405,7 +405,7 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
                 HttpManage.getInstance().upDateSub("Scenebean", sceneBean.getObjectId(), new Gson().toJson(sceneBean), new MyCallback() {
                     @Override
                     public void onSuc(String result) {
-                        Log.e(TAG, result);
+                        MyLog.e(TAG, result);
                         Scenebean scenebean = new Gson().fromJson(result, Scenebean.class);
                         try {
                             App.db.update(scenebean);
@@ -418,7 +418,7 @@ public class SetSceneActivity extends BaseActivity implements View.OnClickListen
 
                     @Override
                     public void onFail(int code, String msg) {
-                        Log.e(TAG,code+msg);
+                        MyLog.e(TAG,code+msg);
                     }
                 });
                 if (sceneBean.getType() == 1||sceneBean.getType()==2) {

@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -210,7 +210,7 @@ public class AddWGActivity extends BaseActivity implements View.OnClickListener 
 //
 //            @Override
 //            public void onDevicesFind(int code, JSONArray deviceStatus) {
-//                Log.e("YYYYY", deviceStatus.toString());
+//                MyLog.e("YYYYY", deviceStatus.toString());
 //                try {
 //                    JSONArray jsonArray = new JSONArray(deviceStatus.toString());
 //                    if (jsonArray.length() > 0) {
@@ -236,7 +236,7 @@ public class AddWGActivity extends BaseActivity implements View.OnClickListener 
 //                        Devicebean devicebean = new Devicebean(name, ip, port, mac, firmware, fogProductId, isEasylinkOK, isHaveSuperUser, remainingUserNumber, hardware, mico, model, protocol, manufacturer, seed);
 //                        dlist.add(devicebean);
 //                    }
-////                    Log.e("LLLLLLLLLLLLLLL", dlist.toString());
+////                    MyLog.e("LLLLLLLLLLLLLLL", dlist.toString());
 //                    runOnUiThread(new Runnable() {
 //                        @Override
 //                        public void run() {
@@ -322,16 +322,16 @@ public class AddWGActivity extends BaseActivity implements View.OnClickListener 
 
     private void bindDevice(String json) {
         String s = new String(Base64.decode(json, Base64.DEFAULT));
-        Log.e("HHHHH", App.getApp().getAccessToken() + "");
+        MyLog.e("HHHHH", App.getApp().getAccessToken() + "");
         HttpManage.getInstance().acceptShare(s, new HttpManage.ResultCallback() {
             @Override
             public void onError(Header[] headers, HttpManage.Error error) {
-                Log.e("UUUU", error.getMsg());
+                MyLog.e("UUUU", error.getMsg());
             }
 
             @Override
             public void onSuccess(int code, Object response) {
-                Log.e("UUUU", response.toString());
+                MyLog.e("UUUU", response.toString());
             }
         });
     }

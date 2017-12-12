@@ -3,7 +3,7 @@ package com.youpon.home1.ui.home.fragement;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,9 +97,9 @@ public class SceneFragment extends Fragment {
                 }
         }
         lists.addAll(DbUtil.findMyScene());
-        Log.e("lists111数量",lists.size()+"");
+        MyLog.e("lists111数量",lists.size()+"");
         for (int j = 0; j < lists.size(); j++) {
-            Log.e("lists111内容",lists.get(j).toString());
+            MyLog.e("lists111内容",lists.get(j).toString());
         }
 
         if (lists.size() == 0) {

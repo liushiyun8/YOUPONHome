@@ -2,7 +2,7 @@ package com.youpon.home1.ui.device;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -58,7 +58,7 @@ public class SoftVersionActivity extends BaseActivity implements View.OnClickLis
         HttpManage.getInstance().getDeviceUpdateTask(device_id, new MyCallback() {
             @Override
             public void onSuc(String result) {
-                Log.e("UpdateTask",result);
+                MyLog.e("UpdateTask",result);
             }
 
             @Override
@@ -71,7 +71,7 @@ public class SoftVersionActivity extends BaseActivity implements View.OnClickLis
             HttpManage.getInstance().getDeviceUpdate(device_id, new MyCallback() {
                 @Override
                 public void onSuc(String result) {
-                    Log.e(TAG,result);
+                    MyLog.e(TAG,result);
                     try {
                         JSONObject jsonObject = new JSONObject(result);
                         if(jsonObject!=null){
@@ -90,7 +90,7 @@ public class SoftVersionActivity extends BaseActivity implements View.OnClickLis
 
                 @Override
                 public void onFail(int code, String msg) {
-                    Log.e(TAG,msg);
+                    MyLog.e(TAG,msg);
                 }
             });
         }else {
@@ -112,7 +112,7 @@ public class SoftVersionActivity extends BaseActivity implements View.OnClickLis
                 HttpManage.getInstance().getFirmware(device_id, new MyCallback() {
                     @Override
                     public void onSuc(String result) {
-                        Log.e("TAG", result+"设备升级");
+                        MyLog.e("TAG", result+"设备升级");
                         Toast.makeText(SoftVersionActivity.this, "设备开始升级..." + result, Toast.LENGTH_SHORT).show();
                     }
 

@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -246,7 +246,7 @@ public class FindpwdActivity extends BaseActivity implements View.OnClickListene
         HttpManage.getInstance().verifyCode(phone, codenumber, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, result);
+                MyLog.e(TAG, result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     verifycode = jsonObject.optString("verifycode");
@@ -315,7 +315,7 @@ public class FindpwdActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onSuccess(int code, Map<String, Object> response) {
                 MyToast.show(FindpwdActivity.this,MyToast.TYPE_OK, "已发送验证码", Toast.LENGTH_LONG);
-                Log.e(TAG,code+"");
+                MyLog.e(TAG,code+"");
                 updateUI2();
             }
         });
