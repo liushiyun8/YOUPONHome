@@ -53,7 +53,8 @@ public class CircleProgress extends View {
             size = width;  
         radius = (int) (size * paddingscale / 2f);  
         paint.setAntiAlias(true);  
-        paint.setColor(preColor);  
+        paint.setColor(preColor);
+        paint.setStrokeCap(Paint.Cap.ROUND);
         // 绘制最大的圆 进度条圆环的背景颜色（未走到的进度）就是这个哦  
         canvas.drawCircle(width / 2, height / 2, radius, paint);  
         rectf.set((width - radius * 2) / 2f, (height - radius * 2) / 2f,  

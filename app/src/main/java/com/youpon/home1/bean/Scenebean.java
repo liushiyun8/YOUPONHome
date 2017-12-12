@@ -109,6 +109,11 @@ public class Scenebean extends Devall{
         return false;
     }
 
+    @Override
+    public int getDeviceId() {
+        return gateway_id;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

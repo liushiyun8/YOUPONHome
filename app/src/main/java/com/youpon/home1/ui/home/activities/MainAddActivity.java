@@ -153,7 +153,7 @@ public class MainAddActivity extends BaseActivity implements View.OnClickListene
                         Devall devall = devallChecked.get(i);
                         devall.setMain(true);
                         App.db.replace(devall);
-                        list.add(new MainBean(devall.getSort(), devall.getSID(), devall.getType()));
+                        list.add(new MainBean(devall.getSort(), devall.getSID(), devall.getType(),devall.getDeviceId()));
                     }
                     if(list.size()>0)
                     HttpManage.getInstance().addSub(HttpManage.TYPE_MORE, "MainBean", new Gson().toJson(list), new Callback.CommonCallback<String>() {

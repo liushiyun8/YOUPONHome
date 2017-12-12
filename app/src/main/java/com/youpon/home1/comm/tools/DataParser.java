@@ -6,6 +6,7 @@ import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
 
 import com.google.gson.Gson;
 import com.youpon.home1.bean.Device;
+import com.youpon.home1.bean.MainBean;
 import com.youpon.home1.bean.gsonBeas.GsonAllDevice;
 import com.youpon.home1.bean.Panel;
 import com.youpon.home1.bean.Scenebean;
@@ -1340,7 +1341,8 @@ public class DataParser {
                         e.printStackTrace();
                     }
                 }
-                EventBus.getDefault().post(new EventData(EventData.CODE_REFRESH_DEVICE,"OK"));
+//                EventBus.getDefault().post(new EventData(EventData.CODE_REFRESH_DEVICE,"OK"));
+                EventBus.getDefault().post(new EventData(EventData.CODE_GETDEVICE,"OK"));
                 EventBus.getDefault().post(new EventData(EventData.CODE_REFRESH_SENSOR,"OK"));
                 break;
             case 12:
@@ -1418,6 +1420,7 @@ public class DataParser {
             List<Sensor> sensors=App.db.selector(Sensor.class).where("device_id","=",deviceid).findAll();
             List<Panel> panels=App.db.selector(Panel.class).where("gateway_id","=",deviceid).findAll();
             List<Scenebean> scenebeen=App.db.selector(Scenebean.class).where("gateway_id","=",deviceid).findAll();
+            List<MainBean> mainBeans = App.db.selector(MainBean.class).where("deviceId", "=", deviceid).findAll();
             if(subs!=null){
                 App.db.delete(subs);
                 for (int i = 0; i < subs.size(); i++) {
@@ -1505,6 +1508,24 @@ public class DataParser {
                 for (int i = 0; i < scenebeen.size(); i++) {
                     Scenebean entity = scenebeen.get(i);
                     HttpManage.getInstance().deleSub(entity.getObjectId(), HttpManage.SCENETABLE, new MyCallback() {
+                        @Override
+                        public void onSuc(String result) {
+
+                        }
+
+                        @Override
+                        public void onFail(int code, String msg) {
+
+                        }
+                    });
+                }
+            }
+
+            if(mainBeans!=null){
+                App.db.delete(mainBeans);
+                for (int i = 0; i < mainBeans.size(); i++) {
+                    MainBean mainBean = mainBeans.get(i);
+                    HttpManage.getInstance().deleSub(mainBean.getObjectId(), HttpManage.MAINTABLE, new MyCallback() {
                         @Override
                         public void onSuc(String result) {
 

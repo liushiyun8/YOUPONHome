@@ -162,6 +162,11 @@ public class Gateway extends Devall {
         return online;
     }
 
+    @Override
+    public int getDeviceId() {
+        return Integer.parseInt(device_id);
+    }
+
     public void setOnline(boolean online) {
         this.online = online;
     }

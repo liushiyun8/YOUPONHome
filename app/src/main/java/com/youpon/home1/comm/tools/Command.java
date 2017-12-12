@@ -312,6 +312,7 @@ public class Command {
                 case XlinkCode.NO_CONNECT_SERVER:
                     XlinkUtils.shortTips("发送数据失败，手机未连接服务器");
                     MyLog.e(name,"发送数据失败，手机未连接服务器");
+                    EventBus.getDefault().post(new EventData(EventData.CODE_RECONNECT,xDevice));
                     break;
                 case XlinkCode.NETWORD_UNAVAILABLE:
                     XlinkUtils.shortTips("当前网络不可用,发送数据失败");

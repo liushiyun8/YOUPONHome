@@ -291,6 +291,11 @@ public class SubDevice extends Devall implements Serializable {
         return online;
     }
 
+    @Override
+    public int getDeviceId() {
+        return gateway_id;
+    }
+
     public void setOnline(boolean online) {
         this.online = online;
     }

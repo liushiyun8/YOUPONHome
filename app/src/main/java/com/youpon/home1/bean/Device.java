@@ -41,6 +41,11 @@ public class Device extends Devall {
         return online;
     }
 
+    @Override
+    public int getDeviceId() {
+        return getXDevice().getDeviceId();
+    }
+
     public void setOnline(boolean online) {
         this.online = online;
     }

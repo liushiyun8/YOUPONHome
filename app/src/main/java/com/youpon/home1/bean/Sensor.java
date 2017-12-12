@@ -487,6 +487,11 @@ public class Sensor extends Devall{
         return online;
     }
 
+    @Override
+    public int getDeviceId() {
+        return device_id;
+    }
+
     public void setType(int type) {
         this.type = type;
     }

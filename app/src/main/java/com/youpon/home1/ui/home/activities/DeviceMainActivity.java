@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.youpon.home1.R;
 import com.youpon.home1.bean.Device;
+import com.youpon.home1.bean.MainBean;
 import com.youpon.home1.comm.App;
 import com.youpon.home1.comm.Comconst;
 import com.youpon.home1.comm.Constant;
@@ -28,6 +29,7 @@ import com.youpon.home1.comm.base.BaseActivity;
 import com.youpon.home1.comm.base.EventData;
 import com.youpon.home1.comm.tools.Command;
 import com.youpon.home1.comm.tools.DataParser;
+import com.youpon.home1.comm.tools.MyCallback;
 import com.youpon.home1.comm.tools.SpUtils;
 import com.youpon.home1.comm.tools.XlinkUtils;
 import com.youpon.home1.http.HttpManage;
@@ -46,6 +48,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
+import org.xutils.common.util.KeyValue;
+import org.xutils.db.sqlite.WhereBuilder;
+import org.xutils.ex.DbException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -485,9 +490,43 @@ public class DeviceMainActivity extends BaseActivity {
                     e.printStackTrace();
                 }
                 EventBus.getDefault().post(new EventData(EventData.CODE_GETDEVICE, ""));
+                try {
+                    App.db.update(MainBean.class,null,new KeyValue("isDelete",true));
+                } catch (DbException e) {
+                    e.printStackTrace();
+                }
                 for (int j = 0; j < DeviceManage.getInstance().getCurrentdev().size(); j++) {
 //                    MyLog.e("JSONCurrent", DeviceManage.getInstance().getCurrentdev().toString());
                     connectDevice(DeviceManage.getInstance().getCurrentdev().get(j));
+                    try {
+                        App.db.update(MainBean.class, WhereBuilder.b("deviceId","=",DeviceManage.getInstance().getCurrentdev().get(j).getDeviceId()),new KeyValue("isDelete",false));
+                    } catch (DbException e) {
+                        e.printStackTrace();
+                    }
+                }
+                try {
+                    List<MainBean> beans = App.db.selector(MainBean.class).where("isDelete", "=", true).findAll();
+                    if(beans!=null){
+                        for (int i = 0; i < beans.size(); i++) {
+                            MainBean mainBean = beans.get(i);
+                            HttpManage.getInstance().deleSub(mainBean.getObjectId(), HttpManage.MAINTABLE, new MyCallback() {
+                                @Override
+                                public void onSuc(String result) {
+
+                                }
+
+                                @Override
+                                public void onFail(int code, String msg) {
+
+                                }
+                            });
+                        }
+                    }
+
+                    App.db.delete(MainBean.class,WhereBuilder.b("isDelete","=",true));
+                    EventBus.getDefault().post(new EventData("mainsave","deviceMainActivity"));
+                } catch (DbException e) {
+                    e.printStackTrace();
                 }
             }
 

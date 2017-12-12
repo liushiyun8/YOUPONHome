@@ -17,8 +17,13 @@ public class MainBean {
     String sid;
     @Column(name = "type")
     int type;
+
+    @Column(name = "deviceId")
+    int deviceId;
     @Column(name = "order")
     int order;
+    @Column(name = "isDelete")
+    boolean isDelete;
 
     public int getSort() {
         return sort;
@@ -44,13 +49,24 @@ public class MainBean {
         this.sid = sid;
     }
 
+    public int getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(int deviceId) {
+        this.deviceId = deviceId;
+    }
+
     public MainBean() {
     }
 
-    public MainBean(int sort, String sid, int type) {
+
+
+    public MainBean(int sort, String sid, int type,int deviceId) {
         this.sort = sort;
         this.sid = sid;
         this.type = type;
+        this.deviceId=deviceId;
     }
 
     public int getOrder() {

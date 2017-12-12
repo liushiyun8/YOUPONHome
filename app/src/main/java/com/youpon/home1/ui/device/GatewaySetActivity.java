@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.se7en.utils.DeviceUtils;
 import com.youpon.home1.R;
 import com.youpon.home1.bean.Device;
+import com.youpon.home1.bean.MainBean;
 import com.youpon.home1.bean.Panel;
 import com.youpon.home1.bean.Roombean;
 import com.youpon.home1.bean.Scenebean;
@@ -288,6 +289,7 @@ public class GatewaySetActivity extends BaseActivity implements View.OnClickList
             List<Sensor> sensors=App.db.selector(Sensor.class).where("device_id","=",device_id).findAll();
             List<Panel> panels=App.db.selector(Panel.class).where("gateway_id","=",device_id).findAll();
             List<Scenebean> scenebeen=App.db.selector(Scenebean.class).where("gateway_id","=",device_id).findAll();
+            List<MainBean> mainBeans = App.db.selector(MainBean.class).where("deviceId", "=", device_id).findAll();
             if(subs!=null){
                 App.db.delete(subs);
                 for (int i = 0; i < subs.size(); i++) {
@@ -375,6 +377,24 @@ public class GatewaySetActivity extends BaseActivity implements View.OnClickList
                 for (int i = 0; i < scenebeen.size(); i++) {
                     Scenebean entity = scenebeen.get(i);
                     HttpManage.getInstance().deleSub(entity.getObjectId(), HttpManage.SCENETABLE, new MyCallback() {
+                        @Override
+                        public void onSuc(String result) {
+
+                        }
+
+                        @Override
+                        public void onFail(int code, String msg) {
+
+                        }
+                    });
+                }
+            }
+
+            if(mainBeans!=null){
+                App.db.delete(mainBeans);
+                for (int i = 0; i < mainBeans.size(); i++) {
+                    MainBean mainBean = mainBeans.get(i);
+                    HttpManage.getInstance().deleSub(mainBean.getObjectId(), HttpManage.MAINTABLE, new MyCallback() {
                         @Override
                         public void onSuc(String result) {
 
