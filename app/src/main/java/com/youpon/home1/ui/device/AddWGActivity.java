@@ -137,7 +137,8 @@ public class AddWGActivity extends BaseActivity implements View.OnClickListener 
         public void onGotDeviceByScan(XDevice device) {
             dlist.add(device);
             adapter.notifyDataSetChanged();
-            XlinkUtils.shortTips("扫描到设备:" + device.getMacAddress());
+//            XlinkUtils.shortTips("扫描到设备:" + device.getMacAddress());
+            MyLog.e("扫描到设备:",XlinkAgent.deviceToJson(device).toString());
             // if (!device.isInit()) {
 //             int ret = XlinkAgent.getInstance().setDeviceAuthorizeCode(
             // device, "0000", Constant.passwrod,

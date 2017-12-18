@@ -29,8 +29,11 @@ public class Sensor extends Devall{
     int value1;
     @Column(name = "value2")
     int value2;
+
+    // value4 暂时用于标记删除位  0不删除，1删除
     @Column(name = "value3")
     int value3;
+    // value4 暂时用于标记网关面板 还是 9位面板
     @Column(name = "value4")
     int value4;
     @Column(name = "online")
@@ -50,8 +53,6 @@ public class Sensor extends Devall{
         isMain = main;
     }
 
-    public static int in= (int) App.getSp().get("sensorin",1);
-
     public Sensor() {
     }
 
@@ -60,35 +61,35 @@ public class Sensor extends Devall{
         if(name==null||name.equals("")) {
             switch (type) {
                 case 1:
-                    this.name = "红外" + in;
+                    this.name = "红外1" ;
                     break;
                 case 2:
-                    this.name = "光感" + in;
+                    this.name = "光感1" ;
                     break;
                 case 3:
-                    this.name = "温度传感器" + in;
+                    this.name = "温度传感器1";
                     break;
                 case 4:
-                    this.name = "湿度传感器" + in;
+                    this.name = "湿度传感器1";
                     break;
                 case 5:
-                    this.name = "二氧化碳传感器" + in;
+                    this.name = "二氧化碳传感器1" ;
                     break;
                 case 6:
-                    this.name = "TVOC传感器" + in;
+                    this.name = "TVOC传感器1" ;
                     break;
                 case 7:
-                    this.name = "可燃气" + in;
+                    this.name = "可燃气1" ;
                     break;
                 case 8:
-                    this.name = "烟感" + in;
+                    this.name = "烟感1" ;
                     break;
             }
-            in++;
-            if (in >= 100) {
-                in = 1;
-            }
-            App.getSp().put("sensorin", in);
+//            in++;
+//            if (in >= 100) {
+//                in = 1;
+//            }
+//            App.getSp().put("sensorin", in);
         }
         this.device_id = device_id;
         this.devisort_id = devisort_id;
@@ -497,38 +498,38 @@ public class Sensor extends Devall{
     }
 
     public void setMytype(int type){
-        id=mac+type;
+        id=mac+type+0;
         this.type = type;
         if(name==null||"".equals(name)) {
             switch (type) {
                 case 1:
-                    this.name = "红外" + in;
+                    this.name = "红外1";
                     break;
                 case 2:
-                    this.name = "光感" + in;
+                    this.name = "光感2";
                     break;
                 case 3:
                 case 4:
-                    this.name = "温湿度传感器" + in;
+                    this.name = "温湿度传感器3";
                     break;
                 case 5:
-                    this.name = "二氧化碳传感器" + in;
+                    this.name = "二氧化碳传感器5" ;
                     break;
                 case 6:
-                    this.name = "TVOC传感器" + in;
+                    this.name = "TVOC传感器6";
                     break;
                 case 7:
-                    this.name = "可燃气" + in;
+                    this.name = "可燃气7";
                     break;
                 case 8:
-                    this.name = "烟感" + in;
+                    this.name = "烟感8";
                     break;
             }
-            in++;
-            if (in >= 100) {
-                in = 1;
-            }
-            App.getSp().put("sensorin", in);
+//            in++;
+//            if (in >= 100) {
+//                in = 1;
+//            }
+//            App.getSp().put("sensorin", in);
         }
     }
 

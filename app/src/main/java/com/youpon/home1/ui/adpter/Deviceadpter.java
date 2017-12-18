@@ -94,6 +94,10 @@ public class Deviceadpter extends BaseAdapter {
          bind.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+//                    DeviceManage.getInstance().addDevice(device);
+//                    DeviceManage.getInstance().addCurrentdev(new Device(device));
+//                    EventBus.getDefault().post(new EventData(EventData.CODE_GETDEVICE,""));
+//                    EventBus.getDefault().post(new EventData(EventData.CODE_RECONNECT,new Device(device)));
                     HttpManage.getInstance().getAuthkey(new MyCallback() {
                         @Override
                         public void onSuc(String result) {
@@ -161,7 +165,7 @@ public class Deviceadpter extends BaseAdapter {
         }
         DeviceManage.getInstance().addDevice(dev);
 //                    if (dev.getXDevice().getSubKey() <= 0) {
-        XlinkAgent.getInstance().getInstance().getDeviceSubscribeKey(dev.getXDevice(), dev.getXDevice().getAccessKey(), new GetSubscribeKeyListener() {
+        XlinkAgent.getInstance().getInstance().getDeviceSubscribeKey(dev.getXDevice(), dev.getAccessKey(), new GetSubscribeKeyListener() {
             @Override
             public void onGetSubscribekey(XDevice xdevice, int code, int subKey) {
                 MyLog.e(TAG,"getDeviceSubscribeKey"+ subKey);

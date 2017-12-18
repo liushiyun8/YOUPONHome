@@ -57,8 +57,9 @@ public class AddDeviceActivity extends BaseActivity implements View.OnClickListe
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void eventData(EventData eventData) {
-        if (eventData.getCode() == EventData.CODE_REFRESH_DEVICE) {
+        if (eventData.getCode() == EventData.CODE_GETDEVICE) {
             updateData();
+            adapter.notifyDataSetChanged();
         }
     }
 
@@ -103,7 +104,7 @@ public class AddDeviceActivity extends BaseActivity implements View.OnClickListe
     private void updateData() {
         deviList.clear();
         try {
-            List<SubDevice> all = App.db.selector(SubDevice.class).where("gateway_id", "=", device_id).orderBy("type").findAll();
+            List<SubDevice> all = App.db.selector(SubDevice.class).where("gateway_id", "=",device_id).and("type","!=",0).findAll();
             deviList.addAll(all);
         } catch (DbException e) {
             e.printStackTrace();
@@ -121,8 +122,14 @@ public class AddDeviceActivity extends BaseActivity implements View.OnClickListe
                 myTime--;
                 time.setText(myTime + "s");
                 if (myTime <= 0) {
+                    Command.sendData1(device_id,Command.getAll(Command.ALLDEVICE).getBytes(),TAG);
+                    Command.sendData1(device_id,Command.getAll(Command.ALLSENSOR).getBytes(),TAG);
                     stopser();
                     return;
+                }
+                if(myTime==20){
+                    Command.sendData1(device_id,Command.getAll(Command.ALLDEVICE).getBytes(),TAG);
+                    Command.sendData1(device_id,Command.getAll(Command.ALLSENSOR).getBytes(),TAG);
                 }
                 time.postDelayed(this, 1000);
             }

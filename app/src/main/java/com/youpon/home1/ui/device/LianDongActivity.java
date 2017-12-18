@@ -202,7 +202,7 @@ public class LianDongActivity extends BaseActivity implements View.OnClickListen
                 String mac = envParasBean.getMac();
                 int sensor_type = envParasBean.getSensor_type();
 //                   &&mac.equals(sensor.getMac())
-                if (sensor.getMac().equals(mac)&&sensor.getType() == sensor_type) {
+                if (sensor.getMac().equals(mac)&&sensor.getType() == (sensor_type==4?3:sensor_type)){
                     list.add(liandong);
                     break;
                 }

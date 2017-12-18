@@ -117,31 +117,43 @@ public class DeviceManage {
     }
 
     public synchronized void parseXDevice(JSONObject jsonObject) throws JSONException {
-        JSONObject json = new JSONObject();
-        json.put("protocol", 1);
-        JSONObject deviceJson = new JSONObject();
-        deviceJson.put("macAddress",jsonObject.optString("mac"));
-        deviceJson.put("deviceID",jsonObject.optString("id"));
-        deviceJson.put("version", 2);//固件版本是2的新固件，返回的是1，这里强制改为2，不强制修改会导致第一次连接设备认证失败
-        deviceJson.put("mcuHardVersion",jsonObject.optString("mcu_version"));
-        deviceJson.put("mucSoftVersion",jsonObject.optString("firmware_version"));
-        deviceJson.put("productID",jsonObject.optString("product_id"));
-        deviceJson.put("accesskey",jsonObject.optString("access_key"));
-        json.put("device", deviceJson);
-        XDevice xdevice = XlinkAgent.JsonToDevice(json);
-        Device device = new Device(xdevice);
-        device.setSubscribe(true);
-        device.setOnline(jsonObject.optBoolean("is_online"));
+        String mac = jsonObject.optString("mac");
+        Device device= getDevice(mac);
+        JSONObject json=null;
+        JSONObject deviceJson=null;
+//        if(deviceSave!=null){
+//            json= XlinkAgent.deviceToJson(deviceSave.getXDevice());
+//            deviceJson = json.optJSONObject("device");
+//        }else {
+            json = new JSONObject();
+            json.put("protocol", 1);
+            deviceJson = new JSONObject();
+//        }
+            deviceJson.put("macAddress",mac);
+            deviceJson.put("deviceID",jsonObject.optString("id"));
+            deviceJson.put("version", 3);//固件版本是2的新固件，返回的是1，这里强制改为2，不强制修改会导致第一次连接设备认证失败
+            deviceJson.put("mcuHardVersion",jsonObject.optString("mcu_version"));
+            deviceJson.put("mucSoftVersion",jsonObject.optString("firmware_version"));
+            deviceJson.put("productID",jsonObject.optString("product_id"));
+            deviceJson.put("accesskey",jsonObject.optString("access_key"));
+            json.put("device", deviceJson);
+            XDevice xdevice = XlinkAgent.JsonToDevice(json);
+            if(device!=null){
+                device.setxDevice(xdevice);
+            }else
+            device = new Device(xdevice);
+            device.setSubscribe(true);
+            device.setOnline(jsonObject.optBoolean("is_online"));
+            device.setRole(jsonObject.optInt("role"));
+            device.setName(jsonObject.optString("name"));
+            addDevice(device);
+            addCurrentdev(device);
         try {
             App.db.update(SubDevice.class, WhereBuilder.b("gateway_id","=",xdevice.getDeviceId()),new KeyValue("online",jsonObject.optBoolean("is_online")));
             App.db.update(Sensor.class, WhereBuilder.b("device_id","=",xdevice.getDeviceId()),new KeyValue("online",jsonObject.optBoolean("is_online")));
         } catch (DbException e) {
             e.printStackTrace();
         }
-        device.setRole(jsonObject.optInt("role"));
-        device.setName(jsonObject.optString("name"));
-        addDevice(device);
-        addCurrentdev(device);
         XlinkAgent.getInstance().initDevice(xdevice);
     }
 

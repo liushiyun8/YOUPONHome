@@ -104,7 +104,7 @@ public class DeviceMainActivity extends BaseActivity {
         if(EventData.TAG_REFRESH.equals(eventData.getTag())){
             loadData();
         }else if(eventData.getCode()==EventData.CODE_RECONNECT){
-//            MyLog.e(TAG,"已经传递到了："+(XDevice) eventData.getData());
+            MyLog.e(TAG,"已经传递到了："+(XDevice) eventData.getData());
             connectDevice(DeviceManage.getInstance().getDevice((XDevice) eventData.getData()));
         }
     }
@@ -201,9 +201,10 @@ public class DeviceMainActivity extends BaseActivity {
                         int deviceid=jsonObject.optInt("device_id");
                         if("online".equals(type)){
                                 Device device = DeviceManage.getInstance().getDevice(deviceid);
-                                if(device!=null)
-                                device.setOnline(true);
-                                DeviceManage.getInstance().addDevice(device);
+                                if(device!=null){
+                                    device.setOnline(true);
+                                    DeviceManage.getInstance().addDevice(device);
+                                }
                         }else {
                             Device device = DeviceManage.getInstance().getDevice(deviceid);
                             if(device!=null){
@@ -261,9 +262,9 @@ public class DeviceMainActivity extends BaseActivity {
                     } else if (status == XlinkCode.DEVICE_CHANGED_CONNECT_SUCCEED) {
                         Log("连接设备成功");
                         XlinkUtils.shortTips("连接设备成功");
-                        dialog.dismiss();
+//                        dialog.dismiss();
                     } else if (status == XlinkCode.DEVICE_CHANGED_OFFLINE) {
-                        dialog.dismiss();
+//                        dialog.dismiss();
                         XlinkUtils.shortTips("连接设备失败");
                         Log("连接设备失败");
                     }
@@ -324,10 +325,13 @@ public class DeviceMainActivity extends BaseActivity {
         }
 
 //        int ret = XlinkAgent.getInstance().connectDevice(device.getXDevice(), device.getXDevice().getAccessKey(), connectDeviceListener);
+
+//        int ret =XlinkAgent.getInstance().connectDevice(device.getXDevice(), device.getXDevice().getAccessKey(), device.getXDevice().getSubKey(),connectDeviceListener);
+        MyLog.e(TAG,XlinkAgent.deviceToJson(device.getXDevice()).toString());
         int ret =XlinkAgent.getInstance().connectDevice(device.getXDevice(),connectDeviceListener);
         MyLog.e(TAG,"连接设备的状态："+ret);
         if (ret < 0) {// 调用设备失败
-            if (dialog != null) {
+            if (dialog != null&&dialog.isShowing()) {
                 dialog.dismiss();
             }
             switch (ret) {
@@ -370,21 +374,20 @@ public class DeviceMainActivity extends BaseActivity {
             byte[] bs=Command.getAll(Command.ALLDEVICE).getBytes();
             byte[] bs1=Command.getAll(Command.ALLSENSOR).getBytes();
 //            byte[] bs2=Command.getRead485("FFFF").getBytes();
-            byte[] bs3=Command.getOtherStr(Command.CUSDEVICE).getBytes();
+//            byte[] bs3=Command.getOtherStr(Command.CUSDEVICE).getBytes();
             String tips;
-            MyLog.e(TAG,"连接设备的listener:"+result);
             switch (result) {
                 // 连接设备成功 设备处于内网
                 case XlinkCode.DEVICE_STATE_LOCAL_LINK:
                     // 连接设备成功，成功后
 //                    DeviceManage.getInstance().updateDevice(xDevice);
                     tips = "正在局域网控制设备(" + xDevice.getMacAddress() + ")";
-                    XlinkUtils.shortTips(tips);
+//                    XlinkUtils.shortTips(tips);
                     Log(tips);
                     Command.sendData(xDevice,bs,TAG);
                     Command.sendData(xDevice,bs1,TAG);
 //                    Command.sendData(xDevice,bs2,TAG);
-                    Command.sendData(xDevice,bs3,TAG);
+//                    Command.sendData(xDevice,bs3,TAG);
                     XlinkAgent.getInstance().sendProbe(xDevice);
                     break;
                 // 连接设备成功 设备处于云端

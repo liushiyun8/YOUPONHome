@@ -3,6 +3,7 @@ package com.youpon.home1.ui.device;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -31,6 +32,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.xlink.wifi.sdk.util.MyLog;
 
 public class LianDongDevActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -47,7 +49,7 @@ public class LianDongDevActivity extends AppCompatActivity implements View.OnCli
     private CommonAdapter<SubDevice> commonAdapter;
     private List<SubDevice> addLs=new ArrayList();
     private int type;
-    private int value4;
+    private String mac;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void event(EventData eventData) {
@@ -69,14 +71,15 @@ public class LianDongDevActivity extends AppCompatActivity implements View.OnCli
         Intent intent = getIntent();
         device_id = intent.getIntExtra("device_id", 0);
         type = intent.getIntExtra("type", 0);
-        value4 = intent.getIntExtra("value4", 299);
+        mac = intent.getStringExtra("mac");
+        Panel panel = PanelManage.getInstance().getPanel(mac);
         try {
             List<SubDevice> subs =null;
-            if(value4==299||value4==0){
+            if(panel==null){
                 subs=App.db.selector(SubDevice.class).where("gateway_id","=",device_id).and("clas","=",299).and("type","!=",0).findAll();
-            }else if(value4==9){
+            }else if(panel.getClas()==9){
                 if(type==1){
-                    subs=App.db.selector(SubDevice.class).where("gateway_id","=",device_id).and("clas","=",9).and("type","=",3).findAll();
+                    subs=App.db.selector(SubDevice.class).where("gateway_id","=",device_id).and("clas","=",9).and("dst","=",4).findAll();
                 }else {
                     subs=App.db.selector(SubDevice.class).where("gateway_id","=",device_id).and("clas","=",9).and("type","=",4).findAll();
                 }
@@ -116,7 +119,7 @@ public class LianDongDevActivity extends AppCompatActivity implements View.OnCli
                 ImageView icon = helper.getView(R.id.icon);
                 final Panel panel = PanelManage.getInstance().getPanel(item.getMac());
                 if(panel!=null){
-                    helper.setText(R.id.panel_name,panel.getName());
+                    helper.setText(R.id.panel_name,panel.getMyName());
                     helper.getView(R.id.panel_name).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

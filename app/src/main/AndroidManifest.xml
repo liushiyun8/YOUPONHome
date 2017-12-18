@@ -140,6 +140,7 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
         <activity android:name=".ui.device.SensorEditActivity" />
         <activity android:name=".ui.home.activities.WebViewActivity" />
+        <activity android:name=".comm.view.DialogActivity" android:theme="@style/PwdDialog"></activity>
     </application>
 
 </manifest>

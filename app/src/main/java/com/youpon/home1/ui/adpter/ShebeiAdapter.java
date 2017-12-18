@@ -375,6 +375,7 @@ public class ShebeiAdapter extends BaseAdapter {
                     if (sensor == null)
                         break;
                     final Panel panel1 = PanelManage.getInstance().getPanel(sensor.getMac());
+                    Log.e("sensorPanel",panel1+"");
                     if(panel1!=null){
                         viewHolder.panel_name.setText(panel1.getMyName());
                         viewHolder.panel_name.setOnClickListener(new View.OnClickListener() {

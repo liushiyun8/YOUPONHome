@@ -29,15 +29,20 @@ import com.youpon.home1.R;
 import com.youpon.home1.bean.Device;
 import com.youpon.home1.comm.tools.SpUtils;
 import com.youpon.home1.comm.tools.XlinkUtils;
+import com.youpon.home1.comm.view.DialogActivity;
+import com.youpon.home1.comm.view.MyDialog;
 import com.youpon.home1.http.HttpManage;
 import com.youpon.home1.manage.DeviceManage;
+import com.youpon.home1.ui.home.activities.AppSetActivity;
 import com.youpon.home1.ui.home.activities.NotifyEventInfoActivity;
+import com.youpon.home1.ui.index.Index2Activity;
 
 import org.xutils.DbManager;
 import org.xutils.x;
 
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.List;
 import io.xlink.wifi.sdk.XDevice;
 import io.xlink.wifi.sdk.XlinkAgent;
@@ -80,14 +85,14 @@ public class App extends Application implements XlinkNetListener{
 	@Override
 	public void onCreate() {
 		super.onCreate();
-//		MyLog.a=Boolean.FALSE;
+		MyLog.a=Boolean.FALSE;
 		application=this;
 		ctx = this.getApplicationContext();
 		SystemUtil.setContext(this);
 		DeviceUtils.setContext(this);
 //		refWatcher = LeakCanary.install(this);
 		XlinkAgent.init(this);
-		XlinkAgent.getInstance().setPreInnerServiceMode(true);
+//		XlinkAgent.getInstance().setPreInnerServiceMode(true);
 		XlinkAgent.setCMServer("cm2.xlink.cn", 23778);
 		XlinkAgent.getInstance().addXlinkListener(this);
 //		CrashHandler crashHandler = CrashHandler.getInstance();
@@ -129,10 +134,10 @@ public class App extends Application implements XlinkNetListener{
 		// Constant.PRODUCTID= Constant.PRODUCTID.trim();
 		// Constant.PRODUCTID=Constant.PRODUCTID.replace(" ", "");
 		initHandler();
-		for (Device device : DeviceManage.getInstance().getDevices()) {// 向sdk初始化设备
-			MyLog.e(TAG, "init device:" + device.getMacAddress());
-			XlinkAgent.getInstance().initDevice(device.getXDevice());
-		}
+//		for (Device device : DeviceManage.getInstance().getDevices()) {// 向sdk初始化设备
+//			MyLog.e(TAG, "init device:" + device.getMacAddress());
+//			XlinkAgent.getInstance().initDevice(device.getXDevice());
+//		}
 
 		// 获取当前软件包版本号和版本名称
 		try {
@@ -296,7 +301,6 @@ public class App extends Application implements XlinkNetListener{
 		}
 		XlinkUtils.shortTips("本地网络已经断开");
 	}
-
 	@Override
 	public void onDisconnect(int code) {
 		if (code == XlinkCode.CLOUD_SERVICE_KILL) {
@@ -304,8 +308,18 @@ public class App extends Application implements XlinkNetListener{
 			if (appid != 0 && !TextUtils.isEmpty(authKey)) {
 				XlinkAgent.getInstance().login(appid, authKey);
 			}
+		}else if(code==XlinkCode.CLOUD_USER_EXTRUSION){
+			Intent intent = new Intent(this, DialogActivity.class);
+			Calendar instance = Calendar.getInstance();
+			int hour = instance.get(Calendar.HOUR_OF_DAY);
+			int minute = instance.get(Calendar.MINUTE);
+			intent.putExtra("data","你的账号于"+hour+":"+(minute<10?"0"+minute:minute)+"在另外一台手机登录,如非你本人操作或授权,请立即修改密码或紧急冻结账号");
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(intent);
 		}
-		XlinkUtils.shortTips("正在修复云端连接");
+//		MyLog.e("disconnect","code:"+code);
+//
+//		XlinkUtils.shortTips("");
 	}
 
 	@Override
@@ -414,7 +428,7 @@ public class App extends Application implements XlinkNetListener{
 		notify.flags = Notification.FLAG_AUTO_CANCEL;
 		NotificationManager mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 //		mNotificationManager.notify(new Random().nextInt(), notify);
-		mNotificationManager.notify(1, notify);
-		XlinkUtils.longTips(new String(eventNotify.notifyData).trim());
+//		mNotificationManager.notify(1, notify);
+//		XlinkUtils.longTips(new String(eventNotify.notifyData).trim());
 	}
 }

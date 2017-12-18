@@ -17,7 +17,7 @@ import com.youpon.home1.R;
  * Created by liuyun on 2017/3/31.
  */
 public class MyDialog extends Dialog {
-    private Activity mContex;
+    private Context mContex;
     private Button yes;//确定按钮
     private Button no;//取消按钮
     private TextView titleTv;//消息标题文本
@@ -63,7 +63,7 @@ public class MyDialog extends Dialog {
 
     public MyDialog(Context context) {
         super(context, R.style.MyDialog);
-        mContex= (Activity) context;
+        mContex= context;
     }
 
     @Override
@@ -177,15 +177,6 @@ public class MyDialog extends Dialog {
     @Override
     public void dismiss() {
         super.dismiss();
-//        backgroundAlpha(1f);
-    }
-
-    public void backgroundAlpha(float bgAlpha)
-    {
-        WindowManager.LayoutParams lp =mContex.getWindow().getAttributes();
-        lp.alpha = bgAlpha; //0.0-1.0
-        mContex.getWindow().setAttributes(lp);
-        mContex.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
     /**

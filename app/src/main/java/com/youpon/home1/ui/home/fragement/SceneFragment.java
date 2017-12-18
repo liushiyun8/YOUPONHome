@@ -56,8 +56,6 @@ public class SceneFragment extends Fragment {
     private String TAG = getClass().getSimpleName();
     private List<Scenebean> fourthScene;
     private UpdateUI updateUI;
-    private int i;
-    private TimerTask task;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void eventData(EventData eventData) {
@@ -133,47 +131,47 @@ public class SceneFragment extends Fragment {
 
     private void init() {
         fourthScene = PanelManage.getInstance().getFourthScene();
-        for (int j = 0; j < fourthScene.size(); j++) {
-            Scenebean scenebean = fourthScene.get(j);
-            try {
-                Scenebean first = App.db.selector(Scenebean.class).where("panel_mac", "=", scenebean.getPanel_mac()).and("gateway_id","=",scenebean.getGateway_id()).and("groupId", "=", scenebean.getGroupId()).and("sceneId", "=", scenebean.getSceneId()).findFirst();
-                if(first==null){
-                    HttpManage.getInstance().addSub(HttpManage.TYPE_SINGLE,HttpManage.SCENETABLE,new Gson().toJson(scenebean), new MyCallback() {
-                        @Override
-                        public void onSuc(String result) {
-                           Scenebean sc = new Gson().fromJson(result, Scenebean.class);
-                            try {
-                                List<Scenebean> first = App.db.selector(Scenebean.class).where("panel_mac", "=", sc.getPanel_mac()).and("gateway_id","=",sc.getGateway_id()).and("groupId", "=", sc.getGroupId()).and("sceneId", "=", sc.getSceneId()).findAll();
-                                if(first==null||first.size()==0){
-                                    App.db.saveOrUpdate(sc);
-                                }else
-                                    HttpManage.getInstance().deleSub(sc.getObjectId(), HttpManage.SCENETABLE, new MyCallback() {
-                                        @Override
-                                        public void onSuc(String result) {
-
-                                        }
-
-                                        @Override
-                                        public void onFail(int code, String msg) {
-
-                                        }
-                                    });
-
-                            } catch (DbException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onFail(int code, String msg) {
-
-                        }
-                    });
-                }
-            } catch (DbException e) {
-                e.printStackTrace();
-            }
-        }
+//        for (int j = 0; j < fourthScene.size(); j++) {
+//            Scenebean scenebean = fourthScene.get(j);
+//            try {
+//                Scenebean first = App.db.selector(Scenebean.class).where("panel_mac", "=", scenebean.getPanel_mac()).and("gateway_id","=",scenebean.getGateway_id()).and("groupId", "=", scenebean.getGroupId()).and("sceneId", "=", scenebean.getSceneId()).findFirst();
+//                if(first==null){
+//                    HttpManage.getInstance().addSub(HttpManage.TYPE_SINGLE,HttpManage.SCENETABLE,new Gson().toJson(scenebean), new MyCallback() {
+//                        @Override
+//                        public void onSuc(String result) {
+//                           Scenebean sc = new Gson().fromJson(result, Scenebean.class);
+//                            try {
+//                                List<Scenebean> first = App.db.selector(Scenebean.class).where("panel_mac", "=", sc.getPanel_mac()).and("gateway_id","=",sc.getGateway_id()).and("groupId", "=", sc.getGroupId()).and("sceneId", "=", sc.getSceneId()).findAll();
+//                                if(first==null||first.size()==0){
+//                                    App.db.saveOrUpdate(sc);
+//                                }else
+//                                    HttpManage.getInstance().deleSub(sc.getObjectId(), HttpManage.SCENETABLE, new MyCallback() {
+//                                        @Override
+//                                        public void onSuc(String result) {
+//
+//                                        }
+//
+//                                        @Override
+//                                        public void onFail(int code, String msg) {
+//
+//                                        }
+//                                    });
+//
+//                            } catch (DbException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onFail(int code, String msg) {
+//
+//                        }
+//                    });
+//                }
+//            } catch (DbException e) {
+//                e.printStackTrace();
+//            }
+//        }
         updateDate();
         mysceneListAdapter = new MysceneListAdapter(getActivity(), lists);
         lv.setAdapter(mysceneListAdapter);
@@ -183,12 +181,6 @@ public class SceneFragment extends Fragment {
                 startActivity(new Intent(getActivity(), SceneAddActivity.class));
             }
         });
-        //获取四位场景里面的设备状态
-        byte[] bs2=Command.getAll(99).getBytes();
-        List<Device> devices = DeviceManage.getInstance().getCurrentdev();
-        for (Device de:devices) {
-            Command.sendData(de.getXDevice(),bs2,TAG);
-        }
 
         //获取网关上三个场景的内容
         List<Panel> panels = PanelManage.getInstance().get485Scenepanel();
@@ -217,6 +209,13 @@ public class SceneFragment extends Fragment {
                 }
 
             }
+        }
+
+        //获取四位场景里面的设备状态
+        byte[] bs2=Command.getAll(99).getBytes();
+        List<Device> devices = DeviceManage.getInstance().getCurrentdev();
+        for (Device de:devices) {
+            Command.sendData(de.getXDevice(),bs2,TAG);
         }
 
 

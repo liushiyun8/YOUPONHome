@@ -8,6 +8,9 @@ import com.youpon.home1.bean.Panel;
 import com.youpon.home1.bean.Scenebean;
 import com.youpon.home1.bean.SubDevice;
 import com.youpon.home1.comm.App;
+import com.youpon.home1.comm.tools.MyCallback;
+import com.youpon.home1.http.HttpManage;
+
 import org.xutils.ex.DbException;
 
 import java.util.ArrayList;
@@ -92,22 +95,9 @@ public class PanelManage {
         try {
             for (int j = 0; j <currentdev.size(); j++) {
                 Device device = currentdev.get(j);
-                List<SubDevice> subs = App.db.selector(SubDevice.class).where("clas", "=", 8).and("gateway_id","=",device.getXDevice().getDeviceId()).findAll();
-                if(subs!=null){
-                    for (int i = 0; i < subs.size(); i++) {
-                        SubDevice subDevice = subs.get(i);
-                        Scenebean scenebean = new Scenebean();
-                        scenebean.setId(subDevice.getId());
-                        scenebean.setGateway_id(subDevice.getGateway_id());
-                        scenebean.setGateway_type(0);
-                        scenebean.setName("四位场景"+subDevice.getDst());
-                        scenebean.setType(1);
-                        scenebean.setPanel_mac(subDevice.getMac());
-                        scenebean.setGroupId("0001");
-                        scenebean.setSceneId("0"+(subDevice.getDst()-1));
-                        list.add(scenebean);
-                    }
-                }
+                List<Scenebean> scenebeans = App.db.selector(Scenebean.class).where("gateway_id", "=",device.getDeviceId()).and("groupId", "=", "0001").findAll();
+                if(scenebeans!=null)
+                    list.addAll(scenebeans);
             }
 
         } catch (DbException e) {
@@ -215,6 +205,17 @@ public class PanelManage {
             Panel next = iterator.next();
             if(next.getGateway_id()==deviceid&&!list.contains(next.getMac())){
                 removePanel(next.getMac());
+                HttpManage.getInstance().deleSub(next.getObjectId(), HttpManage.PANELTABLE, new MyCallback() {
+                    @Override
+                    public void onSuc(String result) {
+
+                    }
+
+                    @Override
+                    public void onFail(int code, String msg) {
+
+                    }
+                });
             }
         }
 

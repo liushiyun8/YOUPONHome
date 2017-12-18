@@ -53,16 +53,6 @@ public class DataParser {
     public void parse(byte[] bytes, XDevice xDevice, final Handler handler){
         Message msg = Message.obtain();
         final int gateID=xDevice.getDeviceId();
-//        final String s485=new BigInteger(1, bytes).toString(16).trim();
-//        if(s485.startsWith("55aa55")){
-//            new Thread(){
-//                @Override
-//                public void run() {
-//                    parse485Message(gateID,s485,handler);
-//                }
-//            }.start();
-//            msg.obj =s485;
-//        }else {
             final String s = new String(bytes).trim();
             msg.obj = s;
                 new Thread(){
@@ -85,7 +75,6 @@ public class DataParser {
         int dst =Integer.parseInt(s485.substring(12, 14),16) ;
         int src = Integer.parseInt(s485.substring(14, 16),16);
         String cluster=s485.substring(16,20);
-//        MyLog.e("verything", "cluster:" + cluster + ",id:" + id + ",dst:" + dst + ",src:" + src + ",uuu:" + s485.substring(22, 26));
         String commandID = s485.substring(20, 22);
         switch (cluster) {
             case "0000":
@@ -286,11 +275,6 @@ public class DataParser {
                             }
                             list.add(actionsBean);
                         }
-//                    if (panel.getClas() == 5 || panel.getClas() == 6 || panel.getClas() == 7) {
-//                        panel.getMap().put(sceneId, list);
-//                        EventBus.getDefault().post(new EventData(EventData.CODE_GETSCENE, ""));
-//                        break;
-//                    }
                         boolean Tag = false;
                         synchronized (this){
                             if ("0001".equals(groupId)) {
@@ -334,10 +318,8 @@ public class DataParser {
                                                 e.printStackTrace();
                                             }
                                         }
-
                                         @Override
                                         public void onFail(int code, String msg) {
-
                                             MyLog.e("code and msg", code + " msg:" + msg);
                                         }
                                     });
@@ -383,7 +365,6 @@ public class DataParser {
                     App.db.update(dbdevi,"value1","value2","online");
                     EventBus.getDefault().postSticky(new EventData(EventData.CODE_REFRESH_DEVICE, "刷新子设备"));
                     EventBus.getDefault().postSticky(new EventData(EventData.CODE_REFRESH_DEVICE, "刷新子设备"));
-//                    EventBus.getDefault().post(new EventData(EventData.CODE_READ_STUTAS, ""));
                     updateScene(deviceid,src,dbdevi.getMac(), tap);
                 } catch (DbException e) {
                     e.printStackTrace();
@@ -517,7 +498,7 @@ public class DataParser {
                                 int ttap1=Integer.parseInt(s485.substring(index+11,index+15),16);
                                 MyLog.e("S485","clu:"+clu+",type:"+type);
                                 MyLog.e("S485","ttap:"+ttap1);
-                                    App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",type),new KeyValue[]{new KeyValue("value1",ttap1),new KeyValue("online",true),new KeyValue("value4",299)});
+                                    App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",type),new KeyValue[]{new KeyValue("value1",ttap1),new KeyValue("online",true)});
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -534,17 +515,10 @@ public class DataParser {
                                 MyLog.e("S485","clu:"+clu);
                                 MyLog.e("S485","ttap:"+tap2);
                                 try {
-//                                    MyLog.e("UUUUJJJ","id:"+id+" device_id:"+deviceid+" type:"+tp);
-//                                    Sensor first = App.db.selector(Sensor.class).where("devisort_id", "=", id).and("device_id", "=", deviceid).and("type", "=", ty).findFirst();
-//                                    if (first==null){
-//                                        MyLog.e("UUUU","sensor为空");
-//                                        return;
-//                                    }else first.setValue1(ttap2);
-//                                    App.db.replace(first);
                                     if("0405".equals(clu)){
-                                        App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",tp),new KeyValue[]{new KeyValue("value2",tap2),new KeyValue("online",true),new KeyValue("value4",299)});
+                                        App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",tp),new KeyValue[]{new KeyValue("value2",tap2),new KeyValue("online",true)});
                                     }else
-                                    App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",tp),new KeyValue[]{new KeyValue("value1",tap2),new KeyValue("online",true),new KeyValue("value4",299)});
+                                    App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",tp),new KeyValue[]{new KeyValue("value1",tap2),new KeyValue("online",true)});
                                 } catch (DbException e) {
                                     e.printStackTrace();
                                 }
@@ -560,13 +534,7 @@ public class DataParser {
                                 MyLog.e("S485","ttap:"+ttap2);
                                 try {
                                     MyLog.e("UUUUJJJ","id:"+id+" device_id:"+deviceid+" type:"+ty);
-//                                    Sensor first = App.db.selector(Sensor.class).where("devisort_id", "=", id).and("device_id", "=", deviceid).and("type", "=", ty).findFirst();
-//                                    if (first==null){
-//                                        MyLog.e("UUUU","sensor为空");
-//                                        return;
-//                                    }else first.setValue1(ttap2);
-//                                    App.db.replace(first);
-                                    App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",ty),new KeyValue[]{new KeyValue("value1",ttap2),new KeyValue("online",true),new KeyValue("value4",299)});
+                                    App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",ty),new KeyValue[]{new KeyValue("value1",ttap2),new KeyValue("online",true)});
                                 } catch (DbException e) {
                                     e.printStackTrace();
                                 }
@@ -578,7 +546,7 @@ public class DataParser {
                                 MyLog.e("S485","clu:"+clu);
                                 MyLog.e("S485","ttap:"+ttap3);
                                 try {
-                                    App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",typ),new KeyValue[]{new KeyValue("value1",ttap3),new KeyValue("online",true),new KeyValue("value4",299)});
+                                    App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("device_id","=",deviceid).and("type","=",typ),new KeyValue[]{new KeyValue("value1",ttap3),new KeyValue("online",true)});
                                 } catch (DbException e) {
                                     e.printStackTrace();
                                 }
@@ -680,10 +648,55 @@ public class DataParser {
                     boolean flag=false;
                     GsonAllDevice.EndpBean endpBean = endp.get(j);
                     int dst=endpBean.getDstid();
-                    if (endpBean.getT()>10){
-                        break;
-                    }
                 try {
+                    if(gsonAllDevice.getClassX()==8){
+                        Scenebean scenebean = App.db.selector(Scenebean.class).where("panel_mac", "=", gsonAllDevice.getMac()).and("gateway_id", "=", deviceid).and("groupId", "=", "0001").and("sceneId", "=", endpBean.getDstid() - 1).findFirst();
+                        if(scenebean==null){
+                            scenebean=new Scenebean();
+                            scenebean.setPanel_mac(gsonAllDevice.getMac());
+                            scenebean.setGateway_id(deviceid);
+                            scenebean.setGateway_type(0);
+                            scenebean.setName("四位场景"+endpBean.getDstid());
+                            scenebean.setType(1);
+                            scenebean.setGroupId("0001");
+                            scenebean.setId(gsonAllDevice.getNwkid());
+                            scenebean.setSceneId("0"+(endpBean.getDstid()-1));
+                            HttpManage.getInstance().addSub(HttpManage.TYPE_SINGLE,HttpManage.SCENETABLE,new Gson().toJson(scenebean), new MyCallback() {
+                                @Override
+                                public void onSuc(String result) {
+                                    Scenebean sc = new Gson().fromJson(result, Scenebean.class);
+                                    try {
+                                        List<Scenebean> first = App.db.selector(Scenebean.class).where("panel_mac", "=", sc.getPanel_mac()).and("gateway_id","=",sc.getGateway_id()).and("groupId", "=", sc.getGroupId()).and("sceneId", "=", sc.getSceneId()).findAll();
+                                        if(first==null||first.size()==0){
+                                            App.db.saveOrUpdate(sc);
+                                        }else
+                                            HttpManage.getInstance().deleSub(sc.getObjectId(), HttpManage.SCENETABLE, new MyCallback() {
+                                                @Override
+                                                public void onSuc(String result) {
+
+                                                }
+
+                                                @Override
+                                                public void onFail(int code, String msg) {
+
+                                                }
+                                            });
+
+                                    } catch (DbException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                @Override
+                                public void onFail(int code, String msg) {
+
+                                }
+                            });
+                        }
+                        continue;
+                    }
+                    if(endpBean.getT()==0||endpBean.getT()>10)
+                        continue;
                     if(endpBean.getDstid()==2&&endpBean.getT()==1){
                         dst=1;
                     }
@@ -722,7 +735,11 @@ public class DataParser {
                     e.printStackTrace();
                 }
                 }
+                if(gsonAllDevice.getClassX()==8){
+                    return;
+                }
             }
+
              EventBus.getDefault().post(new EventData(EventData.CODE_GETDEVICE,""));
             if(list.size()>0)
             HttpManage.getInstance().addSub(HttpManage.TYPE_MORE,"subdevice", new Gson().toJson(list), new Callback.CommonCallback<String>() {
@@ -782,70 +799,18 @@ public class DataParser {
                 App.db.delete(Scenebean.class,WhereBuilder.b("gateway_id","=",deviceid).and("type","!=",0).and("chnl_id","=",1));
                 return;
             }
-        }else if(s.contains("\"CMD\":110")){
-//            synchronized (this){
-//                JSONArray devices = jsonObject.optJSONArray("devices");
-//                List<Panel> list=new ArrayList<>();
-//                for (int i = 0; i < devices.length(); i++) {
-//                    JSONObject jo = devices.optJSONObject(i);
-//                    GsonAllPanel gsonAllPanel = new Gson().fromJson(jo.toString(), GsonAllPanel.class);
-//                    List<GsonAllPanel.ChnlBean> chnl = gsonAllPanel.getChnl();
-//                    boolean flag=false;
-//                    try {
-//                         Panel panel= App.db.selector(Panel.class).where("mac", "=",gsonAllPanel.getMac()).findFirst();
-//                         if(panel==null){
-//                                panel=new Panel();
-//                                flag=true;
-//                         }
-//                            panel.setGateway_id(deviceid);
-//                            panel.setGateway_type(gsonAllPanel.getRiu());
-//                            panel.setClas(gsonAllPanel.getClassX());
-//                            panel.setMac(gsonAllPanel.getMac());
-//                            panel.setId(gsonAllPanel.getNwkid());
-//                            panel.setOnline(gsonAllPanel.getOnline()==1?true:false);
-//                            panel.setChnls(new Gson().toJson(chnl));
-//                            if(flag){
-//                                list.add(panel);
-//                            }
-//                            App.db.replace(panel);
-//                        } catch (DbException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                if(list.size()>0)
-//                    HttpManage.getInstance().addSub(HttpManage.TYPE_MORE,"panel", new Gson().toJson(list), new Callback.CommonCallback<String>() {
-//                        @Override
-//                        public void onSuccess(String result) {
-//                            MyLog.e("HTTT","上传面板数据成功"+result);
-//                            try {
-//                                JSONArray jsonArray = new JSONArray(result);
-//                                for (int i = 0; i < jsonArray.length(); i++) {
-//                                    JSONObject jsonObject1 = jsonArray.optJSONObject(i);
-//                                    Panel panel = new Gson().fromJson(jsonObject1.toString(), Panel.class);
-//                                    PanelManage.getInstance().addPanel(panel);
-//                                }
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onError(Throwable ex, boolean isOnCallback) {
-//                            ex.printStackTrace();
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(CancelledException cex) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onFinished() {
-//                            MyLog.e("HTTT","上传面板数据完成");
-//                        }
-//                    });
-//                return;
-//            }
+        }else if(s.contains("\"CMD\":98")){
+            synchronized (this) {
+                App.db.update(Sensor.class, WhereBuilder.b("device_id", "=", deviceid), new KeyValue("value3", 1));
+                JSONObject jo1 = new JSONObject(s);
+                JSONArray devMacArray = jo1.optJSONArray("sensorMacArray");
+                for (int i = 0; i < devMacArray.length(); i++) {
+                    String mac = devMacArray.optString(i);
+                    App.db.update(Sensor.class, WhereBuilder.b("device_id", "=", deviceid).and("mac", "=", mac), new KeyValue("value3", 0));
+                }
+                App.db.delete(Sensor.class, WhereBuilder.b("device_id", "=", deviceid).and("value3","=", 1));
+                return;
+            }
         }else if(s.contains("\"CMD\":113")){
             synchronized (this){
                 String result = jsonObject.optString("result");
@@ -1063,36 +1028,17 @@ public class DataParser {
                         }else if("0405".equals(cluster)){
                             type1=3;
                             value/=100;
-                            App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("type","=",type1).and("device_id","=",deviceid),new KeyValue[]{new KeyValue("online",true),new KeyValue("value2",value),new KeyValue("value4",9)});
+                            App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("type","=",type1).and("device_id","=",deviceid),new KeyValue[]{new KeyValue("online",true),new KeyValue("value2",value)});
                         }else if("0406".equals(cluster)){
                             type1=1;
                         }
                             if(!"0405".equals(cluster))
-                            App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("type","=",type1).and("device_id","=",deviceid),new KeyValue[]{new KeyValue("online",true),new KeyValue("value1",value),new KeyValue("value4",9)});
+                            App.db.update(Sensor.class,WhereBuilder.b("devisort_id","=",id).and("type","=",type1).and("device_id","=",deviceid),new KeyValue[]{new KeyValue("online",true),new KeyValue("value1",value)});
                         } catch (DbException e) {
                             e.printStackTrace();
                         }
                         EventBus.getDefault().postSticky(new EventData(EventData.CODE_REFRESH_SENSOR,"刷新传感器"));
                         break;
-//                    case "0406":
-//                        String svalue1=pay.substring(12, 14);
-//                        int value1=Integer.parseInt(svalue1,16);
-//                        int type1 = Integer.parseInt(cluster.substring(3));
-//                        Sensor dbsensor2 = null;
-//                        try {
-//                            dbsensor2 = App.db.selector(Sensor.class).where("id", "=", id +type1).findFirst();
-//                            if(dbsensor2==null){
-//                                dbsensor2 = new Sensor(deviceid, id,type1,value1,0);
-//                            }else{
-//                                dbsensor2.setValue1(value1);
-//                            }
-//                            dbsensor2.setOnline(true);
-//                            App.db.replace(dbsensor2);
-//                        } catch (DbException e) {
-//                            e.printStackTrace();
-//                        }
-//                        EventBus.getDefault().postSticky(new EventData(EventData.CODE_REFRESH_SENSOR,"刷新传感器"));
-//                        break;
                     case "0005":
                         String commandId = pay.substring(8, 10);
                         if("00".equals(pay.substring(4,6))){
@@ -1366,8 +1312,15 @@ public class DataParser {
                 EventBus.getDefault().post(new EventData(EventData.CODE_GETDEVICE,"OK"));
                 break;
             case 16:
-                deleData(deviceid);
-                EventBus.getDefault().post(new EventData(EventData.TAG_REFRESH,""));
+                if(jsonObject.optInt("clr")==0){
+                    deleData(deviceid);
+                    EventBus.getDefault().post(new EventData(EventData.TAG_REFRESH,""));
+                }else myhandle.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        EventBus.getDefault().post(new EventData(EventData.TAG_REFRESH,""));
+                    }
+                },10000);
                 break;
             case 17:
                 if ("05".equals(pay.substring(4,6))&&"0001".equals(pay.substring(6,10))) {

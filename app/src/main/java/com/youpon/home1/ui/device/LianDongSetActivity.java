@@ -414,7 +414,7 @@ public class LianDongSetActivity extends BaseActivity implements View.OnClickLis
                 Intent intent = new Intent(this, LianDongDevActivity.class);
                 intent.putExtra("device_id", sensor.getDevice_id());
                 intent.putExtra("type",sensor.getType());
-                intent.putExtra("value4",sensor.getValue4());
+                intent.putExtra("mac",sensor.getMac());
                 startActivity(intent);
                 break;
         }

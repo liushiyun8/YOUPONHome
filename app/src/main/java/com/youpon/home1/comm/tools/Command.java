@@ -1,6 +1,8 @@
 package com.youpon.home1.comm.tools;
 
-import android.util.Log;import io.xlink.wifi.sdk.util.MyLog;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import io.xlink.wifi.sdk.util.MyLog;
 
 import com.youpon.home1.bean.Scenebean;
 import com.youpon.home1.bean.SubDevice;
@@ -12,7 +14,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.xutils.ex.DbException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,7 +32,7 @@ import io.xlink.wifi.sdk.util.MyLog;
  *
  */
 public class Command {
-
+    static List<DataMessage> list= Collections.synchronizedList(new LinkedList<DataMessage>());
     public static String Star="{\"command_id\":";
     public static String middle=",\"CMD\":101,\"G\":[{\"PID\":\"2010\",\"T\":\"91\",\"RIU\":1,\"D\":\"";
     public static String middle1=",\"CMD\":101,\"G\":[{\"PID\":\"2010\",\"T\":\"91\",\"RIU\":0,\"D\":\"";
@@ -48,6 +53,7 @@ public class Command {
     public static final int ALLSCENE=112;
     public static final int ALLLIANDONG=151;
     public static final int ALLTIMER=139;
+    private static boolean First=true;
 
 
     /**
@@ -164,12 +170,15 @@ public class Command {
                     }else
                     first.setValue1(actionsBean.getVal());
                 }
-                if(first.getTp()==3&&first.getValue2()==1&&first.getValue1()>1){
-                    first.setValue1(1);
-                    actionsBean.setVal(1);
+
+                if(first!=null){
+                    if(first.getTp()==3&&first.getValue2()==1&&first.getValue1()>1){
+                        first.setValue1(1);
+                        actionsBean.setVal(1);
+                    }
+                    App.db.update(first);
                 }
-                if(first!=null)
-                App.db.update(first);
+
             } catch (DbException e) {
                 e.printStackTrace();
             }
@@ -305,8 +314,34 @@ public class Command {
         return sendData(DeviceManage.getInstance().getDevice(deviceid).getXDevice(),bs,name);
     }
 
+    static Handler handler=new Handler();
+    static Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            Iterator<DataMessage> iterator = list.iterator();
+            if(iterator.hasNext()){
+                DataMessage next = iterator.next();
+                Boolean x = SendData(next.xDevice, next.bs,next.name);
+                iterator.remove();
+            }
+            handler.postDelayed(this,60);
+        }
+    };
+
     public static boolean sendData(XDevice xDevice, final byte[] bs, String name) {
-        int  ret = XlinkAgent.getInstance().sendPipeData(xDevice, bs, pipeListener);
+        list.add(new DataMessage(xDevice,bs,name));
+        if(First){
+            handler.post(runnable);
+            First=false;
+        }
+//        Boolean x = SendData(xDevice, bs, name);
+//        if (x != null) return x;
+        return true;
+    }
+
+    @Nullable
+    private static Boolean SendData(XDevice xDevice, byte[] bs, String name) {
+        int  ret = XlinkAgent.getInstance().sendPipeData(xDevice, bs,10, pipeListener);
         if (ret < 0) {
             switch (ret) {
                 case XlinkCode.NO_CONNECT_SERVER:
@@ -339,7 +374,7 @@ public class Command {
                         + new String(bs).trim());
             }
         }
-        return true;
+        return null;
     }
 
 
@@ -353,8 +388,8 @@ public class Command {
                     MyLog.e("pipe","发送数据,msgId:" + messageId + "成功");
                     break;
                 case XlinkCode.TIMEOUT:
-                    EventBus.getDefault().post(new EventData(EventData.CODE_RECONNECT,device));
                     MyLog.e("pipe","发送数据,msgId:" + messageId + "超时"+",重连中...");
+//                    EventBus.getDefault().post(new EventData(EventData.CODE_RECONNECT,device));
                     // XlinkUtils.shortTips("发送数据超时："
                     // + );
                     break;

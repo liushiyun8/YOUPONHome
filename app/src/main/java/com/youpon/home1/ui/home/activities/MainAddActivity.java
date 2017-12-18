@@ -131,8 +131,14 @@ public class MainAddActivity extends BaseActivity implements View.OnClickListene
                     helper.setImageResource(R.id.icon,Comconst.IMAGETYPE[subDevice.getTp()]);
                 }else if(item instanceof Sensor){
                     Sensor sensor= (Sensor) item;
-                    Device device = DeviceManage.getInstance().getDevice(sensor.getDevice_id());
-                    helper.setText(R.id.panel_name,device==null?"":device.getName());
+                    Panel panel = PanelManage.getInstance().getPanel(sensor.getMac());
+                    if(panel!=null){
+                        helper.setText(R.id.panel_name,panel.getMyName());
+                    }else {
+                        Device device = DeviceManage.getInstance().getDevice(sensor.getDevice_id());
+                        helper.setText(R.id.panel_name,device==null?"":device.getName());
+                    }
+
                     helper.setImageResource(R.id.icon,Comconst.SENSORTYPE[sensor.getType()-1]);
                 }
             }
